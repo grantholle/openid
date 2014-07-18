@@ -303,5 +303,20 @@ class OpenID
         throw new OpenID_Exception('Invalid URI Identifier');
     }
 
+    /**
+     * Resets internal static variables.
+     * Useful for unit tests.
+     *
+     * @return void
+     */
+    public static function resetInternalData()
+    {
+        self::$store = null;
+        self::$observers = array();
+        self::$lastEvent = array(
+            'name' => 'start',
+            'data' => null,
+        );
+    }
 }
 ?>

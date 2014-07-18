@@ -31,6 +31,11 @@ require_once 'OpenID/Observer/Mock.php';
  */
 class OpenIDTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        OpenID::resetInternalData();
+    }
+
     /**
      * testSetAndGetStore 
      * 
