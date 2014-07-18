@@ -36,11 +36,9 @@ class OpenID_Discover_MockYadis extends OpenID_Discover_Yadis
     /**
      * Returns the mocked Services_Yadis instance
      * 
-     * @param string $identifier The user supplied identifier
-     * 
      * @return Services_Yadis
      */
-    public function getServicesYadis($identifier)
+    public function getServicesYadis()
     {
         return self::$servicesYadisInstance;
     }
