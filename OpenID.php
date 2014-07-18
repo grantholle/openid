@@ -292,7 +292,7 @@ class OpenID
         if (!preg_match('@^http[s]?://@i', $identifier)) {
             $identifier = 'http://' . $identifier;
         }
-        if (strpos($identifier, '/', 8) === false) {
+        if (strlen($identifier) < 8 || strpos($identifier, '/', 8) === false) {
             $identifier .= '/';
         }
         if (filter_var($identifier, FILTER_VALIDATE_URL)) {

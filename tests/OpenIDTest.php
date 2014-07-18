@@ -106,6 +106,14 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException OpenID_Exception
+     */
+    public function testNormalizeIdentifierSchemeOnly()
+    {
+        OpenID::normalizeIdentifier('http://');
+    }
+
+    /**
      * testNormalizeIdentifierFailXRI 
      * 
      * @return void
