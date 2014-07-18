@@ -94,7 +94,6 @@ class OpenID_Discover
      * @var array
      */
     protected $requestOptions = array(
-        'adapter'          => 'curl',
         'follow_redirects' => true,
         'timeout'          => 3,
         'connect_timeout'  => 3

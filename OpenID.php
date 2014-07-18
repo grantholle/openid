@@ -255,9 +255,7 @@ class OpenID
     protected function getHTTPRequest2Instance()
     {
         // @codeCoverageIgnoreStart
-        $request = new HTTP_Request2();
-        $request->setAdapter('curl');
-        return $request;
+        return new HTTP_Request2();
         // @codeCoverageIgnoreEnd
     }
 
