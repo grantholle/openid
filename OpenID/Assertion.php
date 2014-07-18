@@ -67,18 +67,17 @@ class OpenID_Assertion extends OpenID
      * 
      * @return void
      */
-    public function __construct(OpenID_Message $message,
-                                Net_URL2 $requestedURL,
-                                $clockSkew = null)
-    {
+    public function __construct(
+        OpenID_Message $message, Net_URL2 $requestedURL, $clockSkew = null
+    ) {
         $this->message      = $message;
         $this->requestedURL = $requestedURL;
         $this->clockSkew    = $clockSkew;
 
         // Don't check return_to for a negative checkid_immadiate 1.1 response
         if ($message->get('openid.ns') !== null
-            || $message->get('openid.user_setup_url') === null) {
-
+            || $message->get('openid.user_setup_url') === null
+        ) {
             $this->validateReturnTo();
         }
 
@@ -129,8 +128,10 @@ class OpenID_Assertion extends OpenID
     protected function validateReturnTo()
     {
         $returnTo = $this->message->get('openid.return_to');
-        OpenID::setLastEvent(__METHOD__,
-                             'openid.return_to: ' . var_export($returnTo, true));
+        OpenID::setLastEvent(
+            __METHOD__,
+            'openid.return_to: ' . var_export($returnTo, true)
+        );
 
         // Validate openid.return_to
         if (!filter_var($returnTo, FILTER_VALIDATE_URL)) {
@@ -160,8 +161,8 @@ class OpenID_Assertion extends OpenID
 
         foreach ($queryString1 as $param => $value) {
             if (!isset($queryString2[$param])
-                || $queryString2[$param] != $value) {
-
+                || $queryString2[$param] != $value
+            ) {
                 throw new OpenID_Assertion_Exception(
                     'openid.return_to parameters do not match requested url'
                 );

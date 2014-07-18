@@ -226,8 +226,9 @@ class OpenID_RelyingParty extends OpenID
         if ($this->useAssociations) {
             $uris          = $serviceEndpoint->getURIs();
             $opEndpointURL = array_shift($uris);
-            $assoc         = $this->getAssociation($opEndpointURL,
-                                                   $serviceEndpoint->getVersion());
+            $assoc         = $this->getAssociation(
+                $opEndpointURL, $serviceEndpoint->getVersion()
+            );
 
             if ($assoc instanceof OpenID_Association) {
                 $assocHandle = $assoc->assocHandle;
@@ -235,10 +236,9 @@ class OpenID_RelyingParty extends OpenID
         }
 
         // Return OpenID_Auth_Request object
-        return new OpenID_Auth_Request($discover,
-                                       $this->returnTo,
-                                       $this->realm,
-                                       $assocHandle);
+        return new OpenID_Auth_Request(
+            $discover, $this->returnTo, $this->realm, $assocHandle
+        );
     }
 
     /**
@@ -270,8 +270,8 @@ class OpenID_RelyingParty extends OpenID
         switch ($mode) {
         case OpenID::MODE_ID_RES:
             if ($message->get('openid.ns') === null
-                && $message->get('openid.user_setup_url') !== null) {
-
+                && $message->get('openid.user_setup_url') !== null
+            ) {
                 // Negative 1.1 checkid_immediate response
                 $result->setAssertionMethod($mode);
                 $result->setUserSetupURL($message->get('openid.user_setup_url'));
@@ -302,13 +302,14 @@ class OpenID_RelyingParty extends OpenID
                 // Don't fall back to check_authentication
                 $result->setAssertionMethod(OpenID::MODE_ASSOCIATE);
                 $assoc = $this->getStore()
-                              ->getAssociation($opEndpointURL,
-                                               $message->get('openid.assoc_handle'));
+                    ->getAssociation(
+                        $opEndpointURL, $message->get('openid.assoc_handle')
+                    );
                 OpenID::setLastEvent(__METHOD__, print_r($assoc, true));
 
-                if ($assoc instanceof OpenID_Association &&
-                    $assoc->checkMessageSignature($message)) {
-
+                if ($assoc instanceof OpenID_Association
+                    && $assoc->checkMessageSignature($message)
+                ) {
                     $result->setAssertionResult(true);
                 }
 
@@ -342,8 +343,9 @@ class OpenID_RelyingParty extends OpenID
      */
     protected function getDiscover()
     {
-        $discover = OpenID_Discover::getDiscover($this->normalizedID,
-                                                 $this->getStore());
+        $discover = OpenID_Discover::getDiscover(
+            $this->normalizedID, $this->getStore()
+        );
         if (!$discover instanceof OpenID_Discover) {
             // @codeCoverageIgnoreStart
             throw new OpenID_Exception('Unable to discover OP Endpoint URL');
@@ -406,9 +408,9 @@ class OpenID_RelyingParty extends OpenID
      */
     protected function getAssertionObject($message, $requestedURL)
     {
-        return new OpenID_Assertion($message,
-                                    $requestedURL,
-                                    $this->clockSkew);
+        return new OpenID_Assertion(
+            $message, $requestedURL, $this->clockSkew
+        );
     }
 }
 ?>

@@ -69,14 +69,14 @@ class OpenID_Extension_AX extends OpenID_Extension
     public function set($key, $value)
     {
         if (strpos($key, 'mode') === 0
-            && !in_array($value, $this->validModes)) {
-
+            && !in_array($value, $this->validModes)
+        ) {
             throw new OpenID_Extension_Exception('Invalid AX mode: ' . $key);
         }
 
         if (preg_match('/^type[.]/', $key)
-            && !filter_var($value, FILTER_VALIDATE_URL)) {
-
+            && !filter_var($value, FILTER_VALIDATE_URL)
+        ) {
             throw new OpenID_Extension_Exception($key . ' is not a valid URI');
         }
         parent::set($key, $value);

@@ -247,9 +247,7 @@ abstract class OpenID_Extension
         } else {
             // Just grab all message components
             foreach ($message->getArrayFormat() as $key => $value) {
-                if (preg_match('/^openid[.]' . $alias . '[.](.*+)$/',
-                    $key, $matches)) {
-
+                if (preg_match('/^openid[.]' . $alias . '[.](.*+)$/', $key, $matches)) {
                     $values[$matches[1]] = $value;
                 }
             }

@@ -77,12 +77,10 @@ class OpenID_Extension_OAuth extends OpenID_Extension
      *
      * @see http://step2.googlecode.com/svn/spec/openid_oauth_extension/latest/openid_oauth_extension.html
      */
-    public function getAccessToken($consumerKey,
-                                   $consumerSecret,
-                                   $url,
-                                   array $params = array(),
-                                   $method = 'GET')
-    {
+    public function getAccessToken(
+        $consumerKey, $consumerSecret, $url,
+        array $params = array(), $method = 'GET'
+    ) {
         $requestToken = $this->get('request_token');
         if ($requestToken === null) {
             throw new OpenID_Exception('No oauth request token in OpenID message');

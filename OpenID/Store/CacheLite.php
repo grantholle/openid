@@ -118,8 +118,10 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
         // Store URI based key
         $this->cache->save(serialize($association), md5($association->uri));
         // Store URI + Handle based key
-        $this->cache->save(serialize($association),
-                           md5($association->uri . $association->assocHandle));
+        $this->cache->save(
+            serialize($association),
+            md5($association->uri . $association->assocHandle)
+        );
     }
 
     /**

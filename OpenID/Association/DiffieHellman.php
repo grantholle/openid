@@ -86,14 +86,17 @@ class OpenID_Association_DiffieHellman
     public function init()
     {
         if ($this->cdh === null) {
-            $this->cdh = new Crypt_DiffieHellman(self::DH_DEFAULT_MODULUS,
-                                                self::DH_DEFAULT_GENERATOR);
+            $this->cdh = new Crypt_DiffieHellman(
+                self::DH_DEFAULT_MODULUS, self::DH_DEFAULT_GENERATOR
+            );
             $this->cdh->generateKeys();
         }
 
         // Set public key
-        $this->message->set('openid.dh_consumer_public',
-            base64_encode($this->cdh->getPublicKey(Crypt_DiffieHellman::BTWOC)));
+        $this->message->set(
+            'openid.dh_consumer_public',
+            base64_encode($this->cdh->getPublicKey(Crypt_DiffieHellman::BTWOC))
+        );
 
         // Set modulus
         $prime = $this->cdh->getPrime(Crypt_DiffieHellman::BTWOC);

@@ -253,8 +253,9 @@ class OpenID_Association
      */
     public function signMessage(OpenID_Message $message)
     {
-        if ($message->get('openid.sig') !== null ||
-            $message->get('openid.signed') !== null) {
+        if ($message->get('openid.sig') !== null
+            || $message->get('openid.signed') !== null
+        ) {
             throw new OpenID_Association_Exception(
                 'This message appears to be already signed'
             );
@@ -297,10 +298,12 @@ class OpenID_Association
      */
     protected function hashHMAC($message)
     {
-        return hash_hmac($this->getAlgorithm(),
-                         $message,
-                         base64_decode($this->sharedSecret),
-                         true);
+        return hash_hmac(
+            $this->getAlgorithm(),
+            $message,
+            base64_decode($this->sharedSecret),
+            true
+        );
     }
 }
 ?>

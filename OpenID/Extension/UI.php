@@ -63,8 +63,8 @@ class OpenID_Extension_UI extends OpenID_Extension
     public function set($key, $value)
     {
         if (strpos($key, 'mode') === 0
-            && !in_array($value, $this->validModes)) {
-
+            && !in_array($value, $this->validModes)
+        ) {
             throw new OpenID_Extension_Exception('Invalid UI mode: ' . $key);
         }
 

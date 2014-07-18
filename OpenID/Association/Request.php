@@ -90,10 +90,9 @@ class OpenID_Association_Request extends OpenID
      * 
      * @return void
      */
-    public function __construct($opEndpointURL,
-                                $version,
-                                Crypt_DiffieHellman $cdh = null)
-    {
+    public function __construct(
+        $opEndpointURL, $version, Crypt_DiffieHellman $cdh = null
+    ) {
         if (!array_key_exists($version, OpenID::$versionMap)) {
             throw new OpenID_Association_Exception(
                 'Invalid version'
@@ -142,8 +141,8 @@ class OpenID_Association_Request extends OpenID
             if (isset($response['mode'])
                 && $response['mode'] == OpenID::MODE_ERROR
                 && isset($response['error_code'])
-                && $response['error_code'] == 'unsupported-type') {
-    
+                && $response['error_code'] == 'unsupported-type'
+            ) {
                 if (isset($response['assoc_type'])) {
                     $this->setAssociationType($response['assoc_type']);
                 }
@@ -195,8 +194,7 @@ class OpenID_Association_Request extends OpenID
      */
     protected function sendAssociationRequest()
     {
-        if ($this->message->get('openid.session_type')
-            == self::SESSION_TYPE_NO_ENCRYPTION) {
+        if ($this->message->get('openid.session_type') == self::SESSION_TYPE_NO_ENCRYPTION) {
 
             $this->message->delete('openid.dh_consumer_public');
             $this->message->delete('openid.dh_modulus');
@@ -206,9 +204,10 @@ class OpenID_Association_Request extends OpenID
         }
 
         $response = $this->directRequest($this->opEndpointURL, $this->message);
-        $message  = new OpenID_Message($response->getBody(),
-                                       OpenID_Message::FORMAT_KV);
-
+        $message  = new OpenID_Message(
+            $response->getBody(),
+            OpenID_Message::FORMAT_KV
+        );
         OpenID::setLastEvent(__METHOD__, print_r($message->getArrayFormat(), true));
 
         return $message;
@@ -243,8 +242,9 @@ class OpenID_Association_Request extends OpenID
     protected function getDH()
     {
         if (!$this->dh) {
-            $this->dh = new OpenID_Association_DiffieHellman($this->message,
-                                                             $this->cdh);
+            $this->dh = new OpenID_Association_DiffieHellman(
+                $this->message, $this->cdh
+            );
         }
         return $this->dh;
     }
@@ -298,8 +298,10 @@ class OpenID_Association_Request extends OpenID
                     'Un-encrypted sessions require HTTPS'
                 );
             }
-            $this->message->set('openid.session_type',
-                                self::SESSION_TYPE_NO_ENCRYPTION);
+            $this->message->set(
+                'openid.session_type',
+                self::SESSION_TYPE_NO_ENCRYPTION
+            );
             break;
         case self::SESSION_TYPE_DH_SHA1:
         case self::SESSION_TYPE_DH_SHA256:

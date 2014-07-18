@@ -61,8 +61,7 @@ class OpenID_Nonce
      * 
      * @return void
      */
-    public function __construct($opEndpointURL,
-                                $clockSkew = null)
+    public function __construct($opEndpointURL, $clockSkew = null)
     {
         $this->opEndpointURL = $opEndpointURL;
 
@@ -106,24 +105,24 @@ class OpenID_Nonce
             return false;
         }
 
-        $result = preg_match('/(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z(.*)/',
-                             $nonce,
-                             $matches);
+        $result = preg_match(
+            '/(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z(.*)/',
+            $nonce,
+            $matches
+        );
         if ($result != 1 || count($matches) != 8) {
             return false;
         }
 
-        $stamp = gmmktime($matches[4],
-                          $matches[5],
-                          $matches[6],
-                          $matches[2],
-                          $matches[3],
-                          $matches[1]);
+        $stamp = gmmktime(
+            $matches[4], $matches[5], $matches[6],
+            $matches[2], $matches[3], $matches[1]
+        );
 
         $time = time();
         if ($stamp < ($time - $this->clockSkew)
-            || $stamp > ($time + $this->clockSkew)) {
-
+            || $stamp > ($time + $this->clockSkew)
+        ) {
             return false;
         }
 

@@ -120,7 +120,8 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
                 throw new OpenID_Store_Exception(
-                    'Error creating table', $result);
+                    'Error creating table', $result
+                );
             }
         }
 
@@ -193,9 +194,14 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
                 (identifier, serialized_discover, expires)
                 VALUES (?, ?, ?)";
 
-        $this->prepareExecute($sql, array($discover->identifier,
-                                          serialize($discover),
-                                          time() + $expire));
+        $this->prepareExecute(
+            $sql,
+            array(
+                $discover->identifier,
+                serialize($discover),
+                time() + $expire
+            )
+        );
         return $this;
     }
 
@@ -231,14 +237,16 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
             return false;
         }
 
-        $association = new OpenID_Association(array(
-            'uri'          => $row['uri'],
-            'expiresIn'    => $row['expiresin'],
-            'created'      => $row['created'],
-            'assocType'    => $row['assoctype'],
-            'assocHandle'  => $row['assochandle'],
-            'sharedSecret' => $row['sharedsecret']
-        ));
+        $association = new OpenID_Association(
+            array(
+                'uri'          => $row['uri'],
+                'expiresIn'    => $row['expiresin'],
+                'created'      => $row['created'],
+                'assocType'    => $row['assoctype'],
+                'assocHandle'  => $row['assochandle'],
+                'sharedSecret' => $row['sharedsecret']
+            )
+        );
 
         return $association;
     }

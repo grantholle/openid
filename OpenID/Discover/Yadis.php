@@ -70,8 +70,9 @@ implements OpenID_Discover_Interface
                 return false;
             }
 
-            $service = new OpenID_ServiceEndpoints($this->getServicesYadis()
-                                                        ->getYadisId());
+            $service = new OpenID_ServiceEndpoints(
+                $this->getServicesYadis()->getYadisId()
+            );
 
             foreach ($discoveredServices as $discoveredService) {
                 $types = $discoveredService->getTypes();
@@ -95,9 +96,9 @@ implements OpenID_Discover_Interface
                     // Choose OpenID 2.0 if it's available
                     if (count($types) > 1) {
                         foreach ($types as $type) {
-                            if ($type == OpenID::SERVICE_2_0_SERVER ||
-                                $type == OpenID::SERVICE_2_0_SIGNON) {
-
+                            if ($type == OpenID::SERVICE_2_0_SERVER
+                                || $type == OpenID::SERVICE_2_0_SIGNON
+                            ) {
                                 $opEndpoint->setVersion($type);
                                 break;
                             }
@@ -113,9 +114,11 @@ implements OpenID_Discover_Interface
             }
 
             // Add in expires information
-            $service->setExpiresHeader($this->getServicesYadis()
-                                            ->getHTTPResponse()
-                                            ->getHeader('Expires'));
+            $service->setExpiresHeader(
+                $this->getServicesYadis()
+                    ->getHTTPResponse()
+                    ->getHeader('Expires')
+            );
 
             return $service;
 

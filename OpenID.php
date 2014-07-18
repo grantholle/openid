@@ -229,10 +229,9 @@ class OpenID
      * @throws OpenID_Exception if send() fails
      * @return HTTP_Request2_Response
      */
-    public function directRequest($url,
-                                  OpenID_Message $message, 
-                                  array $options = array())
-    {
+    public function directRequest(
+        $url, OpenID_Message $message, array $options = array()
+    ) {
         $request = $this->getHTTPRequest2Instance();
         $request->setConfig($options);
         $request->setURL($url);

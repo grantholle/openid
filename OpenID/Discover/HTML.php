@@ -188,9 +188,9 @@ implements OpenID_Discover_Interface
      */
     protected function getHTTPRequest2()
     {
-        $this->request = new HTTP_Request2($this->identifier,
-                                           HTTP_Request2::METHOD_GET,
-                                           $this->requestOptions);
+        $this->request = new HTTP_Request2(
+            $this->identifier, HTTP_Request2::METHOD_GET, $this->requestOptions
+        );
     }
     // @codeCoverageIgnoreEnd
 }

@@ -112,11 +112,9 @@ class OpenID_Auth_Request
      * 
      * @return void
      */
-    public function __construct(OpenID_Discover $discover,
-                                $returnTo,
-                                $realm,
-                                $assocHandle = null)
-    {
+    public function __construct(
+        OpenID_Discover $discover, $returnTo, $realm, $assocHandle = null
+    ) {
         $this->identifier      = $discover->identifier;
         $this->serviceEndpoint = $discover->services[0];
         $this->message         = new OpenID_Message();
@@ -262,16 +260,17 @@ class OpenID_Auth_Request
     {
         $nonce       = $this->getNonce()->createNonceAndStore();
         $returnToURL = new Net_URL2($this->message->get('openid.return_to'));
-        $returnToURL->setQueryVariable(OpenID_Nonce::RETURN_TO_NONCE,
-                                       urlencode($nonce));
-
+        $returnToURL->setQueryVariable(
+            OpenID_Nonce::RETURN_TO_NONCE, urlencode($nonce)
+        );
         $this->message->set('openid.return_to', $returnToURL->getURL());
 
         // Observing
         $logMessage  = "Nonce: $nonce\n";
         $logMessage  = 'New ReturnTo: ' . $returnToURL->getURL() . "\n";
-        $logMessage .= 'OP URIs: ' . print_r($this->serviceEndpoint->getURIs(),
-                                             true);
+        $logMessage .= 'OP URIs: ' . print_r(
+            $this->serviceEndpoint->getURIs(), true
+        );
         OpenID::setLastEvent(__METHOD__, $logMessage);
     }
 
