@@ -33,5 +33,19 @@ require_once 'OpenID/Exception.php';
  */
 class OpenID_Store_Exception extends OpenID_Exception
 {
+    /**
+     * Database connection failed
+     */
+    const CONNECT_ERROR = 250;
+
+    /**
+     * Database table could not be created
+     */
+    const CREATE_TABLE_ERROR = 251;
+
+    /**
+     * SQL statement invalid
+     */
+    const SQL_ERROR = 253;
 }
 ?>

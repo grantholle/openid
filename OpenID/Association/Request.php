@@ -95,7 +95,8 @@ class OpenID_Association_Request extends OpenID
     ) {
         if (!array_key_exists($version, OpenID::$versionMap)) {
             throw new OpenID_Association_Exception(
-                'Invalid version'
+                'Invalid version',
+                OpenID_Exception::INVALID_VALUE
             );
         }
         $this->version       = $version;
@@ -175,7 +176,8 @@ class OpenID_Association_Request extends OpenID
         if ($this->getSessionType() === self::SESSION_TYPE_NO_ENCRYPTION) {
             if (!isset($response['mac_key'])) {
                 throw new OpenID_Association_Exception(
-                    'Missing mac_key in association response'
+                    'Missing mac_key in association response',
+                    OpenID_Exception::MISSING_DATA
                 );
             }
             $params['sharedSecret'] = $response['mac_key'];
@@ -265,7 +267,10 @@ class OpenID_Association_Request extends OpenID
             $this->message->set('openid.assoc_type', $type);
             break;
         default:
-            throw new OpenID_Association_Exception("Invalid assoc_type: $type");
+            throw new OpenID_Association_Exception(
+                "Invalid assoc_type: $type",
+                OpenID_Exception::INVALID_VALUE
+            );
         }
     }
 
@@ -295,7 +300,8 @@ class OpenID_Association_Request extends OpenID
             // Make sure we're using SSL
             if (!preg_match('@^https://@i', $this->opEndpointURL)) {
                 throw new OpenID_Association_Exception(
-                    'Un-encrypted sessions require HTTPS'
+                    'Un-encrypted sessions require HTTPS',
+                    OpenID_Exception::HTTPS_REQUIRED
                 );
             }
             $this->message->set(
@@ -308,7 +314,10 @@ class OpenID_Association_Request extends OpenID
             $this->message->set('openid.session_type', $type);
             break;
         default:
-            throw new OpenID_Association_Exception("Invalid session_type: $type");
+            throw new OpenID_Association_Exception(
+                "Invalid session_type: $type",
+                OpenID_Exception::INVALID_VALUE
+            );
         }
     }
 

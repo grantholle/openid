@@ -120,7 +120,8 @@ class OpenID_Association_DiffieHellman
     {
         if (!isset($response['dh_server_public'])) {
             throw new OpenID_Association_Exception(
-                'Missing dh_server_public parameter in association response'
+                'Missing dh_server_public parameter in association response',
+                OpenID_Exception::MISSING_DATA
             );
         }
 

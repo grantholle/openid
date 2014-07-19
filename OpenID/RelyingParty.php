@@ -197,7 +197,8 @@ class OpenID_RelyingParty extends OpenID
     {
         if (!is_numeric($skew)) {
             throw new OpenID_Exception(
-                'Invalid clock skew'
+                'Invalid clock skew',
+                OpenID_Exception::INVALID_VALUE
             );
         }
         $this->clockSkew = $skew;
@@ -214,7 +215,10 @@ class OpenID_RelyingParty extends OpenID
     public function prepare()
     {
         if ($this->normalizedID === null) {
-            throw new OpenID_Exception('No identifier provided');
+            throw new OpenID_Exception(
+                'No identifier provided',
+                OpenID_Exception::MISSING_DATA
+            );
         }
 
         // Discover
@@ -283,9 +287,15 @@ class OpenID_RelyingParty extends OpenID
             $result->setAssertionMethod($mode);
             return $result;
         case OpenID::MODE_ERROR:
-            throw new OpenID_Exception($message->get('openid.error'));
+            throw new OpenID_Exception(
+                $message->get('openid.error'),
+                OpenID_Exception::OPENID_ERROR
+            );
         default:
-            throw new OpenID_Exception('Unknown mode: ' . $mode);
+            throw new OpenID_Exception(
+                'Unknown mode: ' . $mode,
+                OpenID_Exception::INVALID_VALUE
+            );
         }
 
         $discover        = $this->getDiscover();
@@ -348,7 +358,10 @@ class OpenID_RelyingParty extends OpenID
         );
         if (!$discover instanceof OpenID_Discover) {
             // @codeCoverageIgnoreStart
-            throw new OpenID_Exception('Unable to discover OP Endpoint URL');
+            throw new OpenID_Exception(
+                'Unable to discover OP Endpoint URL',
+                OpenID_Exception::DISCOVERY_ERROR
+            );
             // @codeCoverageIgnoreEnd
         }
 

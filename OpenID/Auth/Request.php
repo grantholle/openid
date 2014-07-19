@@ -166,7 +166,8 @@ class OpenID_Auth_Request
             break;
         default:
             throw new OpenID_Auth_Exception(
-                'Invalid openid.mode: ' . $mode
+                'Invalid openid.mode: ' . $mode,
+                OpenID_Exception::INVALID_VALUE
             );
         }
     }

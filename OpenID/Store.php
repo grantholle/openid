@@ -45,14 +45,16 @@ abstract class OpenID_Store
         include_once $file;
         if (!class_exists($class)) {
             throw new OpenID_Store_Exception(
-                'Invalid storage driver: ' . $driver
+                'Invalid storage driver: ' . $driver,
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
         $instance = new $class($options);
         if (!$instance instanceof OpenID_Store_Interface) {
             throw new OpenID_Store_Exception(
-                $class . ' does not implement OpenID_Store_Interface'
+                $class . ' does not implement OpenID_Store_Interface',
+                OpenID_Exception::INVALID_DEFINITION
             );
         }
 

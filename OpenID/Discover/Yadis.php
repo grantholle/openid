@@ -124,13 +124,17 @@ implements OpenID_Discover_Interface
 
         } catch (Services_Yadis_Exception $e) {
             // Add logging or observer?
-            throw new OpenID_Discover_Exception($e->getMessage());
+            throw new OpenID_Discover_Exception(
+                $e->getMessage(),
+                OpenID_Exception::DISCOVERY_ERROR
+            );
         }
 
         // Did the identifier even respond to the initial HTTP request?
         if ($this->yadis->getUserResponse() === false) {
             throw new OpenID_Discover_Exception(
-                'No response from identifier'
+                'No response from identifier',
+                OpenID_Exception::HTTP_ERROR                
             );
         }
     }

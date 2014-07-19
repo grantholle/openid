@@ -70,7 +70,10 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
     public function __construct(array $options)
     {
         if (!isset($options['dsn'])) {
-            throw new OpenID_Store_Exception('Missing dsn from options');
+            throw new OpenID_Store_Exception(
+                'Missing dsn from options',
+                OpenID_Exception::MISSING_DATA
+            );
         }
 
         $dsn = $options['dsn'];
@@ -78,7 +81,10 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
         $this->db = MDB2::factory($dsn, $options);
 
         if (PEAR::isError($this->db)) {
-            throw new OpenID_Store_Exception('Error connecting to DB', $this->db);
+            throw new OpenID_Store_Exception(
+                'Error connecting to DB',
+                OpenID_Store_Exception::CONNECT_ERROR
+            );
         }
     }
 
@@ -120,7 +126,8 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
                 throw new OpenID_Store_Exception(
-                    'Error creating table', $result
+                    'Error creating table: ' . $result->getMessage(),
+                    OpenID_Store_Exception::CREATE_TABLE_ERROR
                 );
             }
         }
@@ -141,13 +148,19 @@ class OpenID_Store_MDB2 implements OpenID_Store_Interface
     {
         $prepared = $this->db->prepare($sql);
         if (PEAR::isError($prepared)) {
-            throw new OpenID_Store_Exception($prepared);
+            throw new OpenID_Store_Exception(
+                $prepared->getMessage(),
+                OpenID_Store_Exception::SQL_ERROR
+            );
         }
 
         $result = $prepared->execute($args);
         $prepared->free();
         if (PEAR::isError($result)) {
-            throw new OpenID_Store_Exception($result);
+            throw new OpenID_Store_Exception(
+                $result->getMessage(),
+                OpenID_Store_Exception::SQL_ERROR
+            );
         }
         return $result;
     }

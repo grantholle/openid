@@ -146,7 +146,10 @@ class OpenID_Assertion_Result
             $this->assertionMethod = $method;
             break;
         default:
-            throw new OpenID_Assertion_Exception('Invalid assertion method');
+            throw new OpenID_Assertion_Exception(
+                'Invalid assertion method',
+                OpenID_Exception::INVALID_VALUE
+            );
         }
     }
 

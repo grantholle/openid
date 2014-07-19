@@ -126,7 +126,10 @@ abstract class OpenID_Extension
     public function __construct($type, OpenID_Message $message = null)
     {
         if ($type != self::REQUEST && $type != self::RESPONSE) {
-            throw new OpenID_Extension_Exception('Invalid message type: ' . $type);
+            throw new OpenID_Extension_Exception(
+                'Invalid message type: ' . $type,
+                OpenID_Exception::INVALID_VALUE
+            );
         }
         $this->type = $type;
 
@@ -152,7 +155,10 @@ abstract class OpenID_Extension
         }
 
         if (count($keys) && !in_array($key, $keys)) {
-            throw new OpenID_Extension_Exception('Invalid key: ' . $key);
+            throw new OpenID_Extension_Exception(
+                'Invalid key: ' . $key,
+                OpenID_Exception::INVALID_VALUE
+            );
         }
         $this->values[$key] = $value;
     }
@@ -185,7 +191,8 @@ abstract class OpenID_Extension
         // Make sure we have a valid alias name
         if (empty($this->alias) || in_array($this->alias, self::$reserved)) {
             throw new OpenID_Extension_Exception(
-                'Invalid extension alias' . $this->alias
+                'Invalid extension alias' . $this->alias,
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
@@ -194,7 +201,8 @@ abstract class OpenID_Extension
         // Make sure the alias doesn't collide
         if ($message->get($namespaceAlias) !== null) {
             throw new OpenID_Extension_Exception(
-                'Extension alias ' . $this->alias . ' is already set'
+                'Extension alias ' . $this->alias . ' is already set',
+                OpenID_Exception::INVALID_VALUE
             );
         }
 

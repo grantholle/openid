@@ -88,7 +88,10 @@ class OpenID_Message
     public function set($name, $val)
     {
         if ($name == 'openid.ns' && $val != OpenID::NS_2_0) {
-            throw new OpenID_Message_Exception('Invalid openid.ns value: ' . $val);
+            throw new OpenID_Message_Exception(
+                'Invalid openid.ns value: ' . $val,
+                OpenID_Exception::INVALID_VALUE
+            );
         }
         $this->data[$name] = $val;
     }
@@ -171,7 +174,10 @@ class OpenID_Message
             return $message;
         }
 
-        throw new OpenID_Message_Exception('Invalid format: ' . $format);
+        throw new OpenID_Message_Exception(
+            'Invalid format: ' . $format,
+            OpenID_Exception::INVALID_VALUE
+        );
     }
 
     /**
@@ -188,7 +194,10 @@ class OpenID_Message
     public function setMessage($message, $format = self::FORMAT_ARRAY)
     {
         if (!in_array($format, $this->validFormats)) {
-            throw new OpenID_Message_Exception('Invalid format: ' . $format);
+            throw new OpenID_Message_Exception(
+                'Invalid format: ' . $format,
+                OpenID_Exception::INVALID_VALUE
+            );
         }
 
         // Flush current data

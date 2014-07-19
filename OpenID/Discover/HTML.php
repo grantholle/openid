@@ -144,7 +144,8 @@ implements OpenID_Discover_Interface
             }
         } else {
             throw new OpenID_Discover_Exception(
-                'Discovered information does not conform to spec'
+                'Discovered information does not conform to spec',
+                OpenID_Exception::MISSING_DATA
             );
         }
 
@@ -174,7 +175,8 @@ implements OpenID_Discover_Interface
 
         if ($this->response->getStatus() !== 200) {
             throw new OpenID_Discover_Exception(
-                'Unable to connect to OpenID Provider.'
+                'Unable to connect to OpenID Provider.',
+                OpenID_Exception::HTTP_ERROR                
             );
         }
 

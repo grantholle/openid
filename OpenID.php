@@ -241,7 +241,7 @@ class OpenID
         try {
             return $request->send();
         } catch (HTTP_Request2_Exception $e) {
-            throw new OpenID_Exception($e->getMessage(), $e->getCode());
+            throw new OpenID_Exception($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -297,7 +297,9 @@ class OpenID
         if (filter_var($identifier, FILTER_VALIDATE_URL)) {
             return $identifier;
         }
-        throw new OpenID_Exception('Invalid URI Identifier');
+        throw new OpenID_Exception(
+            'Invalid URI Identifier', OpenID_Exception::INVALID_VALUE
+        );
     }
 
     /**

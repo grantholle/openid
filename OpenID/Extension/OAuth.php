@@ -83,7 +83,10 @@ class OpenID_Extension_OAuth extends OpenID_Extension
     ) {
         $requestToken = $this->get('request_token');
         if ($requestToken === null) {
-            throw new OpenID_Exception('No oauth request token in OpenID message');
+            throw new OpenID_Exception(
+                'No oauth request token in OpenID message',
+                OpenID_Exception::MISSING_DATA
+            );
         }
 
         $consumer = new HTTP_OAuth_Consumer($consumerKey, $consumerSecret);

@@ -191,7 +191,8 @@ class OpenID_Discover
 
         if (!class_exists($class)) {
             throw new OpenID_Discover_Exception(
-                'Unable to load driver: ' . $discoverType
+                'Unable to load driver: ' . $discoverType,
+                OpenID_Exception::LOAD_ERROR
             );
         }
 
@@ -199,7 +200,8 @@ class OpenID_Discover
 
         if (!$object instanceof OpenID_Discover_Interface) {
             throw new OpenID_Discover_Exception(
-                'Requested driver does not conform to Discover interface'
+                'Requested driver does not conform to Discover interface',
+                OpenID_Exception::INVALID_DEFINITION
             );
         }
 
@@ -222,7 +224,8 @@ class OpenID_Discover
 
         if (!class_exists($class, false)) {
             throw new OpenID_Discover_Exception(
-                'Unknown extension: ' . $class
+                'Unknown extension: ' . $class,
+                OpenID_Exception::LOAD_ERROR
             );
         }
 

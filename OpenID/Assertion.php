@@ -136,7 +136,8 @@ class OpenID_Assertion extends OpenID
         // Validate openid.return_to
         if (!filter_var($returnTo, FILTER_VALIDATE_URL)) {
             throw new OpenID_Assertion_Exception(
-                'openid.return_to parameter is invalid or missing'
+                'openid.return_to parameter is invalid or missing',
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
@@ -151,7 +152,8 @@ class OpenID_Assertion extends OpenID
 
         if ($obj1->getURL() != $obj2->getURL()) {
             throw new OpenID_Assertion_Exception(
-                'openid.return_to does not match the requested URL'
+                'openid.return_to does not match the requested URL',
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
@@ -164,7 +166,8 @@ class OpenID_Assertion extends OpenID
                 || $queryString2[$param] != $value
             ) {
                 throw new OpenID_Assertion_Exception(
-                    'openid.return_to parameters do not match requested url'
+                    'openid.return_to parameters do not match requested url',
+                    OpenID_Exception::INVALID_VALUE
                 );
             }
         }
@@ -181,13 +184,15 @@ class OpenID_Assertion extends OpenID
         $claimedID = $this->message->get('openid.claimed_id');
         if ($claimedID === null) {
             throw new OpenID_Assertion_Exception_NoClaimedID(
-                'No claimed_id in message'
+                'No claimed_id in message',
+                OpenID_Exception::MISSING_DATA
             );
         }
 
         if ($claimedID === OpenID::SERVICE_2_0_SERVER) {
             throw new OpenID_Assertion_Exception(
-                'Claimed identifier cannot be an OP identifier'
+                'Claimed identifier cannot be an OP identifier',
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
@@ -198,7 +203,8 @@ class OpenID_Assertion extends OpenID
         $discover = $this->getDiscover($url->getURL());
         if (!$discover instanceof OpenID_Discover) {
             throw new OpenID_Assertion_Exception(
-                'Unable to discover claimed_id'
+                'Unable to discover claimed_id',
+                OpenID_Exception::DISCOVERY_ERROR
             );
         }
 
@@ -206,7 +212,8 @@ class OpenID_Assertion extends OpenID
         $opURL = array_shift($URIs);
         if ($opURL !== $this->message->get('openid.op_endpoint')) {
             throw new OpenID_Assertion_Exception(
-                'This OP is not authorized to issue assertions for this claimed id'
+                'This OP is not authorized to issue assertions for this claimed id',
+                OpenID_Exception::DISCOVERY_ERROR
             );
         }
     }
@@ -225,7 +232,8 @@ class OpenID_Assertion extends OpenID
         $nonce = new OpenID_Nonce($opURL, $this->clockSkew);
         if (!$nonce->verifyResponseNonce($responseNonce)) {
             throw new OpenID_Assertion_Exception(
-                'Invalid or already existing response_nonce'
+                'Invalid or already existing response_nonce',
+                OpenID_Exception::INVALID_VALUE
             );
         }
     }
@@ -251,7 +259,8 @@ class OpenID_Assertion extends OpenID
         $qs     = $netURL->getQueryVariables();
         if (!array_key_exists(OpenID_Nonce::RETURN_TO_NONCE, $qs)) {
             throw new OpenID_Assertion_Exception(
-                'Missing OpenID 1.1 return_to nonce'
+                'Missing OpenID 1.1 return_to nonce',
+                OpenID_Exception::MISSING_DATA
             );
         }
 
@@ -273,7 +282,8 @@ class OpenID_Assertion extends OpenID
 
         if (!$fromStore) {
             throw new OpenID_Assertion_Exception(
-                'Invalid OpenID 1.1 return_to nonce in response'
+                'Invalid OpenID 1.1 return_to nonce in response',
+                OpenID_Exception::INVALID_VALUE
             );
         }
 

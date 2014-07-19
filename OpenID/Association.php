@@ -121,7 +121,8 @@ class OpenID_Association
         foreach ($this->requiredParams as $key) {
             if (!isset($params[$key])) {
                 throw new OpenID_Association_Exception(
-                    "Missing parameter: $key"
+                    "Missing parameter: $key",
+                    OpenID_Exception::MISSING_DATA
                 );
             }
         }
@@ -129,14 +130,16 @@ class OpenID_Association
         // Validate URI
         if (!filter_var($params['uri'], FILTER_VALIDATE_URL)) {
             throw new OpenID_Association_Exception(
-                "Invalid uri: " . $params['uri']
+                "Invalid uri: " . $params['uri'],
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
         // Validate assocType
         if (!in_array(strtoupper($params['assocType']), $this->supportedTypes)) {
             throw new OpenID_Association_Exception(
-                "Invalid association type: " . $params['assocType']
+                "Invalid association type: " . $params['assocType'],
+                OpenID_Exception::INVALID_VALUE
             );
         }
 
@@ -183,7 +186,8 @@ class OpenID_Association
         if ($this->assocHandle != $message->get('openid.assoc_handle')) {
 
             throw new OpenID_Association_Exception(
-                'Association handles do not match'
+                'Association handles do not match',
+                OpenID_Exception::VERIFICATION_ERROR
             );
         }
 
@@ -191,7 +195,8 @@ class OpenID_Association
         if ($this->uri != $message->get('openid.op_endpoint')) {
 
             throw new OpenID_Association_Exception(
-                'Endpoint URLs do not match'
+                'Endpoint URLs do not match',
+                OpenID_Exception::VERIFICATION_ERROR
             );
         }
 
@@ -257,15 +262,16 @@ class OpenID_Association
             || $message->get('openid.signed') !== null
         ) {
             throw new OpenID_Association_Exception(
-                'This message appears to be already signed'
+                'This message appears to be already signed',
+                OpenID_Exception::ALREADY_SIGNED
             );
         }
 
         // Make sure the handles match for this OP and response
         if ($this->assocHandle != $message->get('openid.assoc_handle')) {
-
             throw new OpenID_Association_Exception(
-                'Association handles do not match'
+                'Association handles do not match',
+                OpenID_Exception::VERIFICATION_ERROR
             );
         }
 
