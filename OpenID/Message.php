@@ -213,9 +213,12 @@ class OpenID_Message
         if ($format == self::FORMAT_KV) {
             $lines = explode("\n", $message);
             foreach ($lines as $line) {
-                if ($line != '') {
-                        list($key, $value) = explode(':', $line, 2);
-                        $this->set($key, $value);
+                if ($line == '') {
+                    continue;
+                }
+                if (strpos($line, ':') !== false) {
+                    list($key, $value) = explode(':', $line, 2);
+                    $this->set($key, $value);
                 }
             }
             return;

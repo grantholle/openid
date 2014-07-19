@@ -196,6 +196,12 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertSame($array, $this->object->getArrayFormat());
     }
 
+    public function testSetMessageKvInvalid()
+    {
+        $this->object = new OpenID_Message('a', OpenID_Message::FORMAT_KV);
+        $this->assertSame('', $this->object->getKVFormat());
+    }
+
     /**
      * testSetMessageFailure 
      * 
