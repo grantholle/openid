@@ -84,9 +84,16 @@ require_once 'Net/URL2.php';
  * // Assuming your $realm is the host which they came in to, build a Net_URL2 
  * // object from this request:
  * $request = new Net_URL2($realm . $_SERVER['REQUEST_URI']);
+ *
+ * if (!count($_POST)) {
+ *     list(, $queryString) = explode('?', $_SERVER['REQUEST_URI']);
+ * } else {
+ *     $queryString = file_get_contents('php://input');
+ * }
+ * $message = new \OpenID_Message($queryString, \OpenID_Message::FORMAT_HTTP);
  * 
  * // Now verify:
- * $result = $rp->verify($request);
+ * $result = $rp->verify($request, $message);
  * if ($result->success()) {
  *     echo "success! :)";
  * } else {
