@@ -135,6 +135,18 @@ class OpenID_RelyingParty extends OpenID
      * @var string
      */
     protected $realm = null;
+
+    /**
+     * HTTP_Request2 options
+     *
+     * @var array
+     */
+    protected $requestOptions = array(
+        'follow_redirects' => true,
+        'timeout'          => 3,
+        'connect_timeout'  => 3
+    );
+
     /**
      * Whether or not to use associations
      *
@@ -209,6 +221,19 @@ class OpenID_RelyingParty extends OpenID
             );
         }
         $this->clockSkew = $skew;
+    }
+
+    /**
+     * Sets the HTTP_Request2 options to use
+     *
+     * @param array $options Array of HTTP_Request2 options
+     *
+     * @return OpenID_RelyingParty for fluent interface
+     */
+    public function setRequestOptions(array $options)
+    {
+        $this->requestOptions = $options;
+        return $this;
     }
 
     /**
@@ -361,7 +386,7 @@ class OpenID_RelyingParty extends OpenID
     protected function getDiscover()
     {
         $discover = OpenID_Discover::getDiscover(
-            $this->normalizedID, $this->getStore()
+            $this->normalizedID, $this->getStore(), $this->getRequestOptions()
         );
         if (!$discover instanceof OpenID_Discover) {
             // @codeCoverageIgnoreStart
@@ -392,6 +417,7 @@ class OpenID_RelyingParty extends OpenID
         }
 
         $assoc  = $this->getAssociationRequestObject($opEndpointURL, $version);
+        $assoc->setRequestOptions($this->getRequestOptions());
         $result = $assoc->associate();
 
         if (!$result instanceof OpenID_Association) {
@@ -431,6 +457,16 @@ class OpenID_RelyingParty extends OpenID
         return new OpenID_Assertion(
             $message, $requestedURL, $this->clockSkew
         );
+    }
+
+    /**
+     * Return the HTTP_Request2 options
+     *
+     * @return array Array of HTTP_Request2 options
+     */
+    public function getRequestOptions()
+    {
+        return $this->requestOptions;
     }
 }
 ?>

@@ -23,6 +23,7 @@ require_once 'OpenID/Association/Request.php';
 require_once 'OpenID.php';
 require_once 'OpenID/Nonce.php';
 require_once 'Net/URL2.php';
+require_once 'HTTP/Request2/Adapter/Mock.php';
 
 /**
  * OpenID_RelyingPartyTest
@@ -164,6 +165,37 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     {
         $rp = new OpenID_RelyingParty($this->returnTo, $this->realm);
         $rp->prepare();
+    }
+
+    public function testPrepareRequestOptions()
+    {
+        $mock = new HTTP_Request2_Adapter_Mock();
+        //yadis application/xrds+xml request
+        $mock->addResponse(
+            "HTTP/1.1 200 OK\r\n"
+            . "Connection: close\r\n"
+            . "\r\n"
+            . "Explicit response for example.org",
+            OpenID::normalizeIdentifier($this->id)
+        );
+        //HTML: GET
+        $mock->addResponse(
+            "HTTP/1.1 200 OK\r\n"
+            . "Connection: close\r\n"
+            . "\r\n"
+            . "<html><head><link rel='openid.server' href='http://id.example.org/'/>'",
+            OpenID::normalizeIdentifier($this->id)
+        );
+
+        $this->rp = new OpenID_RelyingParty(
+            $this->returnTo, $this->realm, $this->id
+        );
+        $options = $this->rp->getRequestOptions();
+        $options['adapter'] = $mock;
+
+        $this->rp->setRequestOptions($options);
+        $auth = $this->rp->prepare();
+        $this->assertInstanceOf('OpenID_Auth_Request', $auth);
     }
 
     /**

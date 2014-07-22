@@ -39,6 +39,15 @@ interface OpenID_Discover_Interface
      * @return bool true on success, false on failure
      */
     public function discover();
+
+    /**
+     * Sets the HTTP_Request2 options to use
+     *
+     * @param array $options Array of HTTP_Request2 options
+     *
+     * @return OpenID_Discover for fluent interface
+     */
+    public function setRequestOptions(array $options);
 }
 
 ?>

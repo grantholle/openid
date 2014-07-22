@@ -159,7 +159,7 @@ class OpenID_Discover
 
         foreach (self::$discoveryOrder as $service) {
             try {
-                $discover = self::_factory($service, $this->identifier);
+                $discover = $this->_factory($service, $this->identifier);
                 $result   = $discover->discover();
             } catch (OpenID_Discover_Exception $e) {
                 continue;
@@ -182,7 +182,7 @@ class OpenID_Discover
      *
      * @return void
      */
-    static private function _factory($discoverType, $identifier)
+    protected function _factory($discoverType, $identifier)
     {
         $file  = 'OpenID/Discover/' . $discoverType . '.php';
         $class = 'OpenID_Discover_' . $discoverType;
@@ -204,6 +204,8 @@ class OpenID_Discover
                 OpenID_Exception::INVALID_DEFINITION
             );
         }
+
+        $object->setRequestOptions($this->requestOptions);
 
         return $object;
     }
@@ -245,13 +247,15 @@ class OpenID_Discover
      * exists, otherwise executing discovery and storing results if they are
      * positive.
      *
-     * @param string       $id    URI Identifier to discover
-     * @param OpenID_Store $store Instance of OpenID_Store
+     * @param string       $id      URI Identifier to discover
+     * @param OpenID_Store $store   Instance of OpenID_Store
+     * @param array        $options Options to pass to HTTP_Request2
      *
      * @return OpenID_Discover|false OpenID_Discover on success, false on failure
      */
-    static public function getDiscover($id, OpenID_Store_Interface $store)
-    {
+    static public function getDiscover(
+        $id, OpenID_Store_Interface $store, array $options = array()
+    ) {
         $discoverCache = $store->getDiscover($id);
 
         if ($discoverCache instanceof OpenID_Discover) {
@@ -259,6 +263,7 @@ class OpenID_Discover
         }
 
         $discover = new OpenID_Discover($id);
+        $discover->setRequestOptions($options);
         $result   = $discover->discover();
         if ($result === false) {
             // @codeCoverageIgnoreStart

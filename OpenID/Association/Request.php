@@ -81,6 +81,14 @@ class OpenID_Association_Request extends OpenID
     protected $dh = null;
 
     /**
+     * HTTP_Request2 options
+     *
+     * @var array
+     */
+    protected $requestOptions = array();
+
+
+    /**
      * Sets the arguments passed in, as well as creates the request message.
      *
      * @param string              $opEndpointURL URL of OP Endpoint
@@ -189,7 +197,7 @@ class OpenID_Association_Request extends OpenID
     }
 
     /**
-     * Actually sends the assocition request to the OP Endpoing URL.
+     * Actually sends the assocition request to the OP Endpoint URL.
      *
      * @return OpenID_Message
      * @see associate()
@@ -205,7 +213,9 @@ class OpenID_Association_Request extends OpenID
             $this->initDH();
         }
 
-        $response = $this->directRequest($this->opEndpointURL, $this->message);
+        $response = $this->directRequest(
+            $this->opEndpointURL, $this->message, $this->getRequestOptions()
+        );
         $message  = new OpenID_Message(
             $response->getBody(),
             OpenID_Message::FORMAT_KV
@@ -339,6 +349,29 @@ class OpenID_Association_Request extends OpenID
     public function getEndpointURL()
     {
         return $this->opEndpointURL;
+    }
+
+    /**
+     * Sets the HTTP_Request2 options to use
+     *
+     * @param array $options Array of HTTP_Request2 options
+     *
+     * @return self Fluent interface
+     */
+    public function setRequestOptions(array $options)
+    {
+        $this->requestOptions = $options;
+        return $this;
+    }
+
+    /**
+     * Return the HTTP_Request2 options
+     *
+     * @return array Array of HTTP_Request2 options
+     */
+    public function getRequestOptions()
+    {
+        return $this->requestOptions;
     }
 }
 ?>

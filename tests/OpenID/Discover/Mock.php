@@ -55,7 +55,10 @@ class OpenID_Discover_Mock implements OpenID_Discover_Interface
         $date = new DateTime(date('c', (time() + (3600 * 8))));
         $service->setExpiresHeader($date->format(DATE_RFC1123));
         return $service;
+    }
 
+    public function setRequestOptions(array $options)
+    {
     }
 }
 

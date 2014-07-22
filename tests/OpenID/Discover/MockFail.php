@@ -51,5 +51,9 @@ class OpenID_Discover_MockFail implements OpenID_Discover_Interface
     {
         return false;
     }
+
+    public function setRequestOptions(array $options)
+    {
+    }
 }
 ?>

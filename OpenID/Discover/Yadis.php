@@ -36,8 +36,8 @@ require_once 'OpenID/ServiceEndpoints.php';
  * @see       Services_Yadis
  */
 class OpenID_Discover_Yadis
-extends OpenID_Discover
-implements OpenID_Discover_Interface
+    extends OpenID_Discover
+    implements OpenID_Discover_Interface
 {
     /**
      * The Services_Yadis instance
