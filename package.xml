@@ -11,13 +11,19 @@
   <name>Bill Shupp</name>
   <user>shupp</user>
   <email>shupp@php.net</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Christian Weiske</name>
+  <user>cweiske</user>
+  <email>cweiske@php.net</email>
   <active>yes</active>
  </lead>
- <date>2012-04-01</date>
- <time>13:12:06</time>
+ <date>2014-07-22</date>
+ <time>23:00:42</time>
  <version>
-  <release>0.3.3</release>
-  <api>0.3.3</api>
+  <release>0.4.0</release>
+  <api>0.4.0</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -25,8 +31,13 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* Fix bug #19234: Normalization of identifiers/openID not implemented correctly
-* Some doc block fixes
+  * Fix bug #19234: Normalization of identifiers/openID not implemented correctly
+  * Fix bug #19235: Class docblock example in OpenID_RelyingParty does not work
+  * Fix bug #19239: Exceptions indistinguishable (have no code)
+  * Fix bug #19680: Warning: strpos(): Offset not contained in string
+  * Fix bug #20329: Discover.php requires curl HTTP adapter
+  * Fix bug #20331: Undefined offset: 1 in OpenID/Message.php
+  * Implement request #18662: Unable to configure SSL settings.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -522,5 +533,28 @@ Initial release
 * Some doc block fixes
    </notes>
   </release>
+
+  <release>
+   <version>
+    <release>0.4.0</release>
+    <api>0.4.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2014-07-22</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+    * Fix bug #19234: Normalization of identifiers/openID not implemented correctly
+    * Fix bug #19235: Class docblock example in OpenID_RelyingParty does not work
+    * Fix bug #19239: Exceptions indistinguishable (have no code)
+    * Fix bug #19680: Warning: strpos(): Offset not contained in string
+    * Fix bug #20329: Discover.php requires curl HTTP adapter
+    * Fix bug #20331: Undefined offset: 1 in OpenID/Message.php
+    * Implement request #18662: Unable to configure SSL settings.
+   </notes>
+  </release>
+
  </changelog>
 </package>
