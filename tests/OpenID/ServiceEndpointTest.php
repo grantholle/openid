@@ -101,7 +101,7 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
 
         $uris = $this->object->getURIs();
         $this->assertEquals(array(), $uris);
-        
+
         $this->object->setURIs($testURIs);
 
         $uris = $this->object->getURIs();
@@ -122,7 +122,7 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
 
         $types = $this->object->getTypes();
         $this->assertEquals(array(), $types);
-    
+
         $this->object->setTypes($testTypes);
 
         $types = $this->object->getTypes();
@@ -140,7 +140,7 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
 
         $localID = $this->object->getLocalID();
         $this->assertNull($localID);
-    
+
         $this->object->setLocalID($testLocalID);
 
         $localID = $this->object->getLocalID();
@@ -158,7 +158,7 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
 
         $source = $this->object->getSource();
         $this->assertNull($source);
-    
+
         $this->object->setSource($testSource);
 
         $source = $this->object->getSource();
@@ -176,7 +176,7 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
 
         $version = $this->object->getVersion();
         $this->assertNull($version);
-    
+
         $this->object->setVersion($testVersion);
 
         $version = $this->object->getVersion();

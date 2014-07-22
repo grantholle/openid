@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_RelyingPartyTest 
- * 
+ * OpenID_RelyingPartyTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -25,12 +25,12 @@ require_once 'OpenID/Nonce.php';
 require_once 'Net/URL2.php';
 
 /**
- * OpenID_RelyingPartyTest 
- * 
+ * OpenID_RelyingPartyTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -47,8 +47,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     protected $association   = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -88,13 +88,13 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
         );
 
         $this->association = $this->getMock('OpenID_Association',
-                                            array('checkMessageSignature'), 
+                                            array('checkMessageSignature'),
                                             array($params));
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -105,8 +105,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testEnableDisableAssociations 
-     * 
+     * testEnableDisableAssociations
+     *
      * @return void
      */
     public function testEnableDisableAssociations()
@@ -116,8 +116,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetClockSkew 
-     * 
+     * testSetClockSkew
+     *
      * @return void
      */
     public function testSetClockSkew()
@@ -126,8 +126,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetClockSkewFail 
-     * 
+     * testSetClockSkewFail
+     *
      * @expectedException OpenID_Exception
      * @return void
      */
@@ -137,8 +137,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testPrepare 
-     * 
+     * testPrepare
+     *
      * @return void
      */
     public function testPrepare()
@@ -155,8 +155,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testPrepareFail 
-     * 
+     * testPrepareFail
+     *
      * @expectedException OpenID_Exception
      * @return void
      */
@@ -167,8 +167,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAssociationFail 
-     * 
+     * testGetAssociationFail
+     *
      * @return void
      */
     public function testGetAssociationFail()
@@ -199,8 +199,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAssociation 
-     * 
+     * testGetAssociation
+     *
      * @return void
      */
     public function testGetAssociation()
@@ -230,8 +230,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAssociationRequestObject 
-     * 
+     * testGetAssociationRequestObject
+     *
      * @return void
      */
     public function testGetAssociationRequestObject()
@@ -246,12 +246,12 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Converts an OpenID_Message instance to a Net_URL2 instance based on 
+     * Converts an OpenID_Message instance to a Net_URL2 instance based on
      * $this->returnTo.  This was added to ease the transition from the old
      * verify() signature to the new one.
-     * 
+     *
      * @param OpenID_Message $message Instance of OpenID_Message
-     * 
+     *
      * @return Net_URL2
      */
     protected function messageToNetURL2(OpenID_Message $message)
@@ -260,8 +260,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyCancel 
-     * 
+     * testVerifyCancel
+     *
      * @return void
      */
     public function testVerifyCancel()
@@ -276,8 +276,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyOneOneImmediateFail 
-     * 
+     * testVerifyOneOneImmediateFail
+     *
      * @return void
      */
     public function testVerifyOneOneImmediateFail()
@@ -295,8 +295,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyError 
-     * 
+     * testVerifyError
+     *
      * @expectedException OpenID_Exception
      * @return void
      */
@@ -309,8 +309,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyInvalidMode 
-     * 
+     * testVerifyInvalidMode
+     *
      * @expectedException OpenID_Exception
      * @return void
      */
@@ -323,8 +323,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyAssociation 
-     * 
+     * testVerifyAssociation
+     *
      * @return void
      */
     public function testVerifyAssociation()
@@ -360,8 +360,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyUnsolicited 
-     * 
+     * testVerifyUnsolicited
+     *
      * @return void
      */
     public function testVerifyUnsolicited()
@@ -421,8 +421,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyCheckAuthentication 
-     * 
+     * testVerifyCheckAuthentication
+     *
      * @return void
      */
     public function testVerifyCheckAuthentication()
@@ -468,8 +468,8 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAssertionObject 
-     * 
+     * testGetAssertionObject
+     *
      * @return void
      */
     public function testGetAssertionObject()

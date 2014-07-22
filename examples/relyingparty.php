@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID 
- * 
+ * OpenID
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -113,9 +113,9 @@ if (isset($_POST['start'])) {
 
         $authRequest->addExtension($oauth);
     }
-    
+
     $url = $authRequest->getAuthorizeURL();
-    
+
     if (empty($_POST['debug'])) {
         header("Location: $url");
         exit;
@@ -161,7 +161,7 @@ if (isset($_POST['start'])) {
     $contents .= "</div class='relyingparty_results'>";
     include_once 'common/wrapper.php';
     exit;
-    
+
 } else {
     if (isset($_SESSION['identifier'])) {
         $usid = $_SESSION['identifier'];

@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Observer_LogTest 
- * 
+ * OpenID_Observer_LogTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -17,12 +17,12 @@ require_once 'OpenID/Observer/Log.php';
 require_once 'Log.php';
 
 /**
- * OpenID_Observer_LogTest 
- * 
+ * OpenID_Observer_LogTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -32,8 +32,8 @@ class OpenID_Observer_LogTest extends PHPUnit_Framework_TestCase
     protected $log = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -42,8 +42,8 @@ class OpenID_Observer_LogTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -52,8 +52,8 @@ class OpenID_Observer_LogTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testConstructorNoLogInstance 
-     * 
+     * testConstructorNoLogInstance
+     *
      * @return void
      */
     public function testConstructorNoLogInstance()
@@ -62,8 +62,8 @@ class OpenID_Observer_LogTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testUpdate 
-     * 
+     * testUpdate
+     *
      * @return void
      */
     public function testUpdate()
@@ -72,8 +72,8 @@ class OpenID_Observer_LogTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testUpdateUnknownEvent 
-     * 
+     * testUpdateUnknownEvent
+     *
      * @return void
      */
     public function testUpdateUnknownEvent()
@@ -82,8 +82,8 @@ class OpenID_Observer_LogTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetEvents 
-     * 
+     * testGetEvents
+     *
      * @return void
      */
     public function testGetEvents()

@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Association_Request 
- * 
+ * OpenID_Association_Request
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      OpenID
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -23,14 +23,14 @@ require_once 'OpenID/Message.php';
 require_once 'OpenID/Association/DiffieHellman.php';
 
 /**
- * OpenID_Association_Request 
- * 
+ * OpenID_Association_Request
+ *
  * Request object for establishing OpenID Associations.
- * 
+ *
  * @uses      OpenID
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -39,28 +39,28 @@ class OpenID_Association_Request extends OpenID
 {
     /**
      * OpenID provider endpoint URL
-     * 
+     *
      * @var string
      */
     protected $opEndpointURL = null;
 
     /**
      * Contains contents of the association request
-     * 
+     *
      * @var OpenID_Message
      */
     protected $message = null;
 
     /**
      * Version of OpenID in use.  This determines which algorithms we can use.
-     * 
+     *
      * @var string
      */
     protected $version = null;
 
     /**
      * The association request response in array format
-     * 
+     *
      * @var array
      * @see getResponse()
      */
@@ -68,26 +68,26 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Optional instance of Crypt_DiffieHellman
-     * 
+     *
      * @var Crypt_DiffieHellman
      */
     protected $cdh = null;
 
     /**
      * OpenID_Association_DiffieHellman instance
-     * 
+     *
      * @var OpenID_Association_DiffieHellman
      */
     protected $dh = null;
 
     /**
      * Sets the arguments passed in, as well as creates the request message.
-     * 
+     *
      * @param string              $opEndpointURL URL of OP Endpoint
      * @param string              $version       Version of OpenID in use
      * @param Crypt_DiffieHellman $cdh           Custom Crypt_DiffieHellman
      *                                           instance
-     * 
+     *
      * @return void
      */
     public function __construct(
@@ -120,9 +120,9 @@ class OpenID_Association_Request extends OpenID
     }
 
     /**
-     * Sends the association request.  Loops over errors and adapts to 
+     * Sends the association request.  Loops over errors and adapts to
      * 'unsupported-type' responses.
-     * 
+     *
      * @return mixed OpenID_Association on success, false on failure
      * @see buildAssociation()
      * @see sendAssociationRequest()
@@ -158,9 +158,9 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Build the OpenID_Association class based on the association response
-     * 
+     *
      * @param array $response Association response in array format
-     * 
+     *
      * @return OpenID_Association
      * @see associate()
      */
@@ -190,7 +190,7 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Actually sends the assocition request to the OP Endpoing URL.
-     * 
+     *
      * @return OpenID_Message
      * @see associate()
      */
@@ -217,7 +217,7 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Gets the last association response
-     * 
+     *
      * @return void
      */
     public function getResponse()
@@ -227,7 +227,7 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Initialize the diffie-hellman parameters for the association request.
-     * 
+     *
      * @return void
      */
     protected function initDH()
@@ -238,7 +238,7 @@ class OpenID_Association_Request extends OpenID
     /**
      * Gets an instance of OpenID_Association_DiffieHellman.  If one is not already
      * instanciated, a new one is returned.
-     * 
+     *
      * @return OpenID_Association_DiffieHellman
      */
     protected function getDH()
@@ -253,9 +253,9 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Sets he association type for the request.  Can be sha1 or sha256.
-     * 
+     *
      * @param string $type sha1 or sha256
-     * 
+     *
      * @throws OpenID_Association_Exception on invalid type
      * @return void
      */
@@ -276,7 +276,7 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Gets the current association type
-     * 
+     *
      * @return void
      */
     public function getAssociationType()
@@ -286,10 +286,10 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Sets the session type.  Can be sha1, sha256, or no-encryption
-     * 
+     *
      * @param string $type sha1, sha256, or no-encryption
-     * 
-     * @throws OpenID_Association_Exception on invalid type, or if you set 
+     *
+     * @throws OpenID_Association_Exception on invalid type, or if you set
      *         no-encryption for an OP URL that doesn't support HTTPS
      * @return void
      */
@@ -323,7 +323,7 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Gets the current session type
-     * 
+     *
      * @return string Current session type (sha1, sha256, or no-encryption)
      */
     public function getSessionType()
@@ -333,7 +333,7 @@ class OpenID_Association_Request extends OpenID
 
     /**
      * Gets the OP Endpoint URL
-     * 
+     *
      * @return string OP Endpoint URL
      */
     public function getEndpointURL()

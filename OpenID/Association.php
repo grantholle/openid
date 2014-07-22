@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Association 
- * 
+ * OpenID_Association
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -20,14 +20,14 @@ require_once 'OpenID.php';
 require_once 'OpenID/Message.php';
 
 /**
- * OpenID_Association 
- * 
- * A class that represents an association.  This class can be serialized for 
+ * OpenID_Association
+ *
+ * A class that represents an association.  This class can be serialized for
  * storage.  It also allows you to add and check signatures of an OpenID_Message.
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -37,36 +37,36 @@ class OpenID_Association
 {
     /**
      * URI of the OP Endpoint
-     * 
+     *
      * @var string
      */
     protected $uri = null;
 
     /**
      * expires_in paramater of the association.  Time is in seconds.
-     * 
+     *
      * @var mixed
      */
     protected $expiresIn = null;
 
     /**
      * Unix timestamp of when this association was created.
-     * 
+     *
      * @var int
      */
     protected $created = null;
 
     /**
-     * assoc_type parameter of the association.  Should be one of HMAC-SHA1 or 
+     * assoc_type parameter of the association.  Should be one of HMAC-SHA1 or
      * HMAC-SHA256
-     * 
+     *
      * @var string
      */
     protected $assocType = null;
 
     /**
      * assoc_handle parameter of the association.
-     * 
+     *
      * @var string
      */
     protected $assocHandle = null;
@@ -74,14 +74,14 @@ class OpenID_Association
     /**
      * In the association response, this is also referred to as the "mac_key", or is
      * derived from the "enc_mac_key" if the session used encryption.
-     * 
+     *
      * @var mixed
      */
     protected $sharedSecret = null;
 
     /**
      * Required parameters for storing an association.
-     * 
+     *
      * @see __construct()
      * @var array
      */
@@ -96,7 +96,7 @@ class OpenID_Association
 
     /**
      * Local list of supported association types.
-     * 
+     *
      * @see $assocType
      * @see __construct()
      * @var array
@@ -108,10 +108,10 @@ class OpenID_Association
 
     /**
      * Validates some association values before setting them as member variables.
-     * 
+     *
      * @param array $params Array of relevant parameters from the association
      *                      response
-     * 
+     *
      * @throws OpenID_Association_Exception if the response is not valid
      * @return void
      */
@@ -152,9 +152,9 @@ class OpenID_Association
 
     /**
      * Allows access to association data via $assoc->name
-     * 
+     *
      * @param string $name Name of the item to get
-     * 
+     *
      * @return mixed Value
      */
     public function __get($name)
@@ -164,7 +164,7 @@ class OpenID_Association
 
     /**
      * Gets the algo part of the assoc_type (strips 'HMAC-')
-     * 
+     *
      * @return string Algorithm part of the assoc_type handle
      */
     public function getAlgorithm()
@@ -174,9 +174,9 @@ class OpenID_Association
 
     /**
      * Checks the signature of an OpenID_Message using this association
-     * 
+     *
      * @param OpenID_Message $message Instance of OpenID_Message
-     * 
+     *
      * @throws OpenID_Association_Exception if the handles don't match
      * @return bool true if the signatures match, false otherwise
      */
@@ -227,13 +227,13 @@ class OpenID_Association
     }
 
     /**
-     * Returns a KV formatted message for signing based on the contents of the 
+     * Returns a KV formatted message for signing based on the contents of the
      * openid.signed key.  This allows for duplicate entries, which
      * OpenID_Message::getKVFormat() doesn't.  (Yahoo! uses duplicates)
-     * 
-     * @param OpenID_Message $message An instance of the OpenID_Message you want to 
+     *
+     * @param OpenID_Message $message An instance of the OpenID_Message you want to
      *                                sign
-     * 
+     *
      * @return string The openid.signed items in KV form
      */
     public function getMessageForSigning(OpenID_Message $message)
@@ -249,9 +249,9 @@ class OpenID_Association
 
     /**
      * Signs an OpenID_Message instance
-     * 
+     *
      * @param OpenID_Message $message Message to be signed
-     * 
+     *
      * @throws OpenID_Association_Exception if the message is already signed,
                or the association handles do not match
      * @return void
@@ -297,9 +297,9 @@ class OpenID_Association
 
     /**
      * Gets a an HMAC hash of an OpenID_Message using this association.
-     * 
+     *
      * @param OpenID_Message $message The message format of the items to hash
-     * 
+     *
      * @return string The HMAC hash
      */
     protected function hashHMAC($message)

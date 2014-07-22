@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_MessageTest 
- * 
+ * OpenID_MessageTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -17,12 +17,12 @@ require_once 'OpenID/Message.php';
 require_once 'OpenID/Extension/AX.php';
 
 /**
- * OpenID_MessageTest 
- * 
+ * OpenID_MessageTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -58,8 +58,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGet 
-     * 
+     * testGet
+     *
      * @return void
      */
     public function testGet()
@@ -72,8 +72,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSet 
-     * 
+     * testSet
+     *
      * @return void
      */
     public function testSet()
@@ -88,8 +88,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetFailure 
-     * 
+     * testSetFailure
+     *
      * @expectedException OpenID_Message_Exception
      * @return void
      */
@@ -99,8 +99,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDelete 
-     * 
+     * testDelete
+     *
      * @return void
      */
     public function testDelete()
@@ -118,8 +118,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetKVFormat 
-     * 
+     * testGetKVFormat
+     *
      * @return void
      */
     public function testGetKVFormat()
@@ -130,8 +130,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetHTTPFormat 
-     * 
+     * testGetHTTPFormat
+     *
      * @return void
      */
     public function testGetHTTPFormat()
@@ -143,8 +143,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetArrayFormat 
-     * 
+     * testGetArrayFormat
+     *
      * @return void
      */
     public function testGetArrayFormat()
@@ -158,8 +158,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetMessageFail 
-     * 
+     * testGetMessageFail
+     *
      * @expectedException OpenID_Message_Exception
      * @return void
      */
@@ -169,8 +169,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetMessage 
-     * 
+     * testSetMessage
+     *
      * @return void
      */
     public function testSetMessage()
@@ -203,8 +203,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetMessageFailure 
-     * 
+     * testSetMessageFailure
+     *
      * @expectedException OpenID_Message_Exception
      * @return void
      */
@@ -214,8 +214,8 @@ class OpenID_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAddExtension 
-     * 
+     * testAddExtension
+     *
      * @return void
      */
     public function testAddExtension()

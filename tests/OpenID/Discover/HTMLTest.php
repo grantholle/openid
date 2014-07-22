@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Discover_HTMLTest 
- * 
+ * OpenID_Discover_HTMLTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -16,12 +16,12 @@
 require_once 'OpenID/Discover/HTML.php';
 
 /**
- * OpenID_Discover_HTMLTest 
- * 
+ * OpenID_Discover_HTMLTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -29,8 +29,8 @@ require_once 'OpenID/Discover/HTML.php';
 class OpenID_Discover_HTMLTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * testDiscoverSuccess 
-     * 
+     * testDiscoverSuccess
+     *
      * @return void
      */
     public function testDiscoverSuccess()
@@ -106,8 +106,8 @@ class OpenID_Discover_HTMLTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverFail 
-     * 
+     * testDiscoverFail
+     *
      * @expectedException OpenID_Discover_Exception
      * @return void
      */

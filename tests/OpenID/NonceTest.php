@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_NonceTest 
- * 
+ * OpenID_NonceTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -17,12 +17,12 @@ require_once 'OpenID/Nonce.php';
 require_once 'OpenID/Store/Mock.php';
 
 /**
- * OpenID_NonceTest 
- * 
+ * OpenID_NonceTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -34,8 +34,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     protected $nonce = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -44,8 +44,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -54,8 +54,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidate 
-     * 
+     * testValidate
+     *
      * @return void
      */
     public function testValidate()
@@ -65,8 +65,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateFail 
-     * 
+     * testValidateFail
+     *
      * @return void
      */
     public function testValidateFail()
@@ -80,8 +80,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyResponseNonce 
-     * 
+     * testVerifyResponseNonce
+     *
      * @return void
      */
     public function testVerifyResponseNonce()
@@ -97,8 +97,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifyResponseNonceFail 
-     * 
+     * testVerifyResponseNonceFail
+     *
      * @return void
      */
     public function testVerifyResponseNonceFail()
@@ -114,8 +114,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCreateNonce 
-     * 
+     * testCreateNonce
+     *
      * @return void
      */
     public function testCreateNonce()
@@ -128,8 +128,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCreateNonceAndStore 
-     * 
+     * testCreateNonceAndStore
+     *
      * @return void
      */
     public function testCreateNonceAndStore()
@@ -141,8 +141,8 @@ class OpenID_NonceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateFailTooLong 
-     * 
+     * testValidateFailTooLong
+     *
      * @return void
      */
     public function testValidateFailTooLong()

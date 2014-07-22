@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenIDTest 
- * 
+ * OpenIDTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -19,12 +19,12 @@ require_once 'OpenID/Message.php';
 require_once 'OpenID/Observer/Mock.php';
 
 /**
- * OpenIDTest 
- * 
+ * OpenIDTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -37,8 +37,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetAndGetStore 
-     * 
+     * testSetAndGetStore
+     *
      * @return void
      */
     public function testSetAndGetStore()
@@ -49,8 +49,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetXRIGlobalSymbols 
-     * 
+     * testGetXRIGlobalSymbols
+     *
      * @return void
      */
     public function testGetXRIGlobalSymbols()
@@ -59,8 +59,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testNormalizeIdentifierSuccess 
-     * 
+     * testNormalizeIdentifierSuccess
+     *
      * @return void
      */
     public function testNormalizeIdentifierSuccess()
@@ -95,8 +95,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testNormalizeIdentifierFail 
-     * 
+     * testNormalizeIdentifierFail
+     *
      * @expectedException OpenID_Exception
      * @return void
      */
@@ -114,8 +114,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testNormalizeIdentifierFailXRI 
-     * 
+     * testNormalizeIdentifierFailXRI
+     *
      * @return void
      */
     public function testNormalizeIdentifierFailXRI()
@@ -134,8 +134,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDirectRequest 
-     * 
+     * testDirectRequest
+     *
      * @return void
      */
     public function testDirectRequest()
@@ -155,8 +155,8 @@ class OpenIDTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testObservers 
-     * 
+     * testObservers
+     *
      * @return void
      */
     public function testObservers()

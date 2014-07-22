@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Store_Mock 
- * 
+ * OpenID_Store_Mock
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      OpenID_Store_Interface
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -16,12 +16,12 @@
 require_once 'OpenID/Store/Interface.php';
 
 /**
- * OpenID_Store_Mock 
- * 
+ * OpenID_Store_Mock
+ *
  * @uses      OpenID_Store_Interface
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -29,10 +29,10 @@ require_once 'OpenID/Store/Interface.php';
 class OpenID_Store_Mock implements OpenID_Store_Interface
 {
     /**
-     * getDiscover 
-     * 
+     * getDiscover
+     *
      * @param mixed $identifier Identifier
-     * 
+     *
      * @return void
      */
     public function getDiscover($identifier)
@@ -40,11 +40,11 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * setDiscover 
-     * 
+     * setDiscover
+     *
      * @param OpenID_Discover $discover object
      * @param int             $expire   expire in seconds
-     * 
+     *
      * @return void
      */
     public function setDiscover(OpenID_Discover $discover, $expire = null)
@@ -52,11 +52,11 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * getAssociation 
-     * 
+     * getAssociation
+     *
      * @param string $uri    The OP Endpoint URI
      * @param string $handle The Association Handle (optional)
-     * 
+     *
      * @return void
      */
     public function getAssociation($uri, $handle = null)
@@ -64,10 +64,10 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * setAssociation 
-     * 
+     * setAssociation
+     *
      * @param OpenID_Association $association Association
-     * 
+     *
      * @return void
      */
     public function setAssociation(OpenID_Association $association)
@@ -75,10 +75,10 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * deleteAssociation 
-     * 
+     * deleteAssociation
+     *
      * @param mixed $uri URI
-     * 
+     *
      * @return void
      */
     public function deleteAssociation($uri)
@@ -86,11 +86,11 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * getNonce 
-     * 
+     * getNonce
+     *
      * @param mixed $nonce nonce
      * @param mixed $opURL opURL
-     * 
+     *
      * @return void
      */
     public function getNonce($nonce, $opURL)
@@ -98,11 +98,11 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * setNonce 
-     * 
+     * setNonce
+     *
      * @param mixed $nonce nonce
      * @param mixed $opURL opURL
-     * 
+     *
      * @return void
      */
     public function setNonce($nonce, $opURL)
@@ -110,11 +110,11 @@ class OpenID_Store_Mock implements OpenID_Store_Interface
     }
 
     /**
-     * deleteNonce 
-     * 
+     * deleteNonce
+     *
      * @param mixed $nonce nonce
      * @param mixed $opURL opURL
-     * 
+     *
      * @return void
      */
     public function deleteNonce($nonce, $opURL)

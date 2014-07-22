@@ -1,9 +1,9 @@
 <?php
 /**
  * OpenID_Discover_Yadis
- * 
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
  * @uses      OpenID_Discover_Interface
@@ -15,7 +15,7 @@
  */
 
 /**
- * Required files 
+ * Required files
  */
 require_once 'OpenID/Discover.php';
 require_once 'OpenID/Discover/Interface.php';
@@ -24,7 +24,7 @@ require_once 'OpenID/ServiceEndpoints.php';
 
 /**
  * Implements YADIS discovery
- * 
+ *
  * @category  Auth
  * @package   OpenID
  * @uses      OpenID_Discover_Interface
@@ -41,14 +41,14 @@ implements OpenID_Discover_Interface
 {
     /**
      * The Services_Yadis instance
-     * 
+     *
      * @var Services_Yadis
      */
     protected $yadis = null;
 
     /**
      * Performs YADIS discovery
-     * 
+     *
      * @throws OpenID_Discover_Exception on error
      * @return OpenID_ServiceEndpoints
      */
@@ -108,7 +108,7 @@ implements OpenID_Discover_Interface
                     $opEndpoint->setURIs($discoveredService->getUris());
                     $opEndpoint->setLocalID($localID);
                     $opEndpoint->setSource(OpenID_Discover::TYPE_YADIS);
-                    
+
                     $service->addService($opEndpoint);
                 }
             }
@@ -134,14 +134,14 @@ implements OpenID_Discover_Interface
         if ($this->yadis->getUserResponse() === false) {
             throw new OpenID_Discover_Exception(
                 'No response from identifier',
-                OpenID_Exception::HTTP_ERROR                
+                OpenID_Exception::HTTP_ERROR
             );
         }
     }
 
     /**
      * Gets the Services_Yadis instance.  Abstracted for testing.
-     * 
+     *
      * @return Services_Yadis
      */
     public function getServicesYadis()

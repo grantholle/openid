@@ -1,31 +1,31 @@
 <?php
 /**
- * OpenID_Discover_MockYadisTest 
- * 
+ * OpenID_Discover_MockYadisTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
 
 /**
- * Required files 
+ * Required files
  */
 require_once 'OpenID/Discover/MockYadis.php';
 require_once 'Services/Yadis.php';
 
 /**
- * OpenID_Discover_MockYadisTest 
- * 
+ * OpenID_Discover_MockYadisTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -36,8 +36,8 @@ class OpenID_Discover_MockYadisTest extends PHPUnit_Framework_TestCase
     protected $object = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -50,8 +50,8 @@ class OpenID_Discover_MockYadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -61,8 +61,8 @@ class OpenID_Discover_MockYadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverFailNotValid 
-     * 
+     * testDiscoverFailNotValid
+     *
      * @return void
      */
     public function testDiscoverFailNotValid()

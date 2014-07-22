@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Message 
- * 
+ * OpenID_Message
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -19,18 +19,18 @@ require_once 'OpenID.php';
 require_once 'OpenID/Message/Exception.php';
 
 /**
- * OpenID_Message 
- * 
+ * OpenID_Message
+ *
  * A class that handles any OpenID protocol messages, as described in section 4.1 of
- * the {@link http://openid.net/specs/openid-authentication-2_0.html#anchor4 
- * OpenID 2.0 spec}.  You can set or get messages in one of 3 formats:  Key Value 
- * (KV), Array, or HTTP.  KV is described in the spec (4.1.1 of the 2.0 spec), HTTP 
+ * the {@link http://openid.net/specs/openid-authentication-2_0.html#anchor4
+ * OpenID 2.0 spec}.  You can set or get messages in one of 3 formats:  Key Value
+ * (KV), Array, or HTTP.  KV is described in the spec (4.1.1 of the 2.0 spec), HTTP
  * is urlencoded key value pairs, as you would see them in a query string or an HTTP
  * POST body.
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -49,10 +49,10 @@ class OpenID_Message
 
     /**
      * Optionally instanciates this object with the contents of an OpenID message.
-     * 
+     *
      * @param mixed  $message Message contents
      * @param string $format  Source message format (KV, HTTP, or ARRAY)
-     * 
+     *
      * @return void
      */
     public function __construct($message = null, $format = self::FORMAT_ARRAY)
@@ -64,9 +64,9 @@ class OpenID_Message
 
     /**
      * Gets the value of any key in this message.
-     * 
+     *
      * @param string $name Name of key
-     * 
+     *
      * @return mixed Value of key if set, defaults to null
      */
     public function get($name)
@@ -79,10 +79,10 @@ class OpenID_Message
 
     /**
      * Sets a message key value.
-     * 
+     *
      * @param string $name Key name
      * @param mixed  $val  Key value
-     * 
+     *
      * @return void
      */
     public function set($name, $val)
@@ -98,9 +98,9 @@ class OpenID_Message
 
     /**
      * Deletes a key from a message
-     * 
+     *
      * @param string $name Key name
-     * 
+     *
      * @return void
      */
     public function delete($name)
@@ -110,7 +110,7 @@ class OpenID_Message
 
     /**
      * Gets the current message in KV format
-     * 
+     *
      * @return string
      * @see getMessage()
      */
@@ -121,7 +121,7 @@ class OpenID_Message
 
     /**
      * Gets the current message in HTTP (url encoded) format
-     * 
+     *
      * @return string
      * @see getMessage()
      */
@@ -132,7 +132,7 @@ class OpenID_Message
 
     /**
      * Gets the current message in ARRAY format
-     * 
+     *
      * @return array
      * @see getMessage()
      */
@@ -143,13 +143,13 @@ class OpenID_Message
 
     /**
      * Gets the message in one of three formats:
-     * 
+     *
      *  OpenID_Message::FORMAT_ARRAY (default)
      *  OpenID_Message::FORMAT_KV (KV pairs, OpenID response format)
      *  OpenID_Message::FORMAT_HTTP (url encoded pairs, for use in a query string)
-     * 
+     *
      * @param string $format One of the above three formats
-     * 
+     *
      * @throws OpenID_Message_Exception When passed an invalid format argument
      * @return mixed array, kv string, or url query string paramters
      */
@@ -181,14 +181,14 @@ class OpenID_Message
     }
 
     /**
-     * Sets message contents.  Wipes out any existing message contents.  Default 
+     * Sets message contents.  Wipes out any existing message contents.  Default
      * source format is Array, but you can also use KV and HTTP formats.
-     * 
+     *
      * @param mixed $message Source message
      * @param mixed $format  Source message format (OpenID_Message::FORMAT_KV,
      *                                              OpenID_Message::FORMAT_ARRAY,
      *                                              OpenID_Message::FORMAT_HTTP)
-     * 
+     *
      * @return void
      */
     public function setMessage($message, $format = self::FORMAT_ARRAY)
@@ -238,9 +238,9 @@ class OpenID_Message
 
     /**
      * Adds an extension to an OpenID_Message object.
-     * 
+     *
      * @param OpenID_Extension $extension Instance of OpenID_Extension
-     * 
+     *
      * @see OpenID_Extension
      * @return void
      */

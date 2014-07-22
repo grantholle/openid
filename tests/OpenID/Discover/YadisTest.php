@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Discover_YadisTest 
- * 
+ * OpenID_Discover_YadisTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -16,12 +16,12 @@
 require_once 'OpenID/Discover/Yadis.php';
 
 /**
- * OpenID_Discover_YadisTest 
- * 
+ * OpenID_Discover_YadisTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -33,8 +33,8 @@ class OpenID_Discover_YadisTest extends PHPUnit_Framework_TestCase
     protected $reponse = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -64,8 +64,8 @@ class OpenID_Discover_YadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -76,8 +76,8 @@ class OpenID_Discover_YadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverSuccess 
-     * 
+     * testDiscoverSuccess
+     *
      * @return void
      */
     public function testDiscoverSuccess()
@@ -97,8 +97,8 @@ class OpenID_Discover_YadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverSuccess2 
-     * 
+     * testDiscoverSuccess2
+     *
      * @return void
      */
     public function testDiscoverSuccess2()
@@ -118,8 +118,8 @@ class OpenID_Discover_YadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverFail 
-     * 
+     * testDiscoverFail
+     *
      * @return void
      */
     public function testDiscoverFail()
@@ -142,8 +142,8 @@ class OpenID_Discover_YadisTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetServicesYadis 
-     * 
+     * testGetServicesYadis
+     *
      * @return void
      */
     public function testGetServicesYadis()

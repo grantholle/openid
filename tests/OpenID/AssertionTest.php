@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_AssertionTest 
- * 
+ * OpenID_AssertionTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -24,12 +24,12 @@ require_once 'HTTP/Request2/Adapter/Mock.php';
 require_once 'HTTP/Request2.php';
 
 /**
- * OpenID_AssertionTest 
- * 
+ * OpenID_AssertionTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -46,8 +46,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     protected $clockSkew     = 600;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -66,8 +66,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -79,8 +79,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * createObjects 
-     * 
+     * createObjects
+     *
      * @return void
      */
     protected function createObjects()
@@ -95,8 +95,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnTo 
-     * 
+     * testValidateReturnTo
+     *
      * @return void
      */
     public function testValidateReturnTo()
@@ -122,8 +122,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToOneOneImmediateNegative 
-     * 
+     * testValidateReturnToOneOneImmediateNegative
+     *
      * @return void
      */
     public function testValidateReturnToOneOneImmediateNegative()
@@ -166,8 +166,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToWithQueryStringParameters 
-     * 
+     * testValidateReturnToWithQueryStringParameters
+     *
      * @return void
      */
     public function testValidateReturnToWithQueryStringParameters()
@@ -196,8 +196,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToFailInvalidURI 
-     * 
+     * testValidateReturnToFailInvalidURI
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -208,8 +208,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToFailDifferentURLs 
-     * 
+     * testValidateReturnToFailDifferentURLs
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -223,8 +223,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToFailDifferentQueryStringParameters 
-     * 
+     * testValidateReturnToFailDifferentQueryStringParameters
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -238,8 +238,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToNonce 
-     * 
+     * testValidateReturnToNonce
+     *
      * @return void
      */
     public function testValidateReturnToNonce()
@@ -250,7 +250,7 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
         $this->message->delete('openid.ns');
         $this->message->delete('openid.claimed_id');
         $this->message->set('openid.identity', $this->claimedID);
-        $rtnonce = $this->requestedURL . '?' . OpenID_Nonce::RETURN_TO_NONCE 
+        $rtnonce = $this->requestedURL . '?' . OpenID_Nonce::RETURN_TO_NONCE
                    . '=' . urlencode($nonceValue);
         $this->message->set('openid.return_to', $rtnonce);
         $this->requestedURL = $rtnonce;
@@ -278,8 +278,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToNonceFailInvalid 
-     * 
+     * testValidateReturnToNonceFailInvalid
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -291,7 +291,7 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
         $this->message->delete('openid.ns');
         $this->message->delete('openid.claimed_id');
         $this->message->set('openid.identity', $this->claimedID);
-        $rtnonce = $this->requestedURL . '?' . OpenID_Nonce::RETURN_TO_NONCE 
+        $rtnonce = $this->requestedURL . '?' . OpenID_Nonce::RETURN_TO_NONCE
                    . '=' . urlencode($nonceValue);
         $this->message->set('openid.return_to', $rtnonce);
         $this->requestedURL = $rtnonce;
@@ -319,8 +319,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateReturnToNonceFailMissing 
-     * 
+     * testValidateReturnToNonceFailMissing
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -338,8 +338,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateDiscoverFailNoClaimedID 
-     * 
+     * testValidateDiscoverFailNoClaimedID
+     *
      * @expectedException OpenID_Assertion_Exception_NoClaimedID
      * @return void
      */
@@ -350,8 +350,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateDiscoverFailOPIdentifier 
-     * 
+     * testValidateDiscoverFailOPIdentifier
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -362,8 +362,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateDiscoverFail 
-     * 
+     * testValidateDiscoverFail
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -380,8 +380,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateDiscoverFailOPNotAuthorized 
-     * 
+     * testValidateDiscoverFailOPNotAuthorized
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -407,8 +407,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testValidateNonceFail 
-     * 
+     * testValidateNonceFail
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -436,8 +436,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testVerifySignature 
-     * 
+     * testVerifySignature
+     *
      * @return void
      */
     public function testVerifySignature()
@@ -478,8 +478,8 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCheckAuthentication 
-     * 
+     * testCheckAuthentication
+     *
      * @return void
      */
     public function testCheckAuthentication()
@@ -511,7 +511,7 @@ class OpenID_AssertionTest extends PHPUnit_Framework_TestCase
 
         $httpRequest = new HTTP_Request2;
         $httpRequest->setAdapter($adapter);
-        
+
         $this->assertion->expects($this->once())
                         ->method('getHTTPRequest2Instance')
                         ->will($this->returnValue($httpRequest));

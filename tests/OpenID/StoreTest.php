@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_StoreTest 
- * 
+ * OpenID_StoreTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -19,12 +19,12 @@ require_once 'OpenID/Store/Mock.php';
 require_once 'OpenID/Store/NotInterface.php';
 
 /**
- * OpenID_StoreTest 
- * 
+ * OpenID_StoreTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -32,8 +32,8 @@ require_once 'OpenID/Store/NotInterface.php';
 class OpenID_StoreTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * testFactorySuccess 
-     * 
+     * testFactorySuccess
+     *
      * @return void
      */
     public function testFactorySuccess()
@@ -42,8 +42,8 @@ class OpenID_StoreTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testFactoryFailNoClass 
-     * 
+     * testFactoryFailNoClass
+     *
      * @expectedException OpenID_Store_Exception
      * @return void
      */
@@ -53,8 +53,8 @@ class OpenID_StoreTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testFactoryFailNotInterface 
-     * 
+     * testFactoryFailNotInterface
+     *
      * @expectedException OpenID_Store_Exception
      * @return void
      */

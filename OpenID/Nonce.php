@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Nonce 
- * 
+ * OpenID_Nonce
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -19,12 +19,12 @@ require_once 'OpenID/Store.php';
 require_once 'OpenID.php';
 
 /**
- * Handles nonce functionality.  Requires the OP Endpoint URL nonces are to be 
+ * Handles nonce functionality.  Requires the OP Endpoint URL nonces are to be
  * associated with.
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -38,27 +38,27 @@ class OpenID_Nonce
 
     /**
      * The OP Endoint URL a nonce is associated with
-     * 
+     *
      * @var string
      */
     protected $opEndpointURL = null;
 
     /**
      * Default clock skew, i.e. how long in the past we're willing to allow for.
-     * 
+     *
      * @var int
      * @see validate()
      */
     protected $clockSkew = 18000;
 
     /**
-     * Sets the OP endpoint URL, and optionally the clock skew and custom storage 
+     * Sets the OP endpoint URL, and optionally the clock skew and custom storage
      * driver.
-     * 
+     *
      * @param string $opEndpointURL OP Endpoint URL
-     * @param int    $clockSkew     How many seconds old can a 
+     * @param int    $clockSkew     How many seconds old can a
      *                              nonce be?
-     * 
+     *
      * @return void
      */
     public function __construct($opEndpointURL, $clockSkew = null)
@@ -71,11 +71,11 @@ class OpenID_Nonce
     }
 
     /**
-     * Checks to see if the response nonce has been seen before.  If not, store it 
+     * Checks to see if the response nonce has been seen before.  If not, store it
      * and then validate its syntax
-     * 
+     *
      * @param string $nonce The nonce from the OP response
-     * 
+     *
      * @return bool true on success, false on failure
      */
     public function verifyResponseNonce($nonce)
@@ -93,9 +93,9 @@ class OpenID_Nonce
     /**
      * Validates the syntax of a nonce, as well as checks to see if its timestamp is
      * within the allowed clock skew
-     * 
+     *
      * @param mixed $nonce The nonce to validate
-     * 
+     *
      * @return bool true on success, false on failure
      * @see $clockSkew
      */
@@ -130,12 +130,12 @@ class OpenID_Nonce
     }
 
     /**
-     * Creates a nonce, but does not store it.  You may specify the lenth of the 
+     * Creates a nonce, but does not store it.  You may specify the lenth of the
      * random string, as well as the time stamp to use.
-     * 
+     *
      * @param int $length Lenth of the random string, defaults to 6
      * @param int $time   A unix timestamp in seconds
-     * 
+     *
      * @return string The nonce
      * @see createNonceAndStore()
      */
@@ -163,10 +163,10 @@ class OpenID_Nonce
 
     /**
      * Creates a nonce and also stores it.
-     * 
+     *
      * @param int $length Lenth of the random string, defaults to 6
      * @param int $time   A unix timestamp in seconds
-     * 
+     *
      * @return string The nonce
      * @see createNonce()
      */

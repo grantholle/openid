@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Store_CacheLiteTest 
- * 
+ * OpenID_Store_CacheLiteTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -19,12 +19,12 @@ require_once 'OpenID/Discover.php';
 require_once 'OpenID/Nonce.php';
 
 /**
- * OpenID_Store_CacheLiteTest 
- * 
+ * OpenID_Store_CacheLiteTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -32,15 +32,15 @@ require_once 'OpenID/Nonce.php';
 class OpenID_Store_CacheLiteTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * cache 
-     * 
+     * cache
+     *
      * @var OpenID_Store_CacheLite
      */
     protected $cache = null;
 
     /**
      * Determines the location of the temporary cache directory
-     * 
+     *
      * @return string
      */
     protected function getCacheDir()
@@ -49,8 +49,8 @@ class OpenID_Store_CacheLiteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -62,8 +62,8 @@ class OpenID_Store_CacheLiteTest extends PHPUnit_Framework_TestCase
         $this->cache = new OpenID_Store_CacheLite($options);
     }
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -73,8 +73,8 @@ class OpenID_Store_CacheLiteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAssociations 
-     * 
+     * testAssociations
+     *
      * @return void
      */
     public function testAssociations()
@@ -103,8 +103,8 @@ class OpenID_Store_CacheLiteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscover 
-     * 
+     * testDiscover
+     *
      * @return void
      */
     public function testDiscover()
@@ -122,8 +122,8 @@ class OpenID_Store_CacheLiteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testNonce 
-     * 
+     * testNonce
+     *
      * @return void
      */
     public function testNonce()

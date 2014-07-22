@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Association_DiffieHellman 
- * 
+ * OpenID_Association_DiffieHellman
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -17,14 +17,14 @@ require_once 'OpenID/Association/Exception.php';
 require_once 'OpenID/Message.php';
 
 /**
- * OpenID_Association_DiffieHellman 
- * 
- * Segregates the DiffieHellman specific parts of an association request.  This is 
+ * OpenID_Association_DiffieHellman
+ *
+ * Segregates the DiffieHellman specific parts of an association request.  This is
  * aimed at folks that don't want to use DH for associations.
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -32,7 +32,7 @@ require_once 'OpenID/Message.php';
 class OpenID_Association_DiffieHellman
 {
     /**
-     * DiffieHellman specific constants 
+     * DiffieHellman specific constants
      */
     const DH_DEFAULT_MODULUS = '155172898181473697471232257763715539915724801966915404479707795314057629378541917580651227423698188993727816152646631438561595825688188889951272158842675419950341258706556549803580104870537681476726513255747040765857479291291572334510643245094715007229621094194349783925984760375594985848253359305585439638443';
 
@@ -40,7 +40,7 @@ class OpenID_Association_DiffieHellman
 
     /**
      * The OpenID_Message being used in the request
-     * 
+     *
      * @var OpenID_Message
      */
     protected $message = null;
@@ -48,14 +48,14 @@ class OpenID_Association_DiffieHellman
     /**
      * The instance of Crypt_DiffieHellman.  May be passed into the constructor if
      * you want to use custom keys.
-     * 
+     *
      * @var Crypt_DiffieHellman
      */
     protected $cdh = null;
 
     /**
      * Whether or not the sharedSecretKey has been computed or not
-     * 
+     *
      * @see getSharedSecretKey()
      * @var int
      */
@@ -64,10 +64,10 @@ class OpenID_Association_DiffieHellman
     /**
      * Sets the instance of OpenID_Message being used, and also an optional
      * instance of Crypt_DiffieHellman
-     * 
+     *
      * @param OpenID_Message      $message The request OpenID_Message
      * @param Crypt_DiffieHellman $cdh     Optional instance of Crypt_DiffieHellman
-     * 
+     *
      * @return void
      */
     public function __construct(OpenID_Message $message, $cdh = null)
@@ -80,7 +80,7 @@ class OpenID_Association_DiffieHellman
 
     /**
      * Initialize the diffie-hellman parameters for the association request.
-     * 
+     *
      * @return void
      */
     public function init()
@@ -109,11 +109,11 @@ class OpenID_Association_DiffieHellman
 
     /**
      * Gets the shared secret out of a response
-     * 
+     *
      * @param array $response The response in array format
-     * @param array &$params  The parameters being build for 
+     * @param array &$params  The parameters being build for
      *                        OpenID_Association_Reqequest::buildAssociation()
-     * 
+     *
      * @return void
      */
     public function getSharedSecret(array $response, array &$params)
@@ -142,11 +142,11 @@ class OpenID_Association_DiffieHellman
     }
 
     /**
-     * Gets the shared secret key in BTWOC format.  Computes the key if it has not 
+     * Gets the shared secret key in BTWOC format.  Computes the key if it has not
      * been computed already.
-     * 
+     *
      * @param string $publicKey Public key of the OP
-     * 
+     *
      * @return BTWOC representation of the number
      */
     public function getSharedSecretKey($publicKey)
@@ -156,6 +156,6 @@ class OpenID_Association_DiffieHellman
             $this->sharedKeyComputed = 1;
         }
         return $this->cdh->getSharedSecretKey(Crypt_DiffieHellman::BTWOC);
-    } 
+    }
 }
 ?>

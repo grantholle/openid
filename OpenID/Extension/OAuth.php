@@ -7,7 +7,7 @@
  * @uses      OpenID_Extension
  * @category  Auth
  * @package   OpenID
- * @author    Jeff Hodsdon <jeffhodsdon@gmail.com> 
+ * @author    Jeff Hodsdon <jeffhodsdon@gmail.com>
  * @copyright 2009 Jeff Hodsdon
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -22,7 +22,7 @@ require_once 'HTTP/OAuth/Consumer.php';
  * @uses      OpenID_Extension
  * @category  Auth
  * @package   OpenID
- * @author    Jeff Hodsdon <jeffhodsdon@gmail.com> 
+ * @author    Jeff Hodsdon <jeffhodsdon@gmail.com>
  * @copyright 2009 Jeff Hodsdon
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -32,32 +32,32 @@ class OpenID_Extension_OAuth extends OpenID_Extension
 {
     /**
      * URI of the OAuth namespace
-     * 
+     *
      * @var string $namespace
      */
     protected $namespace ='http://specs.openid.net/extensions/oauth/1.0';
 
     /**
      * Alias to use
-     * 
+     *
      * @var string $alias
      */
     protected $alias = 'oauth';
 
     /**
      * Supported keys in a request
-     * 
+     *
      * @var array $requestKeys
      */
     protected $requestKeys = array('consumer', 'scope');
 
      /**
      * Supported keys in a response
-     * 
+     *
      * @var array $responseKeys
      */
     protected $responseKeys = array('request_token', 'scope');
- 
+
     /**
      * Fetch an OAuth access token
      *

@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Extension_SREGTest 
- * 
+ * OpenID_Extension_SREGTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -16,12 +16,12 @@
 require_once 'OpenID/Extension/SREG11.php';
 
 /**
- * OpenID_Extension_SREGTest 
- * 
+ * OpenID_Extension_SREGTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -31,8 +31,8 @@ class OpenID_Extension_SREGTest extends PHPUnit_Framework_TestCase
     protected $sreg = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -41,8 +41,8 @@ class OpenID_Extension_SREGTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -51,8 +51,8 @@ class OpenID_Extension_SREGTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetFailInvalidKey 
-     * 
+     * testSetFailInvalidKey
+     *
      * @expectedException OpenID_Extension_Exception
      * @return void
      */
@@ -63,7 +63,7 @@ class OpenID_Extension_SREGTest extends PHPUnit_Framework_TestCase
 
     /**
      * testSetFailInvalidKeyReponse
-     * 
+     *
      * @expectedException OpenID_Extension_Exception
      * @return void
      */
@@ -74,8 +74,8 @@ class OpenID_Extension_SREGTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetSuccess 
-     * 
+     * testSetSuccess
+     *
      * @return void
      */
     public function testSetSuccess()

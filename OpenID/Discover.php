@@ -1,9 +1,9 @@
 <?php
 /**
- * OpenID_Discover 
- * 
+ * OpenID_Discover
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
  * @author    Rich Schumacher <rich.schu@gmail.com>
@@ -24,21 +24,21 @@ require_once 'OpenID/Discover/Exception.php';
 /**
  * OpenID_Discover
  *
- * Implements OpenID discovery ({@link 
+ * Implements OpenID discovery ({@link
  * http://openid.net/specs/openid-authentication-2_0.html#discovery 7.3} of the 2.0
  * spec).  Discovery is driver based, and currently supports YADIS discovery
- * (via Services_Yadis), and HTML discovery ({@link OpenID_Discover_HTML}).  Once 
- * completed, it will also support {@link 
- * http://www.hueniverse.com/hueniverse/2009/03/the-discovery-protocol-stack.html 
+ * (via Services_Yadis), and HTML discovery ({@link OpenID_Discover_HTML}).  Once
+ * completed, it will also support {@link
+ * http://www.hueniverse.com/hueniverse/2009/03/the-discovery-protocol-stack.html
  * XRD/LRDD}.
- * 
+ *
  * Example usage for determining the OP Endpoint URL:
  * <code>
  * $id = 'http://user.example.com';
- * 
+ *
  * $discover = new OpenID_Discover($id);
  * $result   = $discover->discover();
- * 
+ *
  * if (!$result) {
  *     echo "Discovery failed\n";
  * } else {
@@ -47,10 +47,10 @@ require_once 'OpenID/Discover/Exception.php';
  *     $opEndpointURL = array_shift($serviceEndpoint->getURIs());
  * }
  * </code>
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @author    Rich Schumacher <rich.schu@gmail.com>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
@@ -63,7 +63,7 @@ class OpenID_Discover
 
     /**
      * List of supported discover types
-     * 
+     *
      * @var array
      */
     protected $supportedTypes = array(
@@ -72,7 +72,7 @@ class OpenID_Discover
     );
 
     /**
-     * Order that discover should be performed 
+     * Order that discover should be performed
      *
      * @var array
      */
@@ -83,14 +83,14 @@ class OpenID_Discover
 
     /**
      * The normalized version of the user supplied identifier
-     * 
+     *
      * @var string
      */
     protected $identifier = null;
 
     /**
      * HTTP_Request2 options
-     * 
+     *
      * @var array
      */
     protected $requestOptions = array(
@@ -101,16 +101,16 @@ class OpenID_Discover
 
     /**
      * Instance of OpenID_ServiceEndpoints
-     * 
+     *
      * @var OpenID_ServiceEndpoints
      */
     protected $services = null;
 
     /**
      * Constructor.  Enables libxml internal errors, normalized the identifier.
-     * 
+     *
      * @param mixed $identifier The user supplied identifier
-     * 
+     *
      * @return void
      */
     public function __construct($identifier)
@@ -121,9 +121,9 @@ class OpenID_Discover
 
     /**
      * Gets member variables
-     * 
+     *
      * @param string $name Name of the member variable to get
-     * 
+     *
      * @return mixed The member variable if it exists
      */
     public function __get($name)
@@ -136,9 +136,9 @@ class OpenID_Discover
 
     /**
      * Sets the HTTP_Request2 options to use
-     * 
+     *
      * @param array $options Array of HTTP_Request2 options
-     * 
+     *
      * @return OpenID_Discover for fluent interface
      */
     public function setRequestOptions(array $options)
@@ -149,7 +149,7 @@ class OpenID_Discover
 
     /**
      * Performs discovery
-     * 
+     *
      * @return bool true on success, false on failure
      */
     public function discover()
@@ -176,10 +176,10 @@ class OpenID_Discover
 
     /**
      * Provides the standard factory pattern for loading discovery drivers.
-     * 
+     *
      * @param string $discoverType The discovery type (driver) to load
      * @param string $identifier   The user supplied identifier
-     * 
+     *
      * @return void
      */
     static private function _factory($discoverType, $identifier)
@@ -210,9 +210,9 @@ class OpenID_Discover
 
     /**
      * Determines if dicovered information supports a given OpenID extension
-     * 
+     *
      * @param string $extension The name of the extension to check, (SREG10, AX, etc)
-     * 
+     *
      * @return bool
      */
     public function extensionSupported($extension)
@@ -242,12 +242,12 @@ class OpenID_Discover
 
     /**
      * Static helper method for retrieving discovered information from cache if it
-     * exists, otherwise executing discovery and storing results if they are 
+     * exists, otherwise executing discovery and storing results if they are
      * positive.
-     * 
+     *
      * @param string       $id    URI Identifier to discover
      * @param OpenID_Store $store Instance of OpenID_Store
-     * 
+     *
      * @return OpenID_Discover|false OpenID_Discover on success, false on failure
      */
     static public function getDiscover($id, OpenID_Store_Interface $store)

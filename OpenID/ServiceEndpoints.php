@@ -35,7 +35,7 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     /**
      * Copy of the Expires header from the HTTP request.  Used for customizing cache
      * times
-     * 
+     *
      * @var string
      */
     private $_expiresHeader = null;
@@ -130,7 +130,7 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     {
         return (!empty($this->_services[$offset]));
     }
-    
+
     /**
      * Returns the value of the services array at the specified offset
      *
@@ -148,7 +148,7 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     }
 
     /**
-     * Sets a value in the services array 
+     * Sets a value in the services array
      *
      * @param int                    $offset   The offset to set
      * @param OpenID_ServiceEndpoint $endpoint The service object to set
@@ -186,7 +186,7 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
 
     /**
      * Gets the Expires header value
-     * 
+     *
      * @see $_expiresHeader
      * @see setExpiresHeader()
      * @return string
@@ -198,9 +198,9 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
 
     /**
      * Sets the Expires header value
-     * 
+     *
      * @param string $value The Expires header value
-     * 
+     *
      * @see getExpiresHeader()
      * @return OpenID_ServiceEndpoints
      */

@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_AllTests 
- * 
+ * OpenID_AllTests
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -35,11 +35,11 @@ require_once 'OpenID/Discover/YadisTest.php';
 require_once 'OpenID/Store/CacheLiteTest.php';
 
 /**
- * OpenID_AllTests 
- * 
+ * OpenID_AllTests
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -47,8 +47,8 @@ require_once 'OpenID/Store/CacheLiteTest.php';
 class OpenID_AllTests
 {
     /**
-     * suite 
-     * 
+     * suite
+     *
      * @return PHPUnit_Framework_TestSuite
      */
     static public function suite()

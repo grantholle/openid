@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Assertion 
- * 
+ * OpenID_Assertion
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -24,12 +24,12 @@ require_once 'OpenID/Nonce.php';
 require_once 'Net/URL2.php';
 
 /**
- * Class for verifying assertions.  Does basic validation (nonce, return_to, etc), 
+ * Class for verifying assertions.  Does basic validation (nonce, return_to, etc),
  * as well as signature verification and check_authentication.
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -38,33 +38,33 @@ class OpenID_Assertion extends OpenID
 {
     /**
      * Response message passed to the constructor
-     * 
+     *
      * @var OpenID_Message
      */
     protected $message = null;
 
     /**
      * The URL of the current request (to compare with openid.return_to)
-     * 
+     *
      * @var string
      */
     protected $requestedURL = null;
 
     /**
      * The clock skew limit for checking nonces.
-     * 
+     *
      * @var int (in seconds)
      */
     protected $clockSkew = null;
 
     /**
-     * Sets the request message, url, and clock skew.  Then does some basic 
+     * Sets the request message, url, and clock skew.  Then does some basic
      * validation (return_to, nonce, discover).
-     * 
+     *
      * @param OpenID_Message $message      Message from the request
      * @param Net_URL2       $requestedURL The requested URL
      * @param int            $clockSkew    Nonce clock skew in seconds
-     * 
+     *
      * @return void
      */
     public function __construct(
@@ -91,9 +91,9 @@ class OpenID_Assertion extends OpenID
 
     /**
      * Verifies the signature of this message association.
-     * 
+     *
      * @param OpenID_Association $assoc Association to use for checking the signature
-     * 
+     *
      * @return bool result of OpenID_Association::checkMessageSignature()
      * @see OpenID_Association::checkMessageSignature()
      */
@@ -101,12 +101,12 @@ class OpenID_Assertion extends OpenID
     {
         return $assoc->checkMessageSignature($this->message);
     }
-    
+
     /**
      * Performs a check_authentication request.
-     * 
+     *
      * @param array $options Options to pass to HTTP_Request
-     * 
+     *
      * @return OpenID_Message Reponse to the check_authentication request
      */
     public function checkAuthentication(array $options = array())
@@ -121,7 +121,7 @@ class OpenID_Assertion extends OpenID
 
     /**
      * Validates the openid.return_to parameter in the response.
-     * 
+     *
      * @return void
      * @throws OpenID_Assertion_Exception on failure
      */
@@ -175,7 +175,7 @@ class OpenID_Assertion extends OpenID
 
     /**
      * Validates and performs discovery on the openid.claimed_id paramter.
-     * 
+     *
      * @return void
      * @throws OpenID_Assertion_Exception on failure
      */
@@ -220,7 +220,7 @@ class OpenID_Assertion extends OpenID
 
     /**
      * Validates the openid.response_nonce parameter.
-     * 
+     *
      * @return void
      * @throws OpenID_Assertion_Exception on invalid or existing nonce
      */
@@ -239,9 +239,9 @@ class OpenID_Assertion extends OpenID
     }
 
     /**
-     * Validates the nonce embedded in the openid.return_to paramater and deletes 
+     * Validates the nonce embedded in the openid.return_to paramater and deletes
      * it from storage.. (For use with OpenID 1.1 only)
-     * 
+     *
      * @return void
      * @throws OpenID_Assertion_Exception on invalid or non-existing nonce
      */
@@ -292,10 +292,10 @@ class OpenID_Assertion extends OpenID
 
     /**
      * Gets an instance of OpenID_Discover.  Abstracted for testing.
-     * 
+     *
      * @param string $identifier OpenID Identifier
-     * 
-     * @return OpenID_Discover|false 
+     *
+     * @return OpenID_Discover|false
      */
     protected function getDiscover($identifier)
     {

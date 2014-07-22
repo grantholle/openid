@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Auth_RequestTest 
- * 
+ * OpenID_Auth_RequestTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -23,12 +23,12 @@ require_once 'OpenID/Store/Mock.php';
 require_once 'OpenID/Nonce.php';
 
 /**
- * OpenID_Auth_RequestTest 
- * 
+ * OpenID_Auth_RequestTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -44,8 +44,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     protected $assocHandle = '12345';
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -63,8 +63,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * setObjects 
-     * 
+     * setObjects
+     *
      * @return void
      */
     protected function setObjects()
@@ -79,8 +79,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -97,8 +97,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAddExtension 
-     * 
+     * testAddExtension
+     *
      * @return void
      */
     public function testAddExtension()
@@ -108,8 +108,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetModeFail 
-     * 
+     * testSetModeFail
+     *
      * @expectedException OpenID_Auth_Exception
      * @return void
      */
@@ -119,8 +119,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetModeSuccess 
-     * 
+     * testSetModeSuccess
+     *
      * @return void
      */
     public function testSetModeSuccess()
@@ -131,8 +131,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAuthorizeURL 
-     * 
+     * testGetAuthorizeURL
+     *
      * @return void
      */
     public function testGetAuthorizeURL()
@@ -149,8 +149,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAuthorizeURLWithQueryString 
-     * 
+     * testGetAuthorizeURLWithQueryString
+     *
      * @return void
      */
     public function testGetAuthorizeURLWithQueryString()
@@ -172,8 +172,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAuthorizeURLSignon 
-     * 
+     * testGetAuthorizeURLSignon
+     *
      * @return void
      */
     public function testGetAuthorizeURLSignon()
@@ -197,8 +197,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAuthorizeURLSignonLocalID 
-     * 
+     * testGetAuthorizeURLSignonLocalID
+     *
      * @return void
      */
     public function testGetAuthorizeURLSignonLocalID()
@@ -223,8 +223,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetAuthorizeURLSignonLocalIDOneOne 
-     * 
+     * testGetAuthorizeURLSignonLocalIDOneOne
+     *
      * @return void
      */
     public function testGetAuthorizeURLSignonLocalIDOneOne()
@@ -257,8 +257,8 @@ class OpenID_Auth_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetDiscover 
-     * 
+     * testGetDiscover
+     *
      * @return void
      */
     public function testGetDiscover()

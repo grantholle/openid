@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Assertion_ResultTest 
- * 
+ * OpenID_Assertion_ResultTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -19,12 +19,12 @@ require_once 'OpenID/Discover.php';
 require_once 'OpenID.php';
 
 /**
- * OpenID_Assertion_ResultTest 
- * 
+ * OpenID_Assertion_ResultTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -34,8 +34,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     protected $result = null;
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -44,8 +44,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -54,8 +54,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetAndGetCheckAuthResponse 
-     * 
+     * testSetAndGetCheckAuthResponse
+     *
      * @return void
      */
     public function testSetAndGetCheckAuthResponse()
@@ -67,8 +67,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSuccess 
-     * 
+     * testSuccess
+     *
      * @return void
      */
     public function testSuccess()
@@ -80,8 +80,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetAndGetAssertionMethod 
-     * 
+     * testSetAndGetAssertionMethod
+     *
      * @return void
      */
     public function testSetAndGetAssertionMethod()
@@ -96,8 +96,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetAssertionMethodFail 
-     * 
+     * testSetAssertionMethodFail
+     *
      * @expectedException OpenID_Assertion_Exception
      * @return void
      */
@@ -107,8 +107,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetGetUserSetupURL 
-     * 
+     * testSetGetUserSetupURL
+     *
      * @return void
      */
     public function testSetGetUserSetupURL()
@@ -119,8 +119,8 @@ class OpenID_Assertion_ResultTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetGetDiscover 
-     * 
+     * testSetGetDiscover
+     *
      * @return void
      */
     public function testSetGetDiscover()

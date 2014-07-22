@@ -1,9 +1,9 @@
 <?php
 /**
  * OpenID_Discover_HTML
- * 
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
  * @uses      OpenID_Discover
@@ -24,7 +24,7 @@ require_once 'OpenID/ServiceEndpoints.php';
 
 /**
  * Implements HTML discovery
- * 
+ *
  * @category  Auth
  * @package   OpenID
  * @uses      OpenID_Discover
@@ -40,30 +40,30 @@ implements OpenID_Discover_Interface
 {
     /**
      * The normalized identifier
-     * 
+     *
      * @var string
      */
     protected $identifier = null;
 
     /**
      * Local storage of the HTTP_Request2 object
-     * 
+     *
      * @var HTTP_Request2
      */
     protected $request = null;
 
     /**
      * Local storage of the HTTP_Request2_Response object
-     * 
+     *
      * @var HTTP_Request2_Response
      */
     protected $response = null;
 
     /**
-     * Constructor.  Sets the 
-     * 
+     * Constructor.  Sets the
+     *
      * @param mixed $identifier The user supplied identifier
-     * 
+     *
      * @return void
      */
     public function __construct($identifier)
@@ -73,7 +73,7 @@ implements OpenID_Discover_Interface
 
     /**
      * Performs HTML discovery.
-     * 
+     *
      * @throws OpenID_Discover_Exception on error
      * @return OpenID_ServiceEndpoints
      */
@@ -111,7 +111,7 @@ implements OpenID_Discover_Interface
 
     /**
      * Gets the Expires header from the response object
-     * 
+     *
      * @return string
      */
     protected function getExpiresHeader()
@@ -123,9 +123,9 @@ implements OpenID_Discover_Interface
 
     /**
      * Builds the service endpoint
-     * 
+     *
      * @param array $results Array of items discovered via HTML
-     * 
+     *
      * @return OpenID_ServiceEndpoints
      */
     protected function buildServiceEndpoint(array $results)
@@ -165,7 +165,7 @@ implements OpenID_Discover_Interface
     // @codeCoverageIgnoreStart
     /**
      * Sends the request via HTTP_Request2
-     * 
+     *
      * @return string The HTTP response body
      */
     protected function sendRequest()
@@ -176,7 +176,7 @@ implements OpenID_Discover_Interface
         if ($this->response->getStatus() !== 200) {
             throw new OpenID_Discover_Exception(
                 'Unable to connect to OpenID Provider.',
-                OpenID_Exception::HTTP_ERROR                
+                OpenID_Exception::HTTP_ERROR
             );
         }
 
@@ -185,7 +185,7 @@ implements OpenID_Discover_Interface
 
     /**
      * Instantiates HTTP_Request2.  Abstracted for testing.
-     * 
+     *
      * @return void
      */
     protected function getHTTPRequest2()

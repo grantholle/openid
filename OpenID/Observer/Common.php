@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Observer_Common 
- * 
+ * OpenID_Observer_Common
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -21,16 +21,16 @@
  *  OpenID::attach($log);
  * </code>
  *
- * Now, your logs will by default go to /tmp/OpenID_Observer_Log.log.  To stop 
+ * Now, your logs will by default go to /tmp/OpenID_Observer_Log.log.  To stop
  * observing, just detach like so:
- * 
+ *
  * <code>
  *  OpenID::detach($log);
  * </code>
  *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -40,7 +40,7 @@ abstract class OpenID_Observer_Common
 {
     /**
      * Events to act upon
-     * 
+     *
      * @var array
      * @see getEvents()
      */
@@ -55,7 +55,7 @@ abstract class OpenID_Observer_Common
 
     /**
      * Gets the current array of events
-     * 
+     *
      * @return array
      * @see $events
      */
@@ -66,9 +66,9 @@ abstract class OpenID_Observer_Common
 
     /**
      * Sets a custom array of events to act upon
-     * 
+     *
      * @param array $events Array of events
-     * 
+     *
      * @return void
      * @see $events
      */
@@ -79,9 +79,9 @@ abstract class OpenID_Observer_Common
 
     /**
      * Acts upon an event that just occured
-     * 
+     *
      * @param array $event Event array, containing 'name' and 'data' keys
-     * 
+     *
      * @return void
      */
     abstract public function update(array $event);

@@ -1,20 +1,20 @@
 <?php
 /**
- * OpenID_DiscoverTest 
- * 
+ * OpenID_DiscoverTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
 
 /**
- * Required files 
+ * Required files
  */
 require_once 'OpenID/Discover.php';
 require_once 'OpenID/Discover/Mock.php';
@@ -22,12 +22,12 @@ require_once 'OpenID/Discover/MockSubClass.php';
 require_once 'OpenID/Store/Mock.php';
 
 /**
- * OpenID_DiscoverTest 
- * 
+ * OpenID_DiscoverTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -38,8 +38,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     protected $id       = 'http://user.example.com';
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -48,8 +48,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetRequestOptions 
-     * 
+     * testSetRequestOptions
+     *
      * @return void
      */
     public function testSetRequestOptions()
@@ -60,8 +60,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetFail 
-     * 
+     * testGetFail
+     *
      * @return void
      */
     public function testGetFail()
@@ -70,8 +70,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverFail 
-     * 
+     * testDiscoverFail
+     *
      * @return void
      */
     public function testDiscoverFail()
@@ -87,8 +87,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDiscoverFactoryFailNoClassOrNoInterface 
-     * 
+     * testDiscoverFactoryFailNoClassOrNoInterface
+     *
      * @return void
      */
     public function testDiscoverFactoryFailNoClassOrNoInterface()
@@ -109,8 +109,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetDiscover 
-     * 
+     * testGetDiscover
+     *
      * @return void
      */
     public function testGetDiscover()
@@ -137,8 +137,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testExtensionSupportedSuccess 
-     * 
+     * testExtensionSupportedSuccess
+     *
      * @return void
      */
     public function testExtensionSupportedSuccess()
@@ -155,8 +155,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testExtensionSupportedFailure 
-     * 
+     * testExtensionSupportedFailure
+     *
      * @return void
      */
     public function testExtensionSupportedFailure()
@@ -172,8 +172,8 @@ class OpenID_DiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testExtensionSupportedFailure 
-     * 
+     * testExtensionSupportedFailure
+     *
      * @return void
      */
     public function testExtensionSupportedException()

@@ -166,14 +166,14 @@ class OpenID_ServiceEndpointsTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('OpenID_ServiceEndpoint', $this->object[$index]);
         $this->assertEquals($this->goodService, $this->object[$index]);
-    
+
         unset($this->object[$index]);
 
         $this->assertNull($this->object[$index]);
     }
 
     /**
-     * Tests that the count method via the Countable interface works correctly 
+     * Tests that the count method via the Countable interface works correctly
      *
      * @return void
      */

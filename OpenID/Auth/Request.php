@@ -1,12 +1,12 @@
 <?php
 /**
- * OpenID_Auth_Request 
- * 
+ * OpenID_Auth_Request
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -22,25 +22,25 @@ require_once 'OpenID/Message.php';
 require_once 'OpenID/Nonce.php';
 
 /**
- * Creates an OpenID authorization request of type "checkid_setup" or 
+ * Creates an OpenID authorization request of type "checkid_setup" or
  * "checkid_immediate".
- * 
+ *
  * Example:
  * <code>
  * // First perform discovery on the user supplied identifier
  * $discover = new OpenID_Discover($identifier);
  * $discover->discover();
- * 
+ *
  * // Optionally get association (from cache in this example)
  * $opEndpointURL = array_shift($discover->services[0]->getURIs());
  * $assocHandle   = OpenID::getStore()->getAssociation($opEndpointURL)->assocHandle;
- * 
+ *
  * // Now create the auth request object
  * $auth = new OpenID_Auth_Request($discover,     // OpenID_Discover object
  *                                 $returnTo,     // openid.return_to
  *                                 $realm,        // openid.realm
  *                                 $assocHandle); // openid.assoc_handle
- * 
+ *
  * // Optionally add an extension
  *  $sreg = new OpenID_Extension_SREG11(OpenID_Extension::REQUEST);
  *  $sreg->set('required', 'email');
@@ -48,17 +48,17 @@ require_once 'OpenID/Nonce.php';
  *
  *  // Add it to an existing instance of OpenID_Auth_Request
  *  $auth->addExtension($sreg);
- * 
+ *
  * // Optionally make this a checkid_immediate request
  * $auth->setMode(OpenID::MODE_CHECKID_IMMEDIATE);
- * 
+ *
  * // Send user to the OP
  * header('Location: ' . $auth->getAuthorizeURL());
  * </code>
- * 
+ *
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -67,35 +67,35 @@ class OpenID_Auth_Request
 {
     /**
      * The normalized identifier
-     * 
+     *
      * @var string
      */
     protected $identifier = null;
 
     /**
      * The request message
-     * 
+     *
      * @var OpenID_Message
      */
     protected $message = null;
 
     /**
      * The OP Endpoint we are communicating with
-     * 
+     *
      * @var OpenID_ServiceEndpoint
      */
     protected $serviceEndpoint = null;
 
     /**
      * Nonce class in case we are in 1.1 mode and need to embed it in the return_to
-     * 
+     *
      * @var OpenID_Nonce
      */
     protected $nonce = null;
 
     /**
      * The original OpenID_Discover object.  Useful for detecting extension support
-     * 
+     *
      * @see getDiscover()
      * @var OpenID_Discover|null
      */
@@ -104,12 +104,12 @@ class OpenID_Auth_Request
 
     /**
      * Sets the basic information used in the message.
-     * 
+     *
      * @param OpenID_Discover $discover    Discover object
      * @param string          $returnTo    The return_to URL
      * @param string          $realm       The realm
      * @param string          $assocHandle The optional association handle
-     * 
+     *
      * @return void
      */
     public function __construct(
@@ -138,9 +138,9 @@ class OpenID_Auth_Request
 
     /**
      * Adds an extension to the message.
-     * 
+     *
      * @param OpenID_Extension $extension Extension instance
-     * 
+     *
      * @return void
      */
     public function addExtension(OpenID_Extension $extension)
@@ -149,11 +149,11 @@ class OpenID_Auth_Request
     }
 
     /**
-     * Sets the openid.mode parameter.  Can be either "checkid_setup" or 
+     * Sets the openid.mode parameter.  Can be either "checkid_setup" or
      * "checkid_immediate"
-     * 
+     *
      * @param mixed $mode Value for 'openid.mode'
-     * 
+     *
      * @throws OpenID_Auth_Exception on an invalid mode
      * @return void
      */
@@ -174,7 +174,7 @@ class OpenID_Auth_Request
 
     /**
      * Gets the current openid.mode value
-     * 
+     *
      * @return string
      */
     public function getMode()
@@ -185,7 +185,7 @@ class OpenID_Auth_Request
     /**
      * Gets the auth request message in a URL format suitable for redirection.  The
      * decision about whether to use directed identity or not id done here.
-     * 
+     *
      * @return string The URL to redirect the User-Agent to
      */
     public function getAuthorizeURL()
@@ -227,9 +227,9 @@ class OpenID_Auth_Request
 
     /**
      * Sets the instance of OpenID_Nonce for use with 1.1 return_to nonces
-     * 
+     *
      * @param OpenID_Nonce $nonce Custom instance of OpenID_Nonce
-     * 
+     *
      * @return void
      */
     public function setNonce(OpenID_Nonce $nonce)
@@ -239,7 +239,7 @@ class OpenID_Auth_Request
 
     /**
      * Gets the OpenID_Nonce instance if set, otherwise instantiates one.
-     * 
+     *
      * @return OpenID_Nonce
      */
     protected function getNonce()
@@ -254,7 +254,7 @@ class OpenID_Auth_Request
 
     /**
      * Adds a nonce to the openid.return_to URL parameter.  Only used in OpenID 1.1
-     * 
+     *
      * @return void
      */
     protected function addNonce()
@@ -277,7 +277,7 @@ class OpenID_Auth_Request
 
     /**
      * Returns the discovered information about the identifer
-     * 
+     *
      * @see $discover
      * @return OpenID_Discover|null
      */

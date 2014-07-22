@@ -1,13 +1,13 @@
 <?php
 /**
- * OpenID_Association_RequestTest 
- * 
+ * OpenID_Association_RequestTest
+ *
  * PHP Version 5.2.0+
- * 
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -20,12 +20,12 @@ require_once 'OpenID/Message.php';
 require_once 'Crypt/DiffieHellman.php';
 
 /**
- * OpenID_Association_RequestTest 
- * 
+ * OpenID_Association_RequestTest
+ *
  * @uses      PHPUnit_Framework_TestCase
  * @category  Auth
  * @package   OpenID
- * @author    Bill Shupp <hostmaster@shupp.org> 
+ * @author    Bill Shupp <hostmaster@shupp.org>
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
@@ -44,8 +44,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     protected $macKey       = '12345';
 
     /**
-     * setUp 
-     * 
+     * setUp
+     *
      * @return void
      */
     public function setUp()
@@ -84,8 +84,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * tearDown 
-     * 
+     * tearDown
+     *
      * @return void
      */
     public function tearDown()
@@ -103,8 +103,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAssociate 
-     * 
+     * testAssociate
+     *
      * @return void
      */
     public function testAssociate()
@@ -122,8 +122,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDefaultDH 
-     * 
+     * testDefaultDH
+     *
      * @return void
      */
     public function testDefaultDH()
@@ -140,12 +140,12 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * xorSecret 
-     * 
+     * xorSecret
+     *
      * @param mixed $pubKey Public key
      * @param mixed $secret Secret
      * @param mixed $algo   Algorithm
-     * 
+     *
      * @return string The mac_key
      */
     protected function xorSecret($pubKey, $secret, $algo)
@@ -164,8 +164,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetResponse 
-     * 
+     * testGetResponse
+     *
      * @return void
      */
     public function testGetResponse()
@@ -179,8 +179,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testConstructFail 
-     * 
+     * testConstructFail
+     *
      * @expectedException OpenID_Association_Exception
      * @return void
      */
@@ -190,8 +190,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testConstructWithOpenID1 
-     * 
+     * testConstructWithOpenID1
+     *
      * @return void
      */
     public function testConstructWithOpenID1()
@@ -200,8 +200,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testGetOPEndpointURL 
-     * 
+     * testGetOPEndpointURL
+     *
      * @return void
      */
     public function testGetOPEndpointURL()
@@ -210,8 +210,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAssociateMultipleRequests 
-     * 
+     * testAssociateMultipleRequests
+     *
      * @return void
      */
     public function testAssociateMultipleRequests()
@@ -233,8 +233,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testBuildAssociationNoEncryption 
-     * 
+     * testBuildAssociationNoEncryption
+     *
      * @return void
      */
     public function testBuildAssociationNoEncryption()
@@ -249,8 +249,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testBuildAssociationFailPublicKey 
-     * 
+     * testBuildAssociationFailPublicKey
+     *
      * @expectedException OpenID_Association_Exception
      * @return void
      */
@@ -263,8 +263,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testBuildAssociationFailNoMacKey 
-     * 
+     * testBuildAssociationFailNoMacKey
+     *
      * @expectedException OpenID_Association_Exception
      * @return void
      */
@@ -278,8 +278,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetSessionTypeFailNoEncryption 
-     * 
+     * testSetSessionTypeFailNoEncryption
+     *
      * @expectedException OpenID_Association_Exception
      * @return void
      */
@@ -291,8 +291,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetSessionTypeFailInvalidType 
-     * 
+     * testSetSessionTypeFailInvalidType
+     *
      * @expectedException OpenID_Association_Exception
      * @return void
      */
@@ -302,8 +302,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testSetAssociationTypeFail 
-     * 
+     * testSetAssociationTypeFail
+     *
      * @expectedException OpenID_Association_Exception
      * @return void
      */
@@ -313,8 +313,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAssociateMultipleRequestsSha1 
-     * 
+     * testAssociateMultipleRequestsSha1
+     *
      * @return void
      */
     public function testAssociateMultipleRequestsSha1()
@@ -337,8 +337,8 @@ class OpenID_Association_RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * setResponse 
-     * 
+     * setResponse
+     *
      * @return void
      */
     protected function setResponse()
