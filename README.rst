@@ -57,9 +57,9 @@ Homepage
 Bug tracker
   http://pear.php.net/bugs/search.php?cmd=display&package_name[]=OpenID
 Unit test status
-  https://travis-ci.org/pear/OpenID
+  https://travis-ci.org/pear/openid
 
-  .. image:: https://travis-ci.org/pear/OpenID.svg?branch=master
-     :target: https://travis-ci.org/pear/OpenID
+  .. image:: https://travis-ci.org/pear/openid.svg?branch=master
+     :target: https://travis-ci.org/pear/openid
 Packagist
   https://packagist.org/packages/pear/openid
