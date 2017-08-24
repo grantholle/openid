@@ -1,11 +1,14 @@
 language: php
+sudo: false
 php:
-  - 5.5
-  - 5.4
-  - 5.3
+  - 5.6
+  - 7.0
+  - 7.1
 install:
-  - pear install pear/PHP_CodeSniffer pear/http_request2 pear/cache_lite pear/crypt_diffiehellman-beta pear/services_yadis-beta pear/net_url2 pear/log pear/mdb2 pear/http_oauth-alpha
+  - pear upgrade -f pear
+  - pear install Crypt_DiffieHellman-beta Services_Yadis-beta
+  - pear install --alldeps package.xml
+  - wget https://phar.phpunit.de/phpunit-5.7.phar
   - phpenv rehash
 script:
-  - phpcs -n OpenID*
-  - cd tests && phpunit .
+  - php phpunit-5.7.phar tests/
