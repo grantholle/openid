@@ -31,7 +31,7 @@
         "pear/http_request2": "^2.3.0",
         "pear/cache_lite": "^1.8.0",
         "pear/crypt_diffiehellman": "~0.2.5",
-        "pear/services_yadis": "~0.5.2",
+        "pear/services_yadis": "~0.5.3",
         "pear/net_url2": "^2.2.0"
     },
     "require-dev": {
