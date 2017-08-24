@@ -278,7 +278,7 @@ class OpenID_Auth_Request
     /**
      * Returns the discovered information about the identifer
      *
-     * @see $discover
+     * @see    $discover
      * @return OpenID_Discover|null
      */
     public function getDiscover()

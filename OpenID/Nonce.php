@@ -97,7 +97,7 @@ class OpenID_Nonce
      * @param mixed $nonce The nonce to validate
      *
      * @return bool true on success, false on failure
-     * @see $clockSkew
+     * @see    $clockSkew
      */
     public function validate($nonce)
     {
@@ -137,7 +137,7 @@ class OpenID_Nonce
      * @param int $time   A unix timestamp in seconds
      *
      * @return string The nonce
-     * @see createNonceAndStore()
+     * @see    createNonceAndStore()
      */
     public function createNonce($length = 6, $time = null)
     {
@@ -168,7 +168,7 @@ class OpenID_Nonce
      * @param int $time   A unix timestamp in seconds
      *
      * @return string The nonce
-     * @see createNonce()
+     * @see    createNonce()
      */
     public function createNonceAndStore($length = 6, $time = null)
     {

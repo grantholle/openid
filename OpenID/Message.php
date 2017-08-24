@@ -112,7 +112,7 @@ class OpenID_Message
      * Gets the current message in KV format
      *
      * @return string
-     * @see getMessage()
+     * @see    getMessage()
      */
     public function getKVFormat()
     {
@@ -123,7 +123,7 @@ class OpenID_Message
      * Gets the current message in HTTP (url encoded) format
      *
      * @return string
-     * @see getMessage()
+     * @see    getMessage()
      */
     public function getHTTPFormat()
     {
@@ -134,7 +134,7 @@ class OpenID_Message
      * Gets the current message in ARRAY format
      *
      * @return array
-     * @see getMessage()
+     * @see    getMessage()
      */
     public function getArrayFormat()
     {
@@ -186,8 +186,8 @@ class OpenID_Message
      *
      * @param mixed $message Source message
      * @param mixed $format  Source message format (OpenID_Message::FORMAT_KV,
-     *                                              OpenID_Message::FORMAT_ARRAY,
-     *                                              OpenID_Message::FORMAT_HTTP)
+     *                       OpenID_Message::FORMAT_ARRAY,
+     *                       OpenID_Message::FORMAT_HTTP)
      *
      * @return void
      */
@@ -241,7 +241,7 @@ class OpenID_Message
      *
      * @param OpenID_Extension $extension Instance of OpenID_Extension
      *
-     * @see OpenID_Extension
+     * @see    OpenID_Extension
      * @return void
      */
     public function addExtension(OpenID_Extension $extension)

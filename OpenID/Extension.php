@@ -35,7 +35,9 @@ abstract class OpenID_Extension
     const RESPONSE = 'response';
 
     /**
-     *  @var array Array of reserved message keys
+     * Array of reserved message keys
+     *
+     * @var array
      */
     static protected $reserved = array(
         'assoc_handle',
@@ -108,7 +110,7 @@ abstract class OpenID_Extension
     protected $responseKeys = array();
 
     /**
-     * values
+     * Values
      *
      * @var array
      */
@@ -255,7 +257,8 @@ abstract class OpenID_Extension
         } else {
             // Just grab all message components
             foreach ($message->getArrayFormat() as $key => $value) {
-                if (preg_match('/^openid[.]' . $alias . '[.](.*+)$/', $key, $matches)) {
+                $regex = '/^openid[.]' . $alias . '[.](.*+)$/';
+                if (preg_match($regex, $key, $matches)) {
                     $values[$matches[1]] = $value;
                 }
             }
@@ -266,7 +269,7 @@ abstract class OpenID_Extension
     /**
      * Gets the namespace of this extension
      *
-     * @see $namespace
+     * @see    $namespace
      * @return string
      */
     public function getNamespace()

@@ -18,18 +18,18 @@
 require_once 'OpenID/ServiceEndpoint.php';
 
 /**
-* OpenID_ServiceEndpoints
-*
-* This class represents a colleciton of OpenID_ServiceEndpoint objects.  It
-* implements several SPL interfaces to make it easy to consume.
-*
-* @category  Auth
-* @package   OpenID
-* @author    Rich Schumacher <rich.schu@gmail.com>
-* @copyright 2009 Rich Schumacher
-* @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
-* @link      http://github.com/shupp/openid
-*/
+ * OpenID_ServiceEndpoints
+ *
+ * This class represents a colleciton of OpenID_ServiceEndpoint objects.  It
+ * implements several SPL interfaces to make it easy to consume.
+ *
+ * @category  Auth
+ * @package   OpenID
+ * @author    Rich Schumacher <rich.schu@gmail.com>
+ * @copyright 2009 Rich Schumacher
+ * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
+ * @link      http://github.com/shupp/openid
+ */
 class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
@@ -187,8 +187,8 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     /**
      * Gets the Expires header value
      *
-     * @see $_expiresHeader
-     * @see setExpiresHeader()
+     * @see    $_expiresHeader
+     * @see    setExpiresHeader()
      * @return string
      */
     public function getExpiresHeader()
@@ -201,7 +201,7 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
      *
      * @param string $value The Expires header value
      *
-     * @see getExpiresHeader()
+     * @see    getExpiresHeader()
      * @return OpenID_ServiceEndpoints
      */
     public function setExpiresHeader($value)

@@ -43,7 +43,7 @@ class OpenID_Association
     protected $uri = null;
 
     /**
-     * expires_in paramater of the association.  Time is in seconds.
+     * The expires_in paramater of the association.  Time is in seconds.
      *
      * @var mixed
      */
@@ -57,15 +57,15 @@ class OpenID_Association
     protected $created = null;
 
     /**
-     * assoc_type parameter of the association.  Should be one of HMAC-SHA1 or
-     * HMAC-SHA256
+     * The assoc_type parameter of the association.
+     * Should be one of HMAC-SHA1 or HMAC-SHA256
      *
      * @var string
      */
     protected $assocType = null;
 
     /**
-     * assoc_handle parameter of the association.
+     * The assoc_handle parameter of the association.
      *
      * @var string
      */

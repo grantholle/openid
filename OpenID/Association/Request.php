@@ -132,8 +132,8 @@ class OpenID_Association_Request extends OpenID
      * 'unsupported-type' responses.
      *
      * @return mixed OpenID_Association on success, false on failure
-     * @see buildAssociation()
-     * @see sendAssociationRequest()
+     * @see    buildAssociation()
+     * @see    sendAssociationRequest()
      */
     public function associate()
     {
@@ -170,7 +170,7 @@ class OpenID_Association_Request extends OpenID
      * @param array $response Association response in array format
      *
      * @return OpenID_Association
-     * @see associate()
+     * @see    associate()
      */
     protected function buildAssociation(array $response)
     {
@@ -200,11 +200,12 @@ class OpenID_Association_Request extends OpenID
      * Actually sends the assocition request to the OP Endpoint URL.
      *
      * @return OpenID_Message
-     * @see associate()
+     * @see    associate()
      */
     protected function sendAssociationRequest()
     {
-        if ($this->message->get('openid.session_type') == self::SESSION_TYPE_NO_ENCRYPTION) {
+        $type = $this->message->get('openid.session_type');
+        if ($type == self::SESSION_TYPE_NO_ENCRYPTION) {
 
             $this->message->delete('openid.dh_consumer_public');
             $this->message->delete('openid.dh_modulus');

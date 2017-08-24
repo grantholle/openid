@@ -122,7 +122,7 @@ class OpenID
      *
      * @param OpenID_Observer_Common $observer Observer object
      *
-     * @see OpenID_Observer_Log
+     * @see    OpenID_Observer_Log
      * @return void
      */
     static public function attach(OpenID_Observer_Common $observer)
@@ -225,7 +225,7 @@ class OpenID
      * @param OpenID_Message $message Contains message contents
      * @param array          $options Options to pass to HTTP_Request2
      *
-     * @see getHTTPRequest2Instance()
+     * @see    getHTTPRequest2Instance()
      * @throws OpenID_Exception if send() fails
      * @return HTTP_Request2_Response
      */
@@ -248,7 +248,7 @@ class OpenID
     /**
      * Instantiates HTTP_Request2.  Abstracted for testing.
      *
-     * @see directRequest()
+     * @see    directRequest()
      * @return HTTP_Request2_Response
      */
     protected function getHTTPRequest2Instance()

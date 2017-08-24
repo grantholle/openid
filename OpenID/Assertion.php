@@ -95,7 +95,7 @@ class OpenID_Assertion extends OpenID
      * @param OpenID_Association $assoc Association to use for checking the signature
      *
      * @return bool result of OpenID_Association::checkMessageSignature()
-     * @see OpenID_Association::checkMessageSignature()
+     * @see    OpenID_Association::checkMessageSignature()
      */
     public function verifySignature(OpenID_Association $assoc)
     {

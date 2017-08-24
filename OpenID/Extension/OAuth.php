@@ -52,10 +52,10 @@ class OpenID_Extension_OAuth extends OpenID_Extension
     protected $requestKeys = array('consumer', 'scope');
 
      /**
-     * Supported keys in a response
-     *
-     * @var array $responseKeys
-     */
+      * Supported keys in a response
+      *
+      * @var array $responseKeys
+      */
     protected $responseKeys = array('request_token', 'scope');
 
     /**

@@ -380,7 +380,7 @@ class OpenID_RelyingParty extends OpenID
      * discovery.
      *
      * @throws OpenID_Exception if discovery fails
-     * @see OpenID_Discover::getDiscover()
+     * @see    OpenID_Discover::getDiscover()
      * @return OpenID_Discover
      */
     protected function getDiscover()
@@ -435,7 +435,7 @@ class OpenID_RelyingParty extends OpenID
      * @param string $opEndpointURL The OP endpoint URL to communicate with
      * @param string $version       The OpenID version being used
      *
-     * @see prepare()
+     * @see    prepare()
      * @return OpenID_Association_Request
      */
     protected function getAssociationRequestObject($opEndpointURL, $version)

@@ -57,7 +57,7 @@ abstract class OpenID_Observer_Common
      * Gets the current array of events
      *
      * @return array
-     * @see $events
+     * @see    $events
      */
     public function getEvents()
     {
@@ -70,7 +70,7 @@ abstract class OpenID_Observer_Common
      * @param array $events Array of events
      *
      * @return void
-     * @see $events
+     * @see    $events
      */
     public function setEvents(array $events)
     {

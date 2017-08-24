@@ -74,7 +74,7 @@ class OpenID_Assertion_Result
      *
      * @param OpenID_Message $message The response message
      *
-     * @see getCheckAuthResponse()
+     * @see    getCheckAuthResponse()
      * @return void
      */
     public function setCheckAuthResponse(OpenID_Message $message)
@@ -85,7 +85,7 @@ class OpenID_Assertion_Result
     /**
      * Gets the check_authentication response
      *
-     * @see setCheckAuthResponse()
+     * @see    setCheckAuthResponse()
      * @return OpenID_Message
      */
     public function getCheckAuthResponse()
@@ -180,8 +180,8 @@ class OpenID_Assertion_Result
      *
      * @param OpenID_Discover $discover An instance of OpenID_Discover
      *
-     * @see $discover
-     * @see getDiscover()
+     * @see    $discover
+     * @see    getDiscover()
      * @return void
      */
     public function setDiscover(OpenID_Discover $discover)
@@ -192,8 +192,8 @@ class OpenID_Assertion_Result
     /**
      * Returns the discovered information about the identifer
      *
-     * @see $discover
-     * @see setDiscover()
+     * @see    $discover
+     * @see    setDiscover()
      * @return OpenID_Discover|null
      */
     public function getDiscover()
