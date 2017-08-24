@@ -198,7 +198,7 @@
     <file name="OpenIDTest.php" role="test" />
    </dir> <!-- /tests -->
    <file name="OpenID.php" role="php" />
-   <file name="README" role="data" />
+   <file name="README.rst" role="data" />
   </dir> <!-- / -->
  </contents>
  <dependencies>
