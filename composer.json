@@ -1,0 +1,40 @@
+{
+    "name": "pear/openid",
+    "description": "PHP implementation of OpenID 1.1 and 2.0",
+    "license": "BSD-2-Clause",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=OpenID",
+        "source": "https://github.com/pear/OpenID"
+    },
+    "type": "library",
+    "authors": [
+        {
+            "email": "shupp@php.net",
+            "name": "Bill Shupp",
+            "role": "Lead"
+        },
+        {
+            "email": "cweiske@php.net",
+            "name": "Christian Weiske",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "": "./"
+        }
+    },
+    "include-path": [
+        "./"
+    ],
+    "require": {
+        "pear/http_request2": "^2.3.0",
+        "pear/cache_lite": "^1.8.0",
+        "pear/crypt_diffiehellman": "~0.2.5",
+        "pear/services_yadis": "~0.5.2",
+        "pear/net_url2": "^2.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5"
+    }
+}
