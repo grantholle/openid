@@ -1,6 +1,6 @@
 language: php
 install:
-  - pear upgrade pear
+  - pear upgrade -f pear
   - pear install Crypt_DiffieHellman-beta Services_Yadis-beta
   - pear install package.xml
   - wget https://phar.phpunit.de/phpunit-5.7.phar
