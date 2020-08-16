@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Discover.php';
+require_once 'src/Discover.php';
 
 /**
  * OpenID_Discover_MockSubClass

@@ -13,10 +13,10 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Store/CacheLite.php';
-require_once 'OpenID/Association.php';
-require_once 'OpenID/Discover.php';
-require_once 'OpenID/Nonce.php';
+require_once 'src/Store/CacheLite.php';
+require_once 'src/Association.php';
+require_once 'src/Discover.php';
+require_once 'src/Nonce.php';
 
 /**
  * OpenID_Store_CacheLiteTest

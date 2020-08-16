@@ -13,10 +13,10 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Store.php';
-require_once 'OpenID/Store/NoClass.php';
-require_once 'OpenID/Store/Mock.php';
-require_once 'OpenID/Store/NotInterface.php';
+require_once 'src/Store.php';
+require_once 'src/Store/NoClass.php';
+require_once 'src/Store/Mock.php';
+require_once 'src/Store/NotInterface.php';
 
 /**
  * OpenID_StoreTest

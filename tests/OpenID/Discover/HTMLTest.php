@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Discover/HTML.php';
+require_once 'src/Discover/HTML.php';
 
 /**
  * OpenID_Discover_HTMLTest

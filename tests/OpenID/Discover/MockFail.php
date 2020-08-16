@@ -16,7 +16,7 @@
 /**
  * Required files
  */
-require_once 'OpenID/Discover/Interface.php';
+require_once 'src/Discover/Interface.php';
 
 /**
  * OpenID_Discover_MockFail

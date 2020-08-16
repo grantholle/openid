@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Extension/AX.php';
+require_once 'src/Extension/AX.php';
 
 /**
  * OpenID_Extension_AXTest

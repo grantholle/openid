@@ -19,16 +19,16 @@ set_include_path(dirname(__FILE__) . '/../../:' . get_include_path());
 /**
  * Required files
  */
-require_once 'OpenID/RelyingParty.php';
-require_once 'OpenID/Discover.php';
-require_once 'OpenID/Store.php';
-require_once 'OpenID/Extension/SREG10.php';
-require_once 'OpenID/Extension/SREG11.php';
-require_once 'OpenID/Extension/AX.php';
-require_once 'OpenID/Extension/UI.php';
-require_once 'OpenID/Extension/OAuth.php';
-require_once 'OpenID/Message.php';
-require_once 'OpenID/Observer/Log.php';
+require_once 'src/RelyingParty.php';
+require_once 'src/Discover.php';
+require_once 'src/Store.php';
+require_once 'src/Extension/SREG10.php';
+require_once 'src/Extension/SREG11.php';
+require_once 'src/Extension/AX.php';
+require_once 'src/Extension/UI.php';
+require_once 'src/Extension/OAuth.php';
+require_once 'src/Message.php';
+require_once 'src/Observer/Log.php';
 require_once 'Net/URL2.php';
 
 session_start();

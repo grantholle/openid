@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Discover/Yadis.php';
+require_once 'src/Discover/Yadis.php';
 
 /**
  * OpenID_Discover_YadisTest

@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Observer/Log.php';
+require_once 'src/Observer/Log.php';
 require_once 'Log.php';
 
 /**

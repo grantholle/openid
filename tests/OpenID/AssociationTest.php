@@ -13,8 +13,8 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Association.php';
-require_once 'OpenID/Message.php';
+require_once 'src/Association.php';
+require_once 'src/Message.php';
 
 /**
  * OpenID_AssociationTest

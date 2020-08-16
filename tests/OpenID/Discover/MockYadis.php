@@ -16,7 +16,7 @@
 /**
  * Required files
  */
-require_once 'OpenID/Discover/Yadis.php';
+require_once 'src/Discover/Yadis.php';
 
 /**
  * OpenID_Discover_MockYadis

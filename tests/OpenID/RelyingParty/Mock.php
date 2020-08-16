@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/RelyingParty.php';
+require_once 'src/RelyingParty.php';
 
 /**
  * OpenID_RelyingParty_Mock

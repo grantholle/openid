@@ -13,9 +13,9 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Assertion/Result.php';
-require_once 'OpenID/Message.php';
-require_once 'OpenID/Discover.php';
+require_once 'src/Assertions/Result.php';
+require_once 'src/Message.php';
+require_once 'src/Discover.php';
 require_once 'OpenID.php';
 
 /**

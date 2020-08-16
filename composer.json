@@ -1,10 +1,10 @@
 {
-    "name": "pear/openid",
-    "description": "PHP implementation of OpenID 1.1 and 2.0",
+    "name": "grantholle/pear-openid",
+    "description": "A psr-4 port of the Pear package: PHP implementation of OpenID 1.1 and 2.0",
     "license": "BSD-2-Clause",
     "support": {
-        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=OpenID",
-        "source": "https://github.com/pear/OpenID"
+        "issues": "https://github.com/grantholle/pear-openid/issues",
+        "source": "https://github.com/grantholle/pear-openid"
     },
     "type": "library",
     "authors": [
@@ -17,24 +17,26 @@
             "email": "cweiske@php.net",
             "name": "Christian Weiske",
             "role": "Developer"
+        },
+        {
+            "name": "Grant Holle",
+            "homepage": "https://grantholle.dev"
         }
     ],
     "autoload": {
-        "psr-0": {
-            "": "./"
+        "psr-4": {
+            "Pear\\OpenId\\": "src"
         }
     },
-    "include-path": [
-        "./"
-    ],
     "require": {
-        "pear/http_request2": "^2.3.0",
-        "pear/cache_lite": "^1.8.0",
-        "pear/crypt_diffiehellman": "~0.2.5",
-        "pear/services_yadis": "~0.5.3",
-        "pear/net_url2": "^2.2.0"
+        "php": "^7.2",
+        "grantholle/pear-crypt-diffiehellman": "^1.0",
+        "grantholle/pear-net-url2": "^3.0",
+        "grantholle/pear-services-yadis": "^1.0",
+        "grantholle/pear-http-request2": "^3.0",
+        "grantholle/pear-cache-lite": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5"
+        "phpunit/phpunit": "^9.3"
     }
 }

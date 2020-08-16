@@ -13,15 +13,15 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/RelyingParty.php';
-require_once 'OpenID/RelyingParty/Mock.php';
-require_once 'OpenID/Store/Mock.php';
-require_once 'OpenID/Observer/Log.php';
-require_once 'OpenID/Discover.php';
-require_once 'OpenID/Association.php';
-require_once 'OpenID/Association/Request.php';
+require_once 'src/RelyingParty.php';
+require_once 'src/RelyingParty/Mock.php';
+require_once 'src/Store/Mock.php';
+require_once 'src/Observer/Log.php';
+require_once 'src/Discover.php';
+require_once 'src/Association.php';
+require_once 'src/Association/Request.php';
 require_once 'OpenID.php';
-require_once 'OpenID/Nonce.php';
+require_once 'src/Nonce.php';
 require_once 'Net/URL2.php';
 require_once 'HTTP/Request2/Adapter/Mock.php';
 

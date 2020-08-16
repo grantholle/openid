@@ -1,2 +1,5 @@
 /coverage/
 /dist/
+vendor
+composer.lock
+.idea

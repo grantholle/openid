@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Store/Interface.php';
+require_once 'src/Store/Interface.php';
 
 /**
  * OpenID_Store_Mock

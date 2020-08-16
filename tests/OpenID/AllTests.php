@@ -13,26 +13,26 @@
  */
 
 require_once 'OpenIDTest.php';
-require_once 'OpenID/MessageTest.php';
-require_once 'OpenID/Auth/RequestTest.php';
-require_once 'OpenID/ExtensionTest.php';
-require_once 'OpenID/Extension/AXTest.php';
-require_once 'OpenID/Extension/SREGTest.php';
-require_once 'OpenID/Extension/UITest.php';
-require_once 'OpenID/AssociationTest.php';
-require_once 'OpenID/Association/RequestTest.php';
-require_once 'OpenID/StoreTest.php';
-require_once 'OpenID/ServiceEndpointTest.php';
-require_once 'OpenID/ServiceEndpointsTest.php';
-require_once 'OpenID/Observer/LogTest.php';
-require_once 'OpenID/NonceTest.php';
-require_once 'OpenID/AssertionTest.php';
-require_once 'OpenID/Assertion/ResultTest.php';
-require_once 'OpenID/RelyingPartyTest.php';
-require_once 'OpenID/DiscoverTest.php';
-require_once 'OpenID/Discover/HTMLTest.php';
-require_once 'OpenID/Discover/YadisTest.php';
-require_once 'OpenID/Store/CacheLiteTest.php';
+require_once 'src/MessageTest.php';
+require_once 'src/Auth/RequestTest.php';
+require_once 'src/ExtensionTest.php';
+require_once 'src/Extension/AXTest.php';
+require_once 'src/Extension/SREGTest.php';
+require_once 'src/Extension/UITest.php';
+require_once 'src/AssociationTest.php';
+require_once 'src/Association/RequestTest.php';
+require_once 'src/StoreTest.php';
+require_once 'src/ServiceEndpointTest.php';
+require_once 'src/ServiceEndpointsTest.php';
+require_once 'src/Observer/LogTest.php';
+require_once 'src/NonceTest.php';
+require_once 'src/AssertionTest.php';
+require_once 'src/Assertions/ResultTest.php';
+require_once 'src/RelyingPartyTest.php';
+require_once 'src/DiscoverTest.php';
+require_once 'src/Discover/HTMLTest.php';
+require_once 'src/Discover/YadisTest.php';
+require_once 'src/Store/CacheLiteTest.php';
 
 /**
  * OpenID_AllTests

@@ -16,10 +16,10 @@
 /**
  * Required files
  */
-require_once 'OpenID/Discover.php';
-require_once 'OpenID/Discover/Mock.php';
-require_once 'OpenID/Discover/MockSubClass.php';
-require_once 'OpenID/Store/Mock.php';
+require_once 'src/Discover.php';
+require_once 'src/Discover/Mock.php';
+require_once 'src/Discover/MockSubClass.php';
+require_once 'src/Store/Mock.php';
 
 /**
  * OpenID_DiscoverTest

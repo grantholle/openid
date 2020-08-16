@@ -13,8 +13,8 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/ServiceEndpoint.php';
-require_once 'OpenID/ServiceEndpoints.php';
+require_once 'src/ServiceEndpoint.php';
+require_once 'src/ServiceEndpoints.php';
 
 /**
  * Test class for the OpenID_ServiceEndpoints class

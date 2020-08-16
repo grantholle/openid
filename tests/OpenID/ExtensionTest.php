@@ -13,11 +13,11 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Extension.php';
-require_once 'OpenID/Message.php';
-require_once 'OpenID/Extension/Mock.php';
-require_once 'OpenID/Extension/MockInvalidAlias.php';
-require_once 'OpenID/Extension/MockNoResponseKeys.php';
+require_once 'src/Extension.php';
+require_once 'src/Message.php';
+require_once 'src/Extension/Mock.php';
+require_once 'src/Extension/MockInvalidAlias.php';
+require_once 'src/Extension/MockNoResponseKeys.php';
 
 /**
  * OpenID_ExtensionTest

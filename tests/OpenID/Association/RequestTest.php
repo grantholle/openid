@@ -13,10 +13,10 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Association/Request.php';
+require_once 'src/Association/Request.php';
 require_once 'HTTP/Request2.php';
 require_once 'HTTP/Request2/Adapter/Mock.php';
-require_once 'OpenID/Message.php';
+require_once 'src/Message.php';
 require_once 'Crypt/DiffieHellman.php';
 
 /**

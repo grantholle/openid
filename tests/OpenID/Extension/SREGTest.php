@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Extension/SREG11.php';
+require_once 'src/Extension/SREG11.php';
 
 /**
  * OpenID_Extension_SREGTest

@@ -13,8 +13,8 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Discover/Interface.php';
-require_once 'OpenID/ServiceEndpoints.php';
+require_once 'src/Discover/Interface.php';
+require_once 'src/ServiceEndpoints.php';
 
 /**
  * OpenID_Discover_Mock

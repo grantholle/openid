@@ -13,8 +13,8 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'OpenID/Nonce.php';
-require_once 'OpenID/Store/Mock.php';
+require_once 'src/Nonce.php';
+require_once 'src/Store/Mock.php';
 
 /**
  * OpenID_NonceTest
