@@ -1,4 +1,7 @@
 <?php
+
+namespace Pear\OpenId\Observers;
+
 /**
  * OpenID_Observer_Common
  *
@@ -36,7 +39,7 @@
  * @link      http://github.com/shupp/openid
  * @see       OpenID_Observer_Log
  */
-abstract class OpenID_Observer_Common
+abstract class Common
 {
     /**
      * Events to act upon
@@ -44,14 +47,14 @@ abstract class OpenID_Observer_Common
      * @var array
      * @see getEvents()
      */
-    protected $events = array(
+    protected $events = [
         'OpenID_Association_Request::sendAssociationRequest',
         'OpenID_Association::checkMessageSignature',
         'OpenID_Assertion::validateReturnTo',
         'OpenID_Assertion::validateReturnToNonce',
         'OpenID_RelyingParty::verify',
         'OpenID_Auth_Request::addNonce',
-    );
+    ];
 
     /**
      * Gets the current array of events

@@ -148,9 +148,9 @@ class OpenIDRelyingParty extends OpenID
      * @param mixed $realm      The openid.realm parameter value
      * @param mixed $identifier The user supplied identifier, defaults to null
      *
+     * @throws OpenIdException When the identifier is invalid
      * @see OpenID::normalizeIdentifier
      *
-     * @throws OpenIDException When the identifier is invalid
      */
     public function __construct($returnTo, $realm, $identifier = null)
     {
@@ -186,15 +186,15 @@ class OpenIDRelyingParty extends OpenID
      *
      * @param int $skew Skew (or timeout) in seconds
      *
-     * @throws OpenIDException if $skew is not numeric
      * @return void
+     * @throws OpenIdException if $skew is not numeric
      */
     public function setClockSkew($skew)
     {
         if (!is_numeric($skew)) {
-            throw new OpenIDException(
+            throw new OpenIdException(
                 'Invalid clock skew',
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
         $this->clockSkew = $skew;
@@ -219,14 +219,14 @@ class OpenIDRelyingParty extends OpenID
      * the OpenID_Auth_Request object.
      *
      * @return OpenID_Auth_Request
-     * @throws OpenIDException if no identifier was passed to the constructor
+     * @throws OpenIdException if no identifier was passed to the constructor
      */
     public function prepare()
     {
         if ($this->normalizedID === null) {
-            throw new OpenIDException(
+            throw new OpenIdException(
                 'No identifier provided',
-                OpenIDException::MISSING_DATA
+                OpenIdException::MISSING_DATA
             );
         }
 
@@ -264,8 +264,8 @@ class OpenIDRelyingParty extends OpenID
      * @param OpenID_Message $message      The OpenID_Message instance, as extractd
      *                                     from the input (GET or POST)
      *
-     * @throws OpenIDException on error or invalid openid.mode
      * @return OpenID_Assertion_Response
+     *@throws OpenIdException on error or invalid openid.mode
      */
     public function verify(Net_URL2 $requestedURL, OpenID_Message $message)
     {
@@ -296,14 +296,14 @@ class OpenIDRelyingParty extends OpenID
             $result->setAssertionMethod($mode);
             return $result;
         case OpenID::MODE_ERROR:
-            throw new OpenIDException(
+            throw new OpenIdException(
                 $message->get('openid.error'),
-                OpenIDException::OPENID_ERROR
+                OpenIdException::OPENID_ERROR
             );
         default:
-            throw new OpenIDException(
+            throw new OpenIdException(
                 'Unknown mode: ' . $mode,
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -356,9 +356,9 @@ class OpenIDRelyingParty extends OpenID
      * Gets discovered information from cache if it exists, otherwise performs
      * discovery.
      *
-     * @throws OpenIDException if discovery fails
-     * @see OpenID_Discover::getDiscover()
      * @return OpenID_Discover
+     *@throws OpenIdException if discovery fails
+     * @see OpenID_Discover::getDiscover()
      */
     protected function getDiscover()
     {
@@ -367,9 +367,9 @@ class OpenIDRelyingParty extends OpenID
         );
         if (!$discover instanceof OpenID_Discover) {
             // @codeCoverageIgnoreStart
-            throw new OpenIDException(
+            throw new OpenIdException(
                 'Unable to discover OP Endpoint URL',
-                OpenIDException::DISCOVERY_ERROR
+                OpenIdException::DISCOVERY_ERROR
             );
             // @codeCoverageIgnoreEnd
         }

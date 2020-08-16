@@ -16,10 +16,10 @@
 require_once 'src/RelyingParty.php';
 require_once 'src/RelyingParty/Mock.php';
 require_once 'src/Store/Mock.php';
-require_once 'src/Observer/Log.php';
+require_once 'src/Observers/Log.php';
 require_once 'src/Discover.php';
 require_once 'src/Association.php';
-require_once 'src/Association/Request.php';
+require_once 'src/Associations/Request.php';
 require_once 'OpenID.php';
 require_once 'src/Nonce.php';
 require_once 'Net/URL2.php';

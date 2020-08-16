@@ -1,6 +1,10 @@
 <?php
+
+namespace Pear\OpenId\Exceptions;
+
+
 /**
- * OpenID_Store_Exception
+ * OpenID_Auth_Exception
  *
  * PHP Version 5.2.0+
  *
@@ -14,14 +18,9 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Exception.php';
-
-/**
- * OpenID_Store_Exception
+ * OpenID_Auth_Exception
  *
- * Store exceptions
+ * Auth exceptions
  *
  * @uses      OpenID_Exception
  * @category  Auth
@@ -31,21 +30,6 @@ require_once 'src/Exception.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Store_Exception extends OpenID_Exception
+class OpenIdAuthException extends OpenIdException
 {
-    /**
-     * Database connection failed
-     */
-    const CONNECT_ERROR = 250;
-
-    /**
-     * Database table could not be created
-     */
-    const CREATE_TABLE_ERROR = 251;
-
-    /**
-     * SQL statement invalid
-     */
-    const SQL_ERROR = 253;
 }
-?>

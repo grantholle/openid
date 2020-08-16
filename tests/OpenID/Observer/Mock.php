@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/Observer/Common.php';
+require_once 'src/Observers/Common.php';
 require_once 'src/Exception.php';
 
 /**

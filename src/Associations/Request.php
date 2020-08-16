@@ -1,6 +1,16 @@
 <?php
+
+namespace Pear\OpenId\Associations;
+
+use Pear\Crypt\DiffieHellman as CryptDiffieHellman;
+use Pear\OpenId\Exceptions\OpenIdAssociationException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Exceptions\OpenIdMessageException;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\OpenIdMessage;
+
 /**
- * OpenID_Association_Request
+ * Association_Request
  *
  * PHP Version 5.2.0+
  *
@@ -14,16 +24,7 @@
  */
 
 /**
- * Required files
- */
-require_once 'OpenID.php';
-require_once 'src/Association/Exception.php';
-require_once 'src/Association.php';
-require_once 'src/Message.php';
-require_once 'src/Association/DiffieHellman.php';
-
-/**
- * OpenID_Association_Request
+ * Association_Request
  *
  * Request object for establishing OpenID Associations.
  *
@@ -35,7 +36,7 @@ require_once 'src/Association/DiffieHellman.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Association_Request extends OpenID
+class Request extends OpenId
 {
     /**
      * OpenID provider endpoint URL
@@ -47,7 +48,7 @@ class OpenID_Association_Request extends OpenID
     /**
      * Contains contents of the association request
      *
-     * @var OpenID_Message
+     * @var OpenIdMessage
      */
     protected $message = null;
 
@@ -64,19 +65,19 @@ class OpenID_Association_Request extends OpenID
      * @var array
      * @see getResponse()
      */
-    protected $response = array();
+    protected $response = [];
 
     /**
-     * Optional instance of Crypt_DiffieHellman
+     * Optional instance of DiffieHellman
      *
-     * @var Crypt_DiffieHellman
+     * @var CryptDiffieHellman
      */
     protected $cdh = null;
 
     /**
-     * OpenID_Association_DiffieHellman instance
+     * DiffieHellman instance
      *
-     * @var OpenID_Association_DiffieHellman
+     * @var DiffieHellman
      */
     protected $dh = null;
 
@@ -85,31 +86,30 @@ class OpenID_Association_Request extends OpenID
      *
      * @var array
      */
-    protected $requestOptions = array();
-
+    protected $requestOptions = [];
 
     /**
      * Sets the arguments passed in, as well as creates the request message.
      *
-     * @param string              $opEndpointURL URL of OP Endpoint
-     * @param string              $version       Version of OpenID in use
-     * @param Crypt_DiffieHellman $cdh           Custom Crypt_DiffieHellman
-     *                                           instance
-     *
-     * @return void
+     * @param string $opEndpointURL URL of OP Endpoint
+     * @param string $version Version of OpenID in use
+     * @param DiffieHellman|null $cdh Custom DiffieHellman instance
+     * @throws OpenIdMessageException
+     * @throws OpenIdAssociationException
      */
     public function __construct(
-        $opEndpointURL, $version, Crypt_DiffieHellman $cdh = null
+        $opEndpointURL, $version, DiffieHellman $cdh = null
     ) {
         if (!array_key_exists($version, OpenID::$versionMap)) {
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 'Invalid version',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
-        $this->version       = $version;
+
+        $this->version = $version;
         $this->opEndpointURL = $opEndpointURL;
-        $this->message       = new OpenID_Message;
+        $this->message = new OpenIdMessage;
 
         if ($cdh) {
             $this->cdh = $cdh;
@@ -117,7 +117,8 @@ class OpenID_Association_Request extends OpenID
 
         // Set defaults
         $this->message->set('openid.mode', OpenID::MODE_ASSOCIATE);
-        if (OpenID::$versionMap[$version] == OpenID::NS_2_0) {
+
+        if (OpenID::$versionMap[$version] === OpenID::NS_2_0) {
             $this->message->set('openid.ns', OpenID::NS_2_0);
             $this->message->set('openid.assoc_type', self::ASSOC_TYPE_HMAC_SHA256);
             $this->message->set('openid.session_type', self::SESSION_TYPE_DH_SHA256);
@@ -131,13 +132,16 @@ class OpenID_Association_Request extends OpenID
      * Sends the association request.  Loops over errors and adapts to
      * 'unsupported-type' responses.
      *
-     * @return mixed OpenID_Association on success, false on failure
+     * @return mixed Association on success, false on failure
+     * @throws OpenIdAssociationException
+     * @throws OpenIdMessageException
      * @see buildAssociation()
      * @see sendAssociationRequest()
      */
     public function associate()
     {
         $count = 0;
+
         while ($count < 2) {
             // Easier to operate on array format here
             $response = $this->sendAssociationRequest()->getArrayFormat();
@@ -161,51 +165,53 @@ class OpenID_Association_Request extends OpenID
             }
             $count++;
         }
+
         return false;
     }
 
     /**
-     * Build the OpenID_Association class based on the association response
+     * Build the Association class based on the association response
      *
      * @param array $response Association response in array format
-     *
-     * @return OpenID_Association
+     * @return Association
+     * @throws OpenIdAssociationException
      * @see associate()
      */
     protected function buildAssociation(array $response)
     {
-        $params                = array();
-        $params['created']     = time();
-        $params['expiresIn']   = $response['expires_in'];
-        $params['uri']         = $this->opEndpointURL;
-        $params['assocType']   = $this->getAssociationType();
+        $params = [];
+        $params['created'] = time();
+        $params['expiresIn'] = $response['expires_in'];
+        $params['uri'] = $this->opEndpointURL;
+        $params['assocType'] = $this->getAssociationType();
         $params['assocHandle'] = $response['assoc_handle'];
 
         if ($this->getSessionType() === self::SESSION_TYPE_NO_ENCRYPTION) {
             if (!isset($response['mac_key'])) {
-                throw new OpenID_Association_Exception(
+                throw new OpenIdAssociationException(
                     'Missing mac_key in association response',
-                    OpenID_Exception::MISSING_DATA
+                    OpenIdException::MISSING_DATA
                 );
             }
+
             $params['sharedSecret'] = $response['mac_key'];
         } else {
             $this->getDH()->getSharedSecret($response, $params);
         }
 
-        return new OpenID_Association($params);
+        return new Association($params);
     }
 
     /**
      * Actually sends the assocition request to the OP Endpoint URL.
      *
-     * @return OpenID_Message
+     * @return OpenIdMessage
+     * @throws OpenIdMessageException
      * @see associate()
      */
     protected function sendAssociationRequest()
     {
-        if ($this->message->get('openid.session_type') == self::SESSION_TYPE_NO_ENCRYPTION) {
-
+        if ($this->message->get('openid.session_type') === self::SESSION_TYPE_NO_ENCRYPTION) {
             $this->message->delete('openid.dh_consumer_public');
             $this->message->delete('openid.dh_modulus');
             $this->message->delete('openid.dh_gen');
@@ -216,9 +222,10 @@ class OpenID_Association_Request extends OpenID
         $response = $this->directRequest(
             $this->opEndpointURL, $this->message, $this->getRequestOptions()
         );
-        $message  = new OpenID_Message(
+
+        $message  = new OpenIdMessage(
             $response->getBody(),
-            OpenID_Message::FORMAT_KV
+            OpenIdMessage::FORMAT_KV
         );
         OpenID::setLastEvent(__METHOD__, print_r($message->getArrayFormat(), true));
 
@@ -228,7 +235,7 @@ class OpenID_Association_Request extends OpenID
     /**
      * Gets the last association response
      *
-     * @return void
+     * @return array
      */
     public function getResponse()
     {
@@ -239,6 +246,8 @@ class OpenID_Association_Request extends OpenID
      * Initialize the diffie-hellman parameters for the association request.
      *
      * @return void
+     * @throws CryptDiffieHellman\DiffieHellmanException
+     * @throws OpenIdMessageException
      */
     protected function initDH()
     {
@@ -246,18 +255,19 @@ class OpenID_Association_Request extends OpenID
     }
 
     /**
-     * Gets an instance of OpenID_Association_DiffieHellman.  If one is not already
+     * Gets an instance of DiffieHellman.  If one is not already
      * instanciated, a new one is returned.
      *
-     * @return OpenID_Association_DiffieHellman
+     * @return DiffieHellman
      */
     protected function getDH()
     {
         if (!$this->dh) {
-            $this->dh = new OpenID_Association_DiffieHellman(
+            $this->dh = new DiffieHellman(
                 $this->message, $this->cdh
             );
         }
+
         return $this->dh;
     }
 
@@ -265,11 +275,10 @@ class OpenID_Association_Request extends OpenID
      * Sets he association type for the request.  Can be sha1 or sha256.
      *
      * @param string $type sha1 or sha256
-     *
-     * @throws OpenID_Association_Exception on invalid type
+     * @throws OpenIdAssociationException|OpenIdMessageException on invalid type
      * @return void
      */
-    public function setAssociationType($type)
+    public function setAssociationType(string $type)
     {
         switch ($type) {
         case self::ASSOC_TYPE_HMAC_SHA1:
@@ -277,9 +286,9 @@ class OpenID_Association_Request extends OpenID
             $this->message->set('openid.assoc_type', $type);
             break;
         default:
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 "Invalid assoc_type: $type",
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
     }
@@ -287,7 +296,7 @@ class OpenID_Association_Request extends OpenID
     /**
      * Gets the current association type
      *
-     * @return void
+     * @return mixed
      */
     public function getAssociationType()
     {
@@ -298,36 +307,34 @@ class OpenID_Association_Request extends OpenID
      * Sets the session type.  Can be sha1, sha256, or no-encryption
      *
      * @param string $type sha1, sha256, or no-encryption
-     *
-     * @throws OpenID_Association_Exception on invalid type, or if you set
-     *         no-encryption for an OP URL that doesn't support HTTPS
      * @return void
+     *@throws OpenIdAssociationException|OpenIdMessageException on invalid type, or if you set no-encryption for an OP URL that doesn't support HTTPS
      */
-    public function setSessionType($type)
+    public function setSessionType(string $type)
     {
         switch ($type) {
-        case self::SESSION_TYPE_NO_ENCRYPTION:
-            // Make sure we're using SSL
-            if (!preg_match('@^https://@i', $this->opEndpointURL)) {
-                throw new OpenID_Association_Exception(
-                    'Un-encrypted sessions require HTTPS',
-                    OpenID_Exception::HTTPS_REQUIRED
+            case self::SESSION_TYPE_NO_ENCRYPTION:
+                // Make sure we're using SSL
+                if (!preg_match('@^https://@i', $this->opEndpointURL)) {
+                    throw new OpenIdAssociationException(
+                        'Un-encrypted sessions require HTTPS',
+                        OpenIdException::HTTPS_REQUIRED
+                    );
+                }
+                $this->message->set(
+                    'openid.session_type',
+                    self::SESSION_TYPE_NO_ENCRYPTION
                 );
-            }
-            $this->message->set(
-                'openid.session_type',
-                self::SESSION_TYPE_NO_ENCRYPTION
-            );
-            break;
-        case self::SESSION_TYPE_DH_SHA1:
-        case self::SESSION_TYPE_DH_SHA256:
-            $this->message->set('openid.session_type', $type);
-            break;
-        default:
-            throw new OpenID_Association_Exception(
-                "Invalid session_type: $type",
-                OpenID_Exception::INVALID_VALUE
-            );
+                break;
+            case self::SESSION_TYPE_DH_SHA1:
+            case self::SESSION_TYPE_DH_SHA256:
+                $this->message->set('openid.session_type', $type);
+                break;
+            default:
+                throw new OpenIdAssociationException(
+                    "Invalid session_type: $type",
+                    OpenIdException::INVALID_VALUE
+                );
         }
     }
 
@@ -374,4 +381,3 @@ class OpenID_Association_Request extends OpenID
         return $this->requestOptions;
     }
 }
-?>

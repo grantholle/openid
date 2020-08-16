@@ -1,4 +1,9 @@
 <?php
+
+namespace Pear\OpenId\Extensions;
+
+use Pear\OpenId\Exceptions\OpenIdException;
+
 /**
  * OpenID_Extension_OAuth
  *
@@ -13,9 +18,6 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/Extension.php';
-require_once 'HTTP/OAuth/Consumer.php';
-
 /**
  * Provides support for the OAuth extension
  *
@@ -28,7 +30,7 @@ require_once 'HTTP/OAuth/Consumer.php';
  * @link      http://github.com/shupp/openid
  * @link      http://step2.googlecode.com/svn/spec/openid_oauth_extension/latest/openid_oauth_extension.html
  */
-class OpenID_Extension_OAuth extends OpenID_Extension
+class OAuth extends OpenIdExtension
 {
     /**
      * URI of the OAuth namespace
@@ -63,17 +65,12 @@ class OpenID_Extension_OAuth extends OpenID_Extension
      *
      * Requires an request_token to be present in self::$values
      *
-     * @param string $consumerKey    OAuth consumer application key
+     * @param string $consumerKey OAuth consumer application key
      * @param string $consumerSecret OAuth consumer secret key
-     * @param string $url            Access token url
-     * @param array  $params         Paramters to include in the request
-     *                               for the access token
-     * @param string $method         HTTP Method to use
-     *
+     * @param string $url Access token url
+     * @param array  $params Parameters to include in the request for the access token
+     * @param string $method HTTP Method to use
      * @return array Key => Value array of token and token secret
-     *
-     * @throws OpenID_Exception     On no request_token in response message
-     * @throws HTTP_OAuth_Exception On issue with getting the request token
      *
      * @see http://step2.googlecode.com/svn/spec/openid_oauth_extension/latest/openid_oauth_extension.html
      */
@@ -83,9 +80,9 @@ class OpenID_Extension_OAuth extends OpenID_Extension
     ) {
         $requestToken = $this->get('request_token');
         if ($requestToken === null) {
-            throw new OpenID_Exception(
+            throw new OpenIdException(
                 'No oauth request token in OpenID message',
-                OpenID_Exception::MISSING_DATA
+                OpenIdException::MISSING_DATA
             );
         }
 
@@ -103,5 +100,3 @@ class OpenID_Extension_OAuth extends OpenID_Extension
     }
 
 }
-
-?>

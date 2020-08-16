@@ -1,6 +1,9 @@
 <?php
+
+namespace Pear\OpenId\Exceptions;
+
 /**
- * OpenID_Discover_Exception
+ * OpenID_Association_Exception
  *
  * PHP Version 5.2.0+
  *
@@ -14,14 +17,9 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Exception.php';
-
-/**
- * OpenID_Discover_Exception
+ * OpenID_Association_Exception
  *
- * Discover Exceptions
+ * Association exceptions
  *
  * @uses      OpenID_Exception
  * @category  Auth
@@ -31,7 +29,6 @@ require_once 'src/Exception.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Discover_Exception extends OpenID_Exception
+class OpenIdAssociationException extends OpenIdException
 {
 }
-?>

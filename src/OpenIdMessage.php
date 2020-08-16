@@ -2,10 +2,11 @@
 
 namespace Pear\OpenId;
 
-use Pear\OpenID\Message\OpenIDMessageException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Exceptions\OpenIdMessageException;
 
 /**
- * OpenID_Message
+ * OpenIdMessage
  *
  * A class that handles any OpenID protocol messages, as described in section 4.1 of
  * the {@link http://openid.net/specs/openid-authentication-2_0.html#anchor4
@@ -21,28 +22,29 @@ use Pear\OpenID\Message\OpenIDMessageException;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenIDMessage
+class OpenIdMessage
 {
-    const FORMAT_KV    = 'KV';
-    const FORMAT_HTTP  = 'HTTP';
+    const FORMAT_KV = 'KV';
+    const FORMAT_HTTP = 'HTTP';
     const FORMAT_ARRAY = 'ARRAY';
 
-    protected $validFormats = array(self::FORMAT_KV,
-                                    self::FORMAT_HTTP,
-                                    self::FORMAT_ARRAY);
+    protected $validFormats = [
+        self::FORMAT_KV,
+        self::FORMAT_HTTP,
+        self::FORMAT_ARRAY,
+    ];
 
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Optionally instanciates this object with the contents of an OpenID message.
      *
      * @param mixed $message Message contents
      * @param string $format Source message format (KV, HTTP, or ARRAY)
-     *
      * @return void
-     * @throws OpenIDMessageException
+     * @throws OpenIdMessageException
      */
-    public function __construct($message = null, $format = self::FORMAT_ARRAY)
+    public function __construct($message = null, string $format = self::FORMAT_ARRAY)
     {
         if ($message !== null) {
             $this->setMessage($message, $format);
@@ -53,15 +55,13 @@ class OpenIDMessage
      * Gets the value of any key in this message.
      *
      * @param string $name Name of key
-     *
      * @return mixed Value of key if set, defaults to null
      */
-    public function get($name)
+    public function get(string $name)
     {
-        if (isset($this->data[$name])) {
-            return $this->data[$name];
-        }
-        return null;
+        return isset($this->data[$name])
+            ? $this->data[$name]
+            : null;
     }
 
     /**
@@ -69,18 +69,18 @@ class OpenIDMessage
      *
      * @param string $name Key name
      * @param mixed $val Key value
-     *
      * @return void
-     * @throws OpenIDMessageException
+     * @throws OpenIdMessageException
      */
-    public function set($name, $val)
+    public function set(string $name, $val)
     {
-        if ($name == 'openid.ns' && $val != OpenID::NS_2_0) {
-            throw new OpenIDMessageException(
+        if ($name == 'openid.ns' && $val !== OpenID::NS_2_0) {
+            throw new OpenIdMessageException(
                 'Invalid openid.ns value: ' . $val,
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
+
         $this->data[$name] = $val;
     }
 
@@ -88,10 +88,9 @@ class OpenIDMessage
      * Deletes a key from a message
      *
      * @param string $name Key name
-     *
      * @return void
      */
-    public function delete($name)
+    public function delete(string $name)
     {
         unset($this->data[$name]);
     }
@@ -100,7 +99,7 @@ class OpenIDMessage
      * Gets the current message in KV format
      *
      * @return string
-     * @throws OpenIDMessageException
+     * @throws OpenIdMessageException
      * @see getMessage()
      */
     public function getKVFormat()
@@ -112,7 +111,7 @@ class OpenIDMessage
      * Gets the current message in HTTP (url encoded) format
      *
      * @return string
-     * @throws OpenIDMessageException
+     * @throws OpenIdMessageException
      * @see getMessage()
      */
     public function getHTTPFormat()
@@ -124,7 +123,7 @@ class OpenIDMessage
      * Gets the current message in ARRAY format
      *
      * @return array
-     * @throws OpenIDMessageException
+     * @throws OpenIdMessageException
      * @see getMessage()
      */
     public function getArrayFormat()
@@ -135,39 +134,43 @@ class OpenIDMessage
     /**
      * Gets the message in one of three formats:
      *
-     *  OpenID_Message::FORMAT_ARRAY (default)
-     *  OpenID_Message::FORMAT_KV (KV pairs, OpenID response format)
-     *  OpenID_Message::FORMAT_HTTP (url encoded pairs, for use in a query string)
+     *  OpenIdMessage::FORMAT_ARRAY (default)
+     *  OpenIdMessage::FORMAT_KV (KV pairs, OpenID response format)
+     *  OpenIdMessage::FORMAT_HTTP (url encoded pairs, for use in a query string)
      *
      * @param string $format One of the above three formats
-     *
-     * @throws OpenIDMessageException When passed an invalid format argument
-     * @return mixed array, kv string, or url query string paramters
+     * @return mixed array, kv string, or url query string parameters
+     *@throws OpenIdMessageException When passed an invalid format argument
      */
-    public function getMessage($format = self::FORMAT_ARRAY)
+    public function getMessage(string $format = self::FORMAT_ARRAY)
     {
         if ($format === self::FORMAT_ARRAY) {
             return $this->data;
         }
 
         if ($format === self::FORMAT_HTTP) {
+            $pairs = [];
+
             foreach ($this->data as $k => $v) {
                 $pairs[] = urlencode($k) . '=' . urlencode($v);
             }
+
             return implode('&', $pairs);
         }
 
         if ($format === self::FORMAT_KV) {
             $message = '';
+
             foreach ($this->data as $k => $v) {
                 $message .= "$k:$v\n";
             }
+
             return $message;
         }
 
-        throw new OpenIDMessageException(
+        throw new OpenIdMessageException(
             'Invalid format: ' . $format,
-            OpenIDException::INVALID_VALUE
+            OpenIdException::INVALID_VALUE
         );
     }
 
@@ -176,19 +179,16 @@ class OpenIDMessage
      * source format is Array, but you can also use KV and HTTP formats.
      *
      * @param mixed $message Source message
-     * @param mixed $format Source message format (OpenID_Message::FORMAT_KV,
-     *                                              OpenID_Message::FORMAT_ARRAY,
-     *                                              OpenID_Message::FORMAT_HTTP)
-     *
+     * @param mixed $format Source message format (OpenIdMessage::FORMAT_KV, OpenIdMessage::FORMAT_ARRAY, OpenIdMessage::FORMAT_HTTP)
      * @return void
-     * @throws OpenIDMessageException
+     * @throws OpenIdMessageException
      */
     public function setMessage($message, $format = self::FORMAT_ARRAY)
     {
         if (!in_array($format, $this->validFormats)) {
-            throw new OpenIDMessageException(
+            throw new OpenIdMessageException(
                 'Invalid format: ' . $format,
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -229,13 +229,11 @@ class OpenIDMessage
     }
 
     /**
-     * Adds an extension to an OpenID_Message object.
+     * Adds an extension to an OpenIdMessage object.
      *
      * @param OpenIDExtension $extension Instance of OpenIDExtension
-     *
      * @return void
-     * @throws Extension\OpenIDExtensionException
-     * @throws OpenIDMessageException
+     * @throws Exceptions\OpenIdExtensionException
      * @see OpenIDExtension
      */
     public function addExtension(OpenIDExtension $extension)

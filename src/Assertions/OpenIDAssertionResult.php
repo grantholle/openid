@@ -3,8 +3,8 @@
 namespace Pear\OpenId\Assertions;
 
 use Pear\OpenID\OpenID;
-use Pear\OpenID\OpenIDException;
-use Pear\OpenID\OpenIDMessage;
+use Pear\OpenID\OpenIdException;
+use Pear\OpenID\OpenIdMessage;
 
 /**
  * A class that represents the result of verifying an assertion.
@@ -21,7 +21,7 @@ class OpenIDAssertionResult
     /**
      * The check_authentication response
      *
-     * @var OpenIDMessage
+     * @var OpenIdMessage
      */
     protected $checkAuthResponse = null;
 
@@ -60,12 +60,12 @@ class OpenIDAssertionResult
      * Sets the check_authentication response in the form of an OpenIDMessage
      * instance
      *
-     * @param OpenIDMessage $message The response message
+     * @param OpenIdMessage $message The response message
      *
-     * @see getCheckAuthResponse()
      * @return void
+     *@see getCheckAuthResponse()
      */
-    public function setCheckAuthResponse(OpenIDMessage $message)
+    public function setCheckAuthResponse(OpenIdMessage $message)
     {
         $this->checkAuthResponse = $message;
     }
@@ -73,8 +73,8 @@ class OpenIDAssertionResult
     /**
      * Gets the check_authentication response
      *
-     * @see setCheckAuthResponse()
-     * @return OpenIDMessage
+     * @return OpenIdMessage
+     *@see setCheckAuthResponse()
      */
     public function getCheckAuthResponse()
     {
@@ -134,9 +134,9 @@ class OpenIDAssertionResult
             $this->assertionMethod = $method;
             break;
         default:
-            throw new OpenIDAssertionException(
+            throw new OpenIdAssertionException(
                 'Invalid assertion method',
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
     }

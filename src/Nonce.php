@@ -1,4 +1,7 @@
 <?php
+
+namespace Pear\OpenId;
+
 /**
  * OpenID_Nonce
  *
@@ -13,12 +16,6 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Store.php';
-require_once 'OpenID.php';
-
-/**
  * Handles nonce functionality.  Requires the OP Endpoint URL nonces are to be
  * associated with.
  *
@@ -29,7 +26,7 @@ require_once 'OpenID.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Nonce
+class Nonce
 {
     /**
      *  Constant for the parameter used with OpenID 1.1 nonces in the return_to URL
@@ -56,12 +53,9 @@ class OpenID_Nonce
      * driver.
      *
      * @param string $opEndpointURL OP Endpoint URL
-     * @param int    $clockSkew     How many seconds old can a
-     *                              nonce be?
-     *
-     * @return void
+     * @param int|null $clockSkew How many seconds old can a nonce be?
      */
-    public function __construct($opEndpointURL, $clockSkew = null)
+    public function __construct(string $opEndpointURL, int $clockSkew = null)
     {
         $this->opEndpointURL = $opEndpointURL;
 
@@ -75,17 +69,18 @@ class OpenID_Nonce
      * and then validate its syntax
      *
      * @param string $nonce The nonce from the OP response
-     *
      * @return bool true on success, false on failure
      */
-    public function verifyResponseNonce($nonce)
+    public function verifyResponseNonce(string $nonce)
     {
         // See if it is already stored
-        if (OpenID::getStore()->getNonce($nonce, $this->opEndpointURL) !== false) {
+        if (OpenId::getStore()->getNonce($nonce, $this->opEndpointURL) !== false) {
             return false;
         }
+
         // Store it
-        OpenID::getStore()->setNonce($nonce, $this->opEndpointURL);
+        OpenId::getStore()
+            ->setNonce($nonce, $this->opEndpointURL);
 
         return $this->validate($nonce);
     }
@@ -173,9 +168,7 @@ class OpenID_Nonce
     public function createNonceAndStore($length = 6, $time = null)
     {
         $nonce = $this->createNonce($length, $time);
-        OpenID::getStore()->setNonce($nonce, $this->opEndpointURL);
+        OpenId::getStore()->setNonce($nonce, $this->opEndpointURL);
         return $nonce;
     }
 }
-
-?>

@@ -1,4 +1,7 @@
 <?php
+
+namespace Pear\OpenId\Observers;
+
 /**
  * OpenID_Observer_Log
  *
@@ -14,12 +17,6 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Observer/Common.php';
-require_once 'Log.php';
-
-/**
  * An observer based on PEAR's Log package.  You may either pass in your own Log
  * instance to the constructor, or allow the default file driver to write to
  * /tmp/OpenID_Observer_Log.log by default.
@@ -32,7 +29,7 @@ require_once 'Log.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Observer_Log extends OpenID_Observer_Common
+class Log extends Common
 {
     /**
      * Holds the instance of Log
@@ -46,10 +43,9 @@ class OpenID_Observer_Log extends OpenID_Observer_Common
      * no instance of Log is given, the 'file' Log driver will be used, and write to
      * /tmp/OpenID_Observer_Log.log.
      *
-     * @param Log   $log    Instance of Log, optional
+     * @param Log|null $log Instance of Log, optional
      * @param array $events Custom list of events to log
      *
-     * @return void
      */
     public function __construct(Log $log = null, array $events = array())
     {
@@ -79,4 +75,4 @@ class OpenID_Observer_Log extends OpenID_Observer_Common
         $this->log->log($event['data']);
     }
 }
-?>
+

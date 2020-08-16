@@ -16,7 +16,7 @@
 /**
  * Required files
  */
-require_once 'src/Extension/SREG10.php';
+require_once 'src/Extensions/SREG10.php';
 
 /**
  * Implementation of the Simple Registration Extension, version 1.1 Draft 1.

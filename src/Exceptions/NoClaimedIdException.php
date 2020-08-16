@@ -2,7 +2,7 @@
 
 namespace Pear\OpenId\Assertions\Exceptions;
 
-use Pear\OpenID\Assertions\OpenIDAssertionException;
+use Pear\OpenID\Assertions\OpenIdAssertionException;
 
 /**
  * OpenID_Assertion_Exception_NoClaimedID
@@ -19,6 +19,6 @@ use Pear\OpenID\Assertions\OpenIDAssertionException;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class NoClaimedIDException extends OpenIDAssertionException
+class NoClaimedIdException extends OpenIdAssertionException
 {
 }

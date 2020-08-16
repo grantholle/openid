@@ -1,13 +1,12 @@
 <?php
 
-namespace Pear\OpenId\Message;
+namespace Pear\OpenId\Exceptions;
 
-use Pear\OpenID\OpenIDException;
 
 /**
- * OpenID_Message_Exception
+ * OpenID_Extension_Exception
  *
- * Message exceptions
+ * Extension exceptions
  *
  * @uses      OpenID_Exception
  * @category  Auth
@@ -17,6 +16,6 @@ use Pear\OpenID\OpenIDException;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenIDMessageException extends OpenIDException
+class OpenIdExtensionException extends OpenIdException
 {
 }

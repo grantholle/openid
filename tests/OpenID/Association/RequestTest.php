@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/Association/Request.php';
+require_once 'src/Associations/Request.php';
 require_once 'HTTP/Request2.php';
 require_once 'HTTP/Request2/Adapter/Mock.php';
 require_once 'src/Message.php';

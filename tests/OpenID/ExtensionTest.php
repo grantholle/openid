@@ -15,9 +15,9 @@
 
 require_once 'src/Extension.php';
 require_once 'src/Message.php';
-require_once 'src/Extension/Mock.php';
-require_once 'src/Extension/MockInvalidAlias.php';
-require_once 'src/Extension/MockNoResponseKeys.php';
+require_once 'src/Extensions/Mock.php';
+require_once 'src/Extensions/MockInvalidAlias.php';
+require_once 'src/Extensions/MockNoResponseKeys.php';
 
 /**
  * OpenID_ExtensionTest

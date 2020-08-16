@@ -14,7 +14,7 @@
  */
 
 require_once 'src/Message.php';
-require_once 'src/Extension/AX.php';
+require_once 'src/Extensions/AX.php';
 
 /**
  * OpenID_MessageTest

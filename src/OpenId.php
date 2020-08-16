@@ -2,6 +2,8 @@
 
 namespace Pear\OpenId;
 
+use Pear\OpenId\Observers\Common;
+
 /**
  * OpenID
  *
@@ -17,7 +19,7 @@ namespace Pear\OpenId;
  * @copyright 2009 Bill Shupp
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
- * @see       OpenID_Observer_Common
+ * @see       Common
  * @see       OpenID_Store
  */
 class OpenId
@@ -104,29 +106,28 @@ class OpenId
     /**
      * Attaches an observer
      *
-     * @param OpenID_Observer_Common $observer Observer object
-     *
+     * @param Common $observer Observer object
      * @see OpenID_Observer_Log
      * @return void
      */
-    static public function attach(OpenID_Observer_Common $observer)
+    static public function attach(Common $observer)
     {
         foreach (self::$observers as $attached) {
             if ($attached === $observer) {
                 return;
             }
         }
+
         self::$observers[] = $observer;
     }
 
     /**
      * Detaches the observer
      *
-     * @param OpenID_Observer_Common $observer Observer object
-     *
+     * @param Common $observer Observer object
      * @return void
      */
-    static public function detach(OpenID_Observer_Common $observer)
+    static public function detach(Common $observer)
     {
         foreach (self::$observers as $key => $attached) {
             if ($attached === $observer) {
@@ -153,10 +154,9 @@ class OpenId
      *
      * @param string $name Name of the event
      * @param mixed  $data The event's data
-     *
      * @return void
      */
-    static public function setLastEvent($name, $data)
+    static public function setLastEvent(string $name, $data)
     {
         self::$lastEvent = array(
             'name' => $name,
@@ -168,7 +168,7 @@ class OpenId
     /**
      * Gets the last event
      *
-     * @return void
+     * @return array
      */
     static public function getLastEvent()
     {

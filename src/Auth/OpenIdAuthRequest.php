@@ -1,4 +1,9 @@
 <?php
+
+namespace Pear\OpenId\Auth;
+
+use Pear\OpenId\OpenIdMessage;
+
 /**
  * OpenID_Auth_Request
  *
@@ -11,15 +16,6 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-
-/**
- * Required files
- */
-require_once 'Net/URL2.php';
-require_once 'OpenID.php';
-require_once 'src/Auth/Exception.php';
-require_once 'src/Message.php';
-require_once 'src/Nonce.php';
 
 /**
  * Creates an OpenID authorization request of type "checkid_setup" or
@@ -63,7 +59,7 @@ require_once 'src/Nonce.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Auth_Request
+class OpenIdAuthRequest
 {
     /**
      * The normalized identifier
@@ -75,7 +71,7 @@ class OpenID_Auth_Request
     /**
      * The request message
      *
-     * @var OpenID_Message
+     * @var OpenIdMessage
      */
     protected $message = null;
 
@@ -117,7 +113,7 @@ class OpenID_Auth_Request
     ) {
         $this->identifier      = $discover->identifier;
         $this->serviceEndpoint = $discover->services[0];
-        $this->message         = new OpenID_Message();
+        $this->message         = new OpenIdMessage();
         $this->discover        = $discover;
 
         // Only set NS for 2.0

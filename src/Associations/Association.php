@@ -1,4 +1,12 @@
 <?php
+
+namespace Pear\OpenId\Associations;
+
+use Pear\OpenId\Exceptions\OpenIdAssociationException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\OpenIdMessage;
+
 /**
  * OpenID_Association
  *
@@ -13,17 +21,10 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Association/Exception.php';
-require_once 'OpenID.php';
-require_once 'src/Message.php';
-
-/**
  * OpenID_Association
  *
  * A class that represents an association.  This class can be serialized for
- * storage.  It also allows you to add and check signatures of an OpenID_Message.
+ * storage.  It also allows you to add and check signatures of an OpenIdMessage.
  *
  * @category  Auth
  * @package   OpenID
@@ -33,7 +34,7 @@ require_once 'src/Message.php';
  * @link      http://github.com/shupp/openid
  * @see       OpenID_Association_Request::buildRequest()
  */
-class OpenID_Association
+class Association
 {
     /**
      * URI of the OP Endpoint
@@ -85,14 +86,14 @@ class OpenID_Association
      * @see __construct()
      * @var array
      */
-    protected $requiredParams = array(
+    protected $requiredParams = [
         'uri',
         'expiresIn',
         'created',
         'assocType',
         'assocHandle',
-        'sharedSecret'
-    );
+        'sharedSecret',
+    ];
 
     /**
      * Local list of supported association types.
@@ -101,18 +102,16 @@ class OpenID_Association
      * @see __construct()
      * @var array
      */
-    protected $supportedTypes = array(
-        OpenID::ASSOC_TYPE_HMAC_SHA1,
-        OpenID::ASSOC_TYPE_HMAC_SHA256
-    );
+    protected $supportedTypes = [
+        OpenId::ASSOC_TYPE_HMAC_SHA1,
+        OpenId::ASSOC_TYPE_HMAC_SHA256
+    ];
 
     /**
      * Validates some association values before setting them as member variables.
      *
-     * @param array $params Array of relevant parameters from the association
-     *                      response
-     *
-     * @throws OpenID_Association_Exception if the response is not valid
+     * @param array $params Array of relevant parameters from the association response
+     * @throws OpenIdAssociationException if the response is not valid
      * @return void
      */
     public function __construct(array $params)
@@ -120,26 +119,26 @@ class OpenID_Association
         // Make sure required params are present
         foreach ($this->requiredParams as $key) {
             if (!isset($params[$key])) {
-                throw new OpenID_Association_Exception(
+                throw new OpenIdAssociationException(
                     "Missing parameter: $key",
-                    OpenID_Exception::MISSING_DATA
+                    OpenIdException::MISSING_DATA
                 );
             }
         }
 
         // Validate URI
         if (!filter_var($params['uri'], FILTER_VALIDATE_URL)) {
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 "Invalid uri: " . $params['uri'],
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
         // Validate assocType
         if (!in_array(strtoupper($params['assocType']), $this->supportedTypes)) {
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 "Invalid association type: " . $params['assocType'],
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -173,55 +172,54 @@ class OpenID_Association
     }
 
     /**
-     * Checks the signature of an OpenID_Message using this association
+     * Checks the signature of an OpenIdMessage using this association
      *
-     * @param OpenID_Message $message Instance of OpenID_Message
-     *
-     * @throws OpenID_Association_Exception if the handles don't match
+     * @param OpenIdMessage $message Instance of OpenIdMessage
      * @return bool true if the signatures match, false otherwise
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
+     * @throws OpenIdAssociationException if the handles don't match
      */
-    public function checkMessageSignature(OpenID_Message $message)
+    public function checkMessageSignature(OpenIdMessage $message)
     {
         // Make sure the handles match for this OP and response
         if ($this->assocHandle != $message->get('openid.assoc_handle')) {
-
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 'Association handles do not match',
-                OpenID_Exception::VERIFICATION_ERROR
+                OpenIdException::VERIFICATION_ERROR
             );
         }
 
         // Make sure the OP Endpoints match for this association and response
         if ($this->uri != $message->get('openid.op_endpoint')) {
-
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 'Endpoint URLs do not match',
-                OpenID_Exception::VERIFICATION_ERROR
+                OpenIdException::VERIFICATION_ERROR
             );
         }
 
         if (!strlen($message->get('openid.signed'))) {
-            OpenID::setLastEvent(__METHOD__, 'openid.signed is empty');
+            OpenId::setLastEvent(__METHOD__, 'openid.signed is empty');
+
             return false;
         }
-        $list = explode(',', $message->get('openid.signed'));
 
         // Create a message with only keys in the signature
         $signedOnly = $this->getMessageForSigning($message);
 
         $signedOnlyDigest = base64_encode($this->hashHMAC($signedOnly));
 
-        $event = array(
-            'assocHandle'       => $this->assocHandle,
-            'algo'              => $this->getAlgorithm(),
-            'secret'            => $this->sharedSecret,
-            'openid.sig'        => $message->get('openid.sig'),
-            'signature'         => $signedOnlyDigest,
-            'SignedKVFormat'    => $signedOnly,
+        $event = [
+            'assocHandle' => $this->assocHandle,
+            'algo' => $this->getAlgorithm(),
+            'secret' => $this->sharedSecret,
+            'openid.sig' => $message->get('openid.sig'),
+            'signature' => $signedOnlyDigest,
+            'SignedKVFormat' => $signedOnly,
             'MessageHTTPFormat' => $message->getHTTPFormat(),
-            'phpInput'          => file_get_contents('php://input')
-        );
-        OpenID::setLastEvent(__METHOD__, print_r($event, true));
+            'phpInput' => file_get_contents('php://input')
+        ];
+
+        OpenId::setLastEvent(__METHOD__, print_r($event, true));
 
         return $signedOnlyDigest == $message->get('openid.sig');
     }
@@ -229,14 +227,12 @@ class OpenID_Association
     /**
      * Returns a KV formatted message for signing based on the contents of the
      * openid.signed key.  This allows for duplicate entries, which
-     * OpenID_Message::getKVFormat() doesn't.  (Yahoo! uses duplicates)
+     * OpenIdMessage::getKVFormat() doesn't.  (Yahoo! uses duplicates)
      *
-     * @param OpenID_Message $message An instance of the OpenID_Message you want to
-     *                                sign
-     *
+     * @param OpenIdMessage $message An instance of the OpenIdMessage you want to sign
      * @return string The openid.signed items in KV form
      */
-    public function getMessageForSigning(OpenID_Message $message)
+    public function getMessageForSigning(OpenIdMessage $message)
     {
         $list = explode(',', $message->get('openid.signed'));
 
@@ -248,30 +244,29 @@ class OpenID_Association
     }
 
     /**
-     * Signs an OpenID_Message instance
+     * Signs an OpenIdMessage instance
      *
-     * @param OpenID_Message $message Message to be signed
-     *
-     * @throws OpenID_Association_Exception if the message is already signed,
-               or the association handles do not match
+     * @param OpenIdMessage $message Message to be signed
      * @return void
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
+     * @throws OpenIdAssociationException if the message is already signed, or the association handles do not match
      */
-    public function signMessage(OpenID_Message $message)
+    public function signMessage(OpenIdMessage $message)
     {
         if ($message->get('openid.sig') !== null
             || $message->get('openid.signed') !== null
         ) {
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 'This message appears to be already signed',
-                OpenID_Exception::ALREADY_SIGNED
+                OpenIdException::ALREADY_SIGNED
             );
         }
 
         // Make sure the handles match for this OP and response
         if ($this->assocHandle != $message->get('openid.assoc_handle')) {
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 'Association handles do not match',
-                OpenID_Exception::VERIFICATION_ERROR
+                OpenIdException::VERIFICATION_ERROR
             );
         }
 
@@ -284,7 +279,7 @@ class OpenID_Association
         sort($keys);
         $message->set('openid.signed', implode(',', $keys));
 
-        $signedMessage = new OpenID_Message;
+        $signedMessage = new OpenIdMessage;
 
         foreach ($keys as $key) {
             $signedMessage->set($key, $message->get('openid.' . $key));
@@ -296,13 +291,12 @@ class OpenID_Association
     }
 
     /**
-     * Gets a an HMAC hash of an OpenID_Message using this association.
+     * Gets a an HMAC hash of an OpenIdMessage using this association.
      *
-     * @param OpenID_Message $message The message format of the items to hash
-     *
+     * @param string $message The message format of the items to hash
      * @return string The HMAC hash
      */
-    protected function hashHMAC($message)
+    protected function hashHMAC(string $message)
     {
         return hash_hmac(
             $this->getAlgorithm(),
@@ -312,4 +306,3 @@ class OpenID_Association
         );
     }
 }
-?>

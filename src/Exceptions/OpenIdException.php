@@ -1,6 +1,6 @@
 <?php
 
-namespace Pear\OpenId;
+namespace Pear\OpenId\Exceptions;
 
 /**
  * OpenID exceptions
@@ -13,7 +13,7 @@ namespace Pear\OpenId;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenIDException extends \Exception
+class OpenIdException extends \Exception
 {
     /**
      * A given value does not match the expected format

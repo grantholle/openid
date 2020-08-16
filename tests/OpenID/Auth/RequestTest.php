@@ -18,7 +18,7 @@ require_once 'src/Discover.php';
 require_once 'src/Discover/Mock.php';
 require_once 'src/ServiceEndpoint.php';
 require_once 'src/Extension.php';
-require_once 'src/Extension/UI.php';
+require_once 'src/Extensions/UI.php';
 require_once 'src/Store/Mock.php';
 require_once 'src/Nonce.php';
 

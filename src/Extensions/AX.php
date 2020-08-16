@@ -1,4 +1,10 @@
 <?php
+
+namespace Pear\OpenId\Extensions;
+
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Exceptions\OpenIdExtensionException;
+
 /**
  * OpenID_Extension_AX
  *
@@ -14,11 +20,6 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Extension.php';
-
-/**
  * Support for the AX extension
  *
  * @uses      OpenID_Extension
@@ -29,7 +30,7 @@ require_once 'src/Extension.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Extension_AX extends OpenID_Extension
+class AX extends OpenIdExtension
 {
     /**
      * URL for the openid.ns.ax parameter
@@ -50,42 +51,42 @@ class OpenID_Extension_AX extends OpenID_Extension
      *
      * @var array
      */
-    protected $validModes = array(
+    protected $validModes = [
         'fetch_request',
         'fetch_response',
         'store_request',
         'store_response_success',
         'store_response_failure',
-    );
+    ];
 
     /**
      * Adds some validation checking when setting a key, then calls the parent set()
      *
-     * @param string $key   Message key
-     * @param mixed  $value Key's value
-     *
+     * @param string $key Message key
+     * @param mixed $value Key's value
      * @return void
+     * @throws OpenIdExtensionException
      */
     public function set($key, $value)
     {
         if (strpos($key, 'mode') === 0
             && !in_array($value, $this->validModes)
         ) {
-            throw new OpenID_Extension_Exception(
+            throw new OpenIdExtensionException(
                 'Invalid AX mode: ' . $key,
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
         if (preg_match('/^type[.]/', $key)
             && !filter_var($value, FILTER_VALIDATE_URL)
         ) {
-            throw new OpenID_Extension_Exception(
+            throw new OpenIdExtensionException(
                 $key . ' is not a valid URI',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
+
         parent::set($key, $value);
     }
 }
-?>

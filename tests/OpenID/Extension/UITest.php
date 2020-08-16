@@ -13,7 +13,7 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/Extension/UI.php';
+require_once 'src/Extensions/UI.php';
 
 /**
  * OpenID_Extension_UITest

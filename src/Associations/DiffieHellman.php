@@ -1,9 +1,11 @@
 <?php
 
-namespace Pear\OpenId\Association;
+namespace Pear\OpenId\Associations;
 
-use Pear\OpenID\OpenIDMessage;
-use Pear\Crypt\DiffieHellman;
+use Pear\OpenId\Exceptions\OpenIdAssociationException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenID\OpenIdMessage;
+use Pear\Crypt\DiffieHellman as CryptDiffieHellman;
 
 /**
  * OpenID_Association_DiffieHellman
@@ -18,7 +20,7 @@ use Pear\Crypt\DiffieHellman;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenIDAssociationDiffieHellman
+class DiffieHellman
 {
     /**
      * DiffieHellman specific constants
@@ -30,7 +32,7 @@ class OpenIDAssociationDiffieHellman
     /**
      * The OpenIDMessage being used in the request
      *
-     * @var OpenIDMessage
+     * @var OpenIdMessage
      */
     protected $message = null;
 
@@ -54,12 +56,11 @@ class OpenIDAssociationDiffieHellman
      * Sets the instance of OpenIDMessage being used, and also an optional
      * instance of DiffieHellman
      *
-     * @param OpenIDMessage      $message The request OpenIDMessage
-     * @param DiffieHellman $cdh     Optional instance of DiffieHellman
+     * @param OpenIdMessage $message The request OpenIDMessage
+     * @param CryptDiffieHellman|null $cdh Optional instance of DiffieHellman
      *
-     * @return void
      */
-    public function __construct(OpenIDMessage $message, $cdh = null)
+    public function __construct(OpenIdMessage $message, CryptDiffieHellman $cdh = null)
     {
         $this->message = $message;
         if ($cdh instanceof DiffieHellman) {
@@ -71,28 +72,31 @@ class OpenIDAssociationDiffieHellman
      * Initialize the diffie-hellman parameters for the association request.
      *
      * @return void
+     * @throws CryptDiffieHellman\DiffieHellmanException
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
     public function init()
     {
         if ($this->cdh === null) {
-            $this->cdh = new DiffieHellman(
+            $this->cdh = new CryptDiffieHellman(
                 self::DH_DEFAULT_MODULUS, self::DH_DEFAULT_GENERATOR
             );
+
             $this->cdh->generateKeys();
         }
 
         // Set public key
         $this->message->set(
             'openid.dh_consumer_public',
-            base64_encode($this->cdh->getPublicKey(DiffieHellman::BTWOC))
+            base64_encode($this->cdh->getPublicKey(CryptDiffieHellman::BTWOC))
         );
 
         // Set modulus
-        $prime = $this->cdh->getPrime(DiffieHellman::BTWOC);
+        $prime = $this->cdh->getPrime(CryptDiffieHellman::BTWOC);
         $this->message->set('openid.dh_modulus', base64_encode($prime));
 
         // Set prime
-        $gen = $this->cdh->getGenerator(DiffieHellman::BTWOC);
+        $gen = $this->cdh->getGenerator(CryptDiffieHellman::BTWOC);
         $this->message->set('openid.dh_gen', base64_encode($gen));
     }
 
@@ -100,53 +104,50 @@ class OpenIDAssociationDiffieHellman
      * Gets the shared secret out of a response
      *
      * @param array $response The response in array format
-     * @param array &$params  The parameters being build for
-     *                        OpenID_Association_Reqequest::buildAssociation()
-     *
+     * @param array &$params The parameters being build for Request::buildAssociation()
      * @return void
+     * @throws OpenIdAssociationException|CryptDiffieHellman\DiffieHellmanException
      */
     public function getSharedSecret(array $response, array &$params)
     {
         if (!isset($response['dh_server_public'])) {
-            throw new OpenID_Association_Exception(
+            throw new OpenIdAssociationException(
                 'Missing dh_server_public parameter in association response',
-                OpenID_Exception::MISSING_DATA
+                OpenIdException::MISSING_DATA
             );
         }
 
-        $pubKey       = base64_decode($response['dh_server_public']);
+        $pubKey = base64_decode($response['dh_server_public']);
         $sharedSecret = $this->getSharedSecretKey($pubKey);
 
-        $opSecret       = base64_decode($response['enc_mac_key']);
-        $bytes          = mb_strlen(bin2hex($opSecret), '8bit') / 2;
-        $algo           = str_replace('HMAC-', '', $params['assocType']);
+        $opSecret = base64_decode($response['enc_mac_key']);
+        $bytes = mb_strlen(bin2hex($opSecret), '8bit') / 2;
+        $algo = str_replace('HMAC-', '', $params['assocType']);
         $hash_dh_shared = hash($algo, $sharedSecret, true);
 
-        $xsecret = '';
+        $xSecret = '';
         for ($i = 0; $i < $bytes; $i++) {
-            $xsecret .= chr(ord($opSecret[$i]) ^ ord($hash_dh_shared[$i]));
+            $xSecret .= chr(ord($opSecret[$i]) ^ ord($hash_dh_shared[$i]));
         }
 
-        $params['sharedSecret'] = base64_encode($xsecret);
+        $params['sharedSecret'] = base64_encode($xSecret);
     }
 
     /**
-     * Gets the shared secret key in BTWOC format.  Computes the key if it has not
+     * Gets the shared secret key in BTWOC format. Computes the key if it has not
      * been computed already.
      *
      * @param string $publicKey Public key of the OP
-     *
-     * @return BTWOC|string
-     * @throws DiffieHellman\DiffieHellmanException
+     * @return string
+     * @throws CryptDiffieHellman\DiffieHellmanException
      */
     public function getSharedSecretKey($publicKey)
     {
         if ($this->sharedKeyComputed == 0) {
-            $this->cdh->computeSecretKey($publicKey, DiffieHellman::BINARY);
+            $this->cdh->computeSecretKey($publicKey, CryptDiffieHellman::BINARY);
             $this->sharedKeyComputed = 1;
         }
 
-        return $this->cdh->getSharedSecretKey(DiffieHellman::BTWOC);
+        return $this->cdh->getSharedSecretKey(CryptDiffieHellman::BTWOC);
     }
 }
-?>

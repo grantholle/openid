@@ -1,8 +1,9 @@
 <?php
 
-namespace Pear\OpenId;
+namespace Pear\OpenId\Extensions;
 
-use Pear\OpenID\Extension\OpenIDExtensionException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Exceptions\OpenIdExtensionException;
 
 /**
  * OpenID_Extension
@@ -16,7 +17,7 @@ use Pear\OpenID\Extension\OpenIDExtensionException;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-abstract class OpenIDExtension
+abstract class OpenIdExtension
 {
     const REQUEST  = 'request';
     const RESPONSE = 'response';
@@ -104,18 +105,17 @@ abstract class OpenIDExtension
     /**
      * Sets the message type, request or response
      *
-     * @param string         $type    Type response or type request
-     * @param OpenIDMessage $message Optional message to get values from
-     *
-     * @throws OpenIDExtensionException|Message\OpenIDMessageException on invalid type argument
-     * @return void
+     * @param string $type Type response or type request
+     * @param OpenIdMessage|null $message Optional message to get values from
+     * @throws Message\OpenIdMessageException on invalid type argument
+     * @throws OpenIdExtensionException on invalid type argument
      */
-    public function __construct($type, OpenIDMessage $message = null)
+    public function __construct(string $type, OpenIdMessage $message = null)
     {
         if ($type != self::REQUEST && $type != self::RESPONSE) {
-            throw new OpenIDExtensionException(
+            throw new OpenIdExtensionException(
                 'Invalid message type: ' . $type,
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
         $this->type = $type;
@@ -131,8 +131,8 @@ abstract class OpenIDExtension
      * @param string $key   Key
      * @param string $value Value
      *
-     * @throws OpenIDExtensionException on invalid key argument
      * @return void
+     * @throws OpenIdExtensionException on invalid key argument
      */
     public function set($key, $value)
     {
@@ -142,9 +142,9 @@ abstract class OpenIDExtension
         }
 
         if (count($keys) && !in_array($key, $keys)) {
-            throw new OpenIDExtensionException(
+            throw new OpenIdExtensionException(
                 'Invalid key: ' . $key,
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
         $this->values[$key] = $value;
@@ -168,18 +168,18 @@ abstract class OpenIDExtension
     /**
      * Adds the extension contents to an OpenIDMessage
      *
-     * @param OpenIDMessage $message Message to add the extension contents to
+     * @param OpenIdMessage $message Message to add the extension contents to
      *
-     * @throws OpenIDExtensionException|Message\OpenIDMessageException on error
      * @return void
+     * @throws OpenIdExtensionException|Message\OpenIdMessageException on error
      */
-    public function toMessage(OpenIDMessage $message)
+    public function toMessage(OpenIdMessage $message)
     {
         // Make sure we have a valid alias name
         if (empty($this->alias) || in_array($this->alias, self::$reserved)) {
-            throw new OpenIDExtensionException(
+            throw new OpenIdExtensionException(
                 'Invalid extension alias' . $this->alias,
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -187,9 +187,9 @@ abstract class OpenIDExtension
 
         // Make sure the alias doesn't collide
         if ($message->get($namespaceAlias) !== null) {
-            throw new OpenIDExtensionException(
+            throw new OpenIdExtensionException(
                 'Extension alias ' . $this->alias . ' is already set',
-                OpenIDException::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -206,13 +206,13 @@ abstract class OpenIDExtension
     /**
      * Extracts extension contents from an OpenIDMessage
      *
-     * @param OpenIDMessage $message OpenIDMessage to extract the extension
+     * @param OpenIdMessage $message OpenIDMessage to extract the extension
      *                                contents from
      *
      * @return array An array of the extension's key/value pairs
-     * @throws Message\OpenIDMessageException
+     * @throws Message\OpenIdMessageException
      */
-    public function fromMessageResponse(OpenIDMessage $message)
+    public function fromMessageResponse(OpenIdMessage $message)
     {
         $values = array();
         $alias  = null;
