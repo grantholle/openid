@@ -46,7 +46,7 @@ class HTML extends Discover implements DiscoverInterface
      *
      * @var string
      */
-    protected $identifier = null;
+    public $identifier = null;
 
     /**
      * Local storage of the Request2 object
@@ -63,22 +63,13 @@ class HTML extends Discover implements DiscoverInterface
     protected $response = null;
 
     /**
-     * Constructor.  Sets the
-     *
-     * @param mixed $identifier The user supplied identifier
-     * @return void
-     */
-//    public function __construct($identifier)
-//    {
-//        parent::__construct($identifier);
-//        $this->identifier = $identifier;
-//    }
-
-    /**
      * Performs HTML discovery.
      *
-     * @throws OpenIdDiscoverException() on error
      * @return ServiceEndpoints
+     * @throws OpenIdDiscoverException on error
+     * @throws Request2\Exceptions\Exception
+     * @throws Request2\Exceptions\LogicException
+     * @throws Request2\Exceptions\Request2Exception
      */
     public function discover()
     {
@@ -91,12 +82,12 @@ class HTML extends Discover implements DiscoverInterface
         $query = "/html/head/link[contains(@rel,'openid')]";
         $links = $xPath->query($query);
 
-        $results = array(
-            'openid2.provider' => array(),
-            'openid2.local_id' => array(),
-            'openid.server'    => array(),
-            'openid.delegate'  => array()
-        );
+        $results = [
+            'openid2.provider' => [],
+            'openid2.local_id' => [],
+            'openid.server' => [],
+            'openid.delegate' => [],
+        ];
 
         foreach ($links as $link) {
             $rels = explode(' ', $link->getAttribute('rel'));
@@ -155,7 +146,7 @@ class HTML extends Discover implements DiscoverInterface
 
         $opEndpoint = new ServiceEndpoint();
         $opEndpoint->setVersion($version);
-        $opEndpoint->setTypes(array($version));
+        $opEndpoint->setTypes([$version]);
         $opEndpoint->setURIs($endpointURIs);
         $opEndpoint->setSource(Discover::TYPE_HTML);
 

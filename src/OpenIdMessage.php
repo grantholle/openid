@@ -194,7 +194,7 @@ class OpenIdMessage
         }
 
         // Flush current data
-        $this->data = array();
+        $this->data = [];
 
         if ($format == self::FORMAT_ARRAY) {
             foreach ($message as $k => $v) {
@@ -243,5 +243,13 @@ class OpenIdMessage
         $extension->toMessage($this);
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }

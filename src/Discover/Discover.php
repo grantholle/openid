@@ -59,28 +59,28 @@ use Pear\OpenId\Store\StoreInterface;
  */
 class Discover
 {
-    const TYPE_YADIS = 'Yadis';
-    const TYPE_HTML  = 'HTML';
+    const TYPE_YADIS = Yadis::class;
+    const TYPE_HTML  = HTML::class;
 
     /**
      * List of supported discover types
      *
      * @var array
      */
-    protected $supportedTypes = array(
+    protected $supportedTypes = [
         self::TYPE_YADIS,
         self::TYPE_HTML
-    );
+    ];
 
     /**
      * Order that discover should be performed
      *
      * @var array
      */
-    static public $discoveryOrder = array(
+    static public $discoveryOrder = [
         0  => self::TYPE_YADIS,
         10 => self::TYPE_HTML
-    );
+    ];
 
     /**
      * The normalized version of the user supplied identifier
@@ -94,11 +94,11 @@ class Discover
      *
      * @var array
      */
-    protected $requestOptions = array(
+    protected $requestOptions = [
         'follow_redirects' => true,
         'timeout' => 3,
         'connect_timeout' => 3
-    );
+    ];
 
     /**
      * Instance of ServiceEndpoints
@@ -112,8 +112,9 @@ class Discover
      *
      * @param mixed $identifier The user supplied identifier
      * @return void
+     * @throws OpenIdException
      */
-    public function __construct($identifier)
+    public function __construct(string $identifier)
     {
         libxml_use_internal_errors(true);
         $this->identifier = OpenId::normalizeIdentifier($identifier);
@@ -229,6 +230,7 @@ class Discover
      * @param StoreInterface $store Instance of OpenID_Store
      * @param array $options Options to pass to HTTP_Request2
      * @return Discover Discover on success, false on failure
+     * @throws OpenIdException
      */
     static public function getDiscover(
         string $id, StoreInterface $store, array $options = []

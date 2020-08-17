@@ -93,12 +93,12 @@ class Request extends OpenId
      *
      * @param string $opEndpointURL URL of OP Endpoint
      * @param string $version Version of OpenID in use
-     * @param DiffieHellman|null $cdh Custom DiffieHellman instance
+     * @param CryptDiffieHellman|null $cdh Custom DiffieHellman instance
      * @throws OpenIdMessageException
      * @throws OpenIdAssociationException
      */
     public function __construct(
-        $opEndpointURL, $version, DiffieHellman $cdh = null
+        $opEndpointURL, $version, CryptDiffieHellman $cdh = null
     ) {
         if (!array_key_exists($version, OpenID::$versionMap)) {
             throw new OpenIdAssociationException(
@@ -175,6 +175,7 @@ class Request extends OpenId
      * @param array $response Association response in array format
      * @return Association
      * @throws OpenIdAssociationException
+     * @throws CryptDiffieHellman\DiffieHellmanException
      * @see associate()
      */
     protected function buildAssociation(array $response)
@@ -207,6 +208,8 @@ class Request extends OpenId
      *
      * @return OpenIdMessage
      * @throws OpenIdMessageException
+     * @throws CryptDiffieHellman\DiffieHellmanException
+     * @throws \Pear\Http\Request2\Exceptions\Request2Exception
      * @see associate()
      */
     protected function sendAssociationRequest()

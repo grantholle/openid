@@ -27,7 +27,7 @@ abstract class OpenIdExtension
     /**
      *  @var array Array of reserved message keys
      */
-    static protected $reserved = array(
+    static protected $reserved = [
         'assoc_handle',
         'assoc_type',
         'claimed_id',
@@ -52,7 +52,7 @@ abstract class OpenIdExtension
         'sig',
         'signed',
         'trust_root ',
-    );
+    ];
 
     /**
      * Whether or not to use namespace alias assignments (for SREG 1.0 mostly)
@@ -88,21 +88,21 @@ abstract class OpenIdExtension
      *
      * @var array
      */
-    protected $requestKeys = array();
+    protected $requestKeys = [];
 
     /**
      * Keys appropriate for a response.  Leave empty to allow any keys.
      *
      * @var array
      */
-    protected $responseKeys = array();
+    protected $responseKeys = [];
 
     /**
      * values
      *
      * @var array
      */
-    protected $values = array();
+    protected $values = [];
 
     /**
      * Sets the message type, request or response
@@ -215,7 +215,7 @@ abstract class OpenIdExtension
      */
     public function fromMessageResponse(OpenIdMessage $message)
     {
-        $values = array();
+        $values = [];
         $alias  = null;
 
         foreach ($message->getArrayFormat() as $ns => $value) {

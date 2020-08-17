@@ -51,14 +51,14 @@ class UI extends OpenIdExtension
      *
      * @var array
      */
-    protected $validModes = array('popup');
+    protected $validModes = ['popup'];
 
     /**
      * Adds mode checking to set()
      *
      * @param mixed $key Key
      * @param mixed $value Value
-     * @return void
+     * @return UI
      * @throws OpenIdExtensionException
      */
     public function set($key, $value)
@@ -72,6 +72,6 @@ class UI extends OpenIdExtension
             );
         }
 
-        parent::set($key, $value);
+        return parent::set($key, $value);
     }
 }

@@ -34,7 +34,7 @@ interface DiscoverInterface
      *
      * @return void
      */
-    public function __construct($identifier);
+    public function __construct(string $identifier);
 
     /**
      * Performs discovery on the user supplied identifier

@@ -70,6 +70,7 @@ class Nonce
      *
      * @param string $nonce The nonce from the OP response
      * @return bool true on success, false on failure
+     * @throws Exceptions\StoreException
      */
     public function verifyResponseNonce(string $nonce)
     {
@@ -128,13 +129,12 @@ class Nonce
      * Creates a nonce, but does not store it.  You may specify the lenth of the
      * random string, as well as the time stamp to use.
      *
-     * @param int $length Lenth of the random string, defaults to 6
-     * @param int $time   A unix timestamp in seconds
-     *
+     * @param int $length Length of the random string, defaults to 6
+     * @param int|null $time A unix timestamp in seconds
      * @return string The nonce
      * @see createNonceAndStore()
      */
-    public function createNonce($length = 6, $time = null)
+    public function createNonce(int $length = 6, int $time = null)
     {
         $time = ($time === null) ? time() : $time;
 
@@ -159,13 +159,13 @@ class Nonce
     /**
      * Creates a nonce and also stores it.
      *
-     * @param int $length Lenth of the random string, defaults to 6
-     * @param int $time   A unix timestamp in seconds
-     *
+     * @param int $length Length of the random string, defaults to 6
+     * @param int|null $time A unix timestamp in seconds
      * @return string The nonce
+     * @throws Exceptions\StoreException
      * @see createNonce()
      */
-    public function createNonceAndStore($length = 6, $time = null)
+    public function createNonceAndStore(int $length = 6, int $time = null)
     {
         $nonce = $this->createNonce($length, $time);
         OpenId::getStore()->setNonce($nonce, $this->opEndpointURL);

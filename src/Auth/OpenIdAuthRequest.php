@@ -4,6 +4,8 @@ namespace Pear\OpenId\Auth;
 
 use Pear\Net\Url2;
 use Pear\OpenId\Discover\Discover;
+use Pear\OpenId\Exceptions\OpenIdAuthException;
+use Pear\OpenId\Exceptions\OpenIdException;
 use Pear\OpenId\Extensions\OpenIdExtension;
 use Pear\OpenId\Nonce;
 use Pear\OpenId\OpenId;
@@ -143,12 +145,15 @@ class OpenIdAuthRequest
      * Adds an extension to the message.
      *
      * @param OpenIdExtension $extension Extension instance
-     *
-     * @return void
+     * @return OpenIdAuthRequest
+     * @throws \Pear\OpenId\Exceptions\OpenIdExtensionException
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
     public function addExtension(OpenIdExtension $extension)
     {
         $this->message->addExtension($extension);
+
+        return $this;
     }
 
     /**
@@ -156,9 +161,9 @@ class OpenIdAuthRequest
      * "checkid_immediate"
      *
      * @param mixed $mode Value for 'openid.mode'
-     *
-     * @throws OpenID_Auth_Exception on an invalid mode
      * @return void
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
+     * @throws OpenIdAuthException on an invalid mode
      */
     public function setMode($mode)
     {
@@ -168,9 +173,9 @@ class OpenIdAuthRequest
             $this->message->set('openid.mode', $mode);
             break;
         default:
-            throw new OpenID_Auth_Exception(
+            throw new OpenIdAuthException(
                 'Invalid openid.mode: ' . $mode,
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
     }
@@ -190,6 +195,7 @@ class OpenIdAuthRequest
      * decision about whether to use directed identity or not id done here.
      *
      * @return string The URL to redirect the User-Agent to
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
     public function getAuthorizeURL()
     {
@@ -258,6 +264,7 @@ class OpenIdAuthRequest
      * Adds a nonce to the openid.return_to URL parameter.  Only used in OpenID 1.1
      *
      * @return void
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
     protected function addNonce()
     {
@@ -269,8 +276,8 @@ class OpenIdAuthRequest
         $this->message->set('openid.return_to', $returnToURL->getURL());
 
         // Observing
-        $logMessage  = "Nonce: $nonce\n";
-        $logMessage  = 'New ReturnTo: ' . $returnToURL->getURL() . "\n";
+        $logMessage = "Nonce: $nonce\n";
+        $logMessage .= 'New ReturnTo: ' . $returnToURL->getURL() . "\n";
         $logMessage .= 'OP URIs: ' . print_r(
             $this->serviceEndpoint->getURIs(), true
         );
@@ -278,7 +285,7 @@ class OpenIdAuthRequest
     }
 
     /**
-     * Returns the discovered information about the identifer
+     * Returns the discovered information about the identifier
      *
      * @see $discover
      * @return Discover|null
@@ -287,5 +294,12 @@ class OpenIdAuthRequest
     {
         return $this->discover;
     }
+
+    /**
+     * @return OpenIdMessage|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 }
-?>

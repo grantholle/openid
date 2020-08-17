@@ -44,7 +44,7 @@ abstract class Store
 
         if (!$instance instanceof StoreInterface) {
             throw new StoreException(
-                $class . ' does not implement StoreInterface',
+                $driver . ' does not implement StoreInterface',
                 OpenIdException::INVALID_DEFINITION
             );
         }

@@ -136,7 +136,7 @@ class CacheLite implements StoreInterface
     {
         $this->setOptions(self::TYPE_ASSOCIATION);
 
-        return $this->removeFromCache(md5($uri));
+        $this->removeFromCache(md5($uri));
     }
 
     /**

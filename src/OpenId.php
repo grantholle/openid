@@ -48,12 +48,12 @@ class OpenId
      *
      * @var $versionMap
      */
-    static public $versionMap = array(
+    static public $versionMap = [
         self::SERVICE_2_0_SERVER => self::NS_2_0,
         self::SERVICE_2_0_SIGNON => self::NS_2_0,
         self::SERVICE_1_1_SIGNON => self::NS_1_1,
         self::SERVICE_1_0_SIGNON => self::NS_1_1,
-    );
+    ];
 
     /**
      * Supported Association Hash Algorithms (preferred)
@@ -64,23 +64,23 @@ class OpenId
     /**
      * OpenID Modes
      */
-    const MODE_ASSOCIATE            = 'associate';
-    const MODE_CHECKID_SETUP        = 'checkid_setup';
-    const MODE_CHECKID_IMMEDIATE    = 'checkid_immediate';
+    const MODE_ASSOCIATE = 'associate';
+    const MODE_CHECKID_SETUP = 'checkid_setup';
+    const MODE_CHECKID_IMMEDIATE = 'checkid_immediate';
     const MODE_CHECK_AUTHENTICATION = 'check_authentication';
-    const MODE_ID_RES               = 'id_res';
-    const MODE_CANCEL               = 'cancel';
-    const MODE_SETUP_NEEDED         = 'setup_needed';
-    const MODE_ERROR                = 'error';
+    const MODE_ID_RES = 'id_res';
+    const MODE_CANCEL = 'cancel';
+    const MODE_SETUP_NEEDED = 'setup_needed';
+    const MODE_ERROR = 'error';
 
     /*
      * Association constants
      */
     const SESSION_TYPE_NO_ENCRYPTION = 'no-encryption';
-    const SESSION_TYPE_DH_SHA1       = 'DH-SHA1';
-    const SESSION_TYPE_DH_SHA256     = 'DH-SHA256';
+    const SESSION_TYPE_DH_SHA1 = 'DH-SHA1';
+    const SESSION_TYPE_DH_SHA256 = 'DH-SHA256';
 
-    const ASSOC_TYPE_HMAC_SHA1   = 'HMAC-SHA1';
+    const ASSOC_TYPE_HMAC_SHA1 = 'HMAC-SHA1';
     const ASSOC_TYPE_HMAC_SHA256 = 'HMAC-SHA256';
 
     /**
@@ -96,17 +96,17 @@ class OpenId
      *
      * @var $observers
      */
-    static protected $observers = array();
+    static protected $observers = [];
 
     /**
      * Stores the last event
      *
      * @var $lastEvent
      */
-    static protected $lastEvent = array(
+    static protected $lastEvent = [
         'name' => 'start',
         'data' => null
-    );
+    ];
 
     /**
      * Attaches an observer
@@ -245,7 +245,7 @@ class OpenId
      * @see directRequest()
      * @return Request2
      */
-    protected function getHTTPRequest2Instance()
+    public static function getHTTPRequest2Instance()
     {
         // @codeCoverageIgnoreStart
         return new Request2();
@@ -259,7 +259,7 @@ class OpenId
      */
     static public function getXRIGlobalSymbols()
     {
-        return array('=', '@', '+', '$', '!');
+        return ['=', '@', '+', '$', '!'];
     }
 
     /**
@@ -284,6 +284,7 @@ class OpenId
         if (!preg_match('@^http[s]?://@i', $identifier)) {
             $identifier = 'http://' . $identifier;
         }
+
 
         if (strlen($identifier) < 8 || strpos($identifier, '/', 8) === false) {
             $identifier .= '/';
