@@ -214,7 +214,6 @@ class OpenId
      * @param string $url URL to send the request to
      * @param OpenIdMessage $message Contains message contents
      * @param array $options Options to pass to Request2
-     *
      * @return Response
      * @throws Exceptions\OpenIdMessageException
      * @throws OpenIdException if send() fails
@@ -223,7 +222,7 @@ class OpenId
      * @see getHTTPRequest2Instance()
      */
     public function directRequest(
-        $url, OpenIdMessage $message, array $options = array()
+        string $url, OpenIdMessage $message, array $options = []
     ) {
         $request = $this->getHTTPRequest2Instance();
         $request->setConfig($options);
