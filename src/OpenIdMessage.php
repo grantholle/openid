@@ -4,6 +4,7 @@ namespace Pear\OpenId;
 
 use Pear\OpenId\Exceptions\OpenIdException;
 use Pear\OpenId\Exceptions\OpenIdMessageException;
+use Pear\OpenId\Extensions\OpenIdExtension;
 
 /**
  * OpenIdMessage
@@ -231,13 +232,16 @@ class OpenIdMessage
     /**
      * Adds an extension to an OpenIdMessage object.
      *
-     * @param OpenIDExtension $extension Instance of OpenIDExtension
-     * @return void
+     * @param OpenIdExtension $extension Instance of OpenIdExtension
+     * @return OpenIdMessage
      * @throws Exceptions\OpenIdExtensionException
-     * @see OpenIDExtension
+     * @throws OpenIdMessageException
+     * @see OpenIdExtension
      */
-    public function addExtension(OpenIDExtension $extension)
+    public function addExtension(OpenIdExtension $extension)
     {
         $extension->toMessage($this);
+
+        return $this;
     }
 }

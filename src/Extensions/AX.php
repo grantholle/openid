@@ -63,11 +63,11 @@ class AX extends OpenIdExtension
      * Adds some validation checking when setting a key, then calls the parent set()
      *
      * @param string $key Message key
-     * @param mixed $value Key's value
-     * @return void
+     * @param string $value Key's value
+     * @return AX
      * @throws OpenIdExtensionException
      */
-    public function set($key, $value)
+    public function set(string $key, string $value)
     {
         if (strpos($key, 'mode') === 0
             && !in_array($value, $this->validModes)
@@ -88,5 +88,7 @@ class AX extends OpenIdExtension
         }
 
         parent::set($key, $value);
+
+        return $this;
     }
 }

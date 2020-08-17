@@ -2,7 +2,13 @@
 
 namespace Pear\OpenId\Auth;
 
+use Pear\Net\Url2;
+use Pear\OpenId\Discover\Discover;
+use Pear\OpenId\Extensions\OpenIdExtension;
+use Pear\OpenId\Nonce;
+use Pear\OpenId\OpenId;
 use Pear\OpenId\OpenIdMessage;
+use Pear\OpenId\ServiceEndpoint;
 
 /**
  * OpenID_Auth_Request
@@ -24,21 +30,21 @@ use Pear\OpenId\OpenIdMessage;
  * Example:
  * <code>
  * // First perform discovery on the user supplied identifier
- * $discover = new OpenID_Discover($identifier);
+ * $discover = new Discover($identifier);
  * $discover->discover();
  *
  * // Optionally get association (from cache in this example)
  * $opEndpointURL = array_shift($discover->services[0]->getURIs());
- * $assocHandle   = OpenID::getStore()->getAssociation($opEndpointURL)->assocHandle;
+ * $assocHandle   = OpenId::getStore()->getAssociation($opEndpointURL)->assocHandle;
  *
  * // Now create the auth request object
- * $auth = new OpenID_Auth_Request($discover,     // OpenID_Discover object
+ * $auth = new OpenID_Auth_Request($discover,     // Discover object
  *                                 $returnTo,     // openid.return_to
  *                                 $realm,        // openid.realm
  *                                 $assocHandle); // openid.assoc_handle
  *
  * // Optionally add an extension
- *  $sreg = new OpenID_Extension_SREG11(OpenID_Extension::REQUEST);
+ *  $sreg = new OpenIdExtension _SREG11(OpenIdExtension ::REQUEST);
  *  $sreg->set('required', 'email');
  *  $sreg->set('optional', 'nickname,gender,dob');
  *
@@ -46,7 +52,7 @@ use Pear\OpenId\OpenIdMessage;
  *  $auth->addExtension($sreg);
  *
  * // Optionally make this a checkid_immediate request
- * $auth->setMode(OpenID::MODE_CHECKID_IMMEDIATE);
+ * $auth->setMode(OpenId::MODE_CHECKID_IMMEDIATE);
  *
  * // Send user to the OP
  * header('Location: ' . $auth->getAuthorizeURL());
@@ -78,22 +84,22 @@ class OpenIdAuthRequest
     /**
      * The OP Endpoint we are communicating with
      *
-     * @var OpenID_ServiceEndpoint
+     * @var ServiceEndpoint
      */
     protected $serviceEndpoint = null;
 
     /**
      * Nonce class in case we are in 1.1 mode and need to embed it in the return_to
      *
-     * @var OpenID_Nonce
+     * @var Nonce
      */
     protected $nonce = null;
 
     /**
-     * The original OpenID_Discover object.  Useful for detecting extension support
+     * The original Discover object.  Useful for detecting extension support
      *
      * @see getDiscover()
-     * @var OpenID_Discover|null
+     * @var Discover|null
      */
     protected $discover = null;
 
@@ -101,15 +107,14 @@ class OpenIdAuthRequest
     /**
      * Sets the basic information used in the message.
      *
-     * @param OpenID_Discover $discover    Discover object
-     * @param string          $returnTo    The return_to URL
-     * @param string          $realm       The realm
-     * @param string          $assocHandle The optional association handle
-     *
-     * @return void
+     * @param Discover $discover Discover object
+     * @param string $returnTo The return_to URL
+     * @param string $realm The realm
+     * @param string|null $assocHandle The optional association handle
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
     public function __construct(
-        OpenID_Discover $discover, $returnTo, $realm, $assocHandle = null
+        Discover $discover, string $returnTo, string $realm, string $assocHandle = null
     ) {
         $this->identifier      = $discover->identifier;
         $this->serviceEndpoint = $discover->services[0];
@@ -117,10 +122,12 @@ class OpenIdAuthRequest
         $this->discover        = $discover;
 
         // Only set NS for 2.0
-        $versionFromMap = OpenID::$versionMap[$this->serviceEndpoint->getVersion()];
-        if ($versionFromMap == OpenID::NS_2_0) {
+        $versionFromMap = OpenId::$versionMap[$this->serviceEndpoint->getVersion()];
+
+        if ($versionFromMap == OpenId::NS_2_0) {
             $this->message->set('openid.ns', $versionFromMap);
         }
+
         $this->message->set('openid.return_to', $returnTo);
         $this->message->set('openid.realm', $realm);
 
@@ -129,17 +136,17 @@ class OpenIdAuthRequest
         }
 
         // Default to checkid_setup
-        $this->setMode(OpenID::MODE_CHECKID_SETUP);
+        $this->setMode(OpenId::MODE_CHECKID_SETUP);
     }
 
     /**
      * Adds an extension to the message.
      *
-     * @param OpenID_Extension $extension Extension instance
+     * @param OpenIdExtension $extension Extension instance
      *
      * @return void
      */
-    public function addExtension(OpenID_Extension $extension)
+    public function addExtension(OpenIdExtension $extension)
     {
         $this->message->addExtension($extension);
     }
@@ -156,8 +163,8 @@ class OpenIdAuthRequest
     public function setMode($mode)
     {
         switch ($mode) {
-        case OpenID::MODE_CHECKID_SETUP:
-        case OpenID::MODE_CHECKID_IMMEDIATE:
+        case OpenId::MODE_CHECKID_SETUP:
+        case OpenId::MODE_CHECKID_IMMEDIATE:
             $this->message->set('openid.mode', $mode);
             break;
         default:
@@ -186,27 +193,27 @@ class OpenIdAuthRequest
      */
     public function getAuthorizeURL()
     {
-        $version = OpenID::$versionMap[$this->serviceEndpoint->getVersion()];
+        $version = OpenId::$versionMap[$this->serviceEndpoint->getVersion()];
 
-        if ($this->serviceEndpoint->getVersion() == OpenID::SERVICE_2_0_SERVER) {
-            $this->message->set('openid.claimed_id', OpenID::NS_2_0_ID_SELECT);
-            $this->message->set('openid.identity', OpenID::NS_2_0_ID_SELECT);
+        if ($this->serviceEndpoint->getVersion() == OpenId::SERVICE_2_0_SERVER) {
+            $this->message->set('openid.claimed_id', OpenId::NS_2_0_ID_SELECT);
+            $this->message->set('openid.identity', OpenId::NS_2_0_ID_SELECT);
         } else {
             $localID = $this->serviceEndpoint->getLocalID();
             if (!empty($localID)) {
-                if ($version == OpenID::NS_2_0) {
+                if ($version == OpenId::NS_2_0) {
                     $this->message->set('openid.claimed_id', $this->identifier);
                 }
                 $this->message->set('openid.identity', $localID);
             } else {
-                if ($version == OpenID::NS_2_0) {
+                if ($version == OpenId::NS_2_0) {
                     $this->message->set('openid.claimed_id', $this->identifier);
                 }
                 $this->message->set('openid.identity', $this->identifier);
             }
         }
 
-        if ($version == OpenID::NS_1_1) {
+        if ($version == OpenId::NS_1_1) {
             $this->addNonce();
         }
 
@@ -216,36 +223,35 @@ class OpenIdAuthRequest
         } else {
             $url = $urls[0] . '?' . $this->message->getHTTPFormat();
         }
-        $netURL = new Net_URL2($url);
+        $netURL = new Url2($url);
 
         return $netURL->getURL();
     }
 
     /**
-     * Sets the instance of OpenID_Nonce for use with 1.1 return_to nonces
+     * Sets the instance of Nonce for use with 1.1 return_to nonces
      *
-     * @param OpenID_Nonce $nonce Custom instance of OpenID_Nonce
-     *
+     * @param Nonce $nonce Custom instance of Nonce
      * @return void
      */
-    public function setNonce(OpenID_Nonce $nonce)
+    public function setNonce(Nonce $nonce)
     {
         $this->nonce = $nonce;
     }
 
     /**
-     * Gets the OpenID_Nonce instance if set, otherwise instantiates one.
+     * Gets the Nonce instance if set, otherwise instantiates one.
      *
-     * @return OpenID_Nonce
+     * @return Nonce
      */
     protected function getNonce()
     {
-        if ($this->nonce instanceof OpenID_Nonce) {
+        if ($this->nonce instanceof Nonce) {
             return $this->nonce;
         }
         $URIs  = $this->serviceEndpoint->getURIs();
         $nonce = array_shift($URIs);
-        return new OpenID_Nonce($nonce);
+        return new Nonce($nonce);
     }
 
     /**
@@ -256,9 +262,9 @@ class OpenIdAuthRequest
     protected function addNonce()
     {
         $nonce       = $this->getNonce()->createNonceAndStore();
-        $returnToURL = new Net_URL2($this->message->get('openid.return_to'));
+        $returnToURL = new Url2($this->message->get('openid.return_to'));
         $returnToURL->setQueryVariable(
-            OpenID_Nonce::RETURN_TO_NONCE, urlencode($nonce)
+            Nonce::RETURN_TO_NONCE, urlencode($nonce)
         );
         $this->message->set('openid.return_to', $returnToURL->getURL());
 
@@ -268,14 +274,14 @@ class OpenIdAuthRequest
         $logMessage .= 'OP URIs: ' . print_r(
             $this->serviceEndpoint->getURIs(), true
         );
-        OpenID::setLastEvent(__METHOD__, $logMessage);
+        OpenId::setLastEvent(__METHOD__, $logMessage);
     }
 
     /**
      * Returns the discovered information about the identifer
      *
      * @see $discover
-     * @return OpenID_Discover|null
+     * @return Discover|null
      */
     public function getDiscover()
     {

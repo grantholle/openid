@@ -1,4 +1,10 @@
 <?php
+
+namespace Pear\OpenId\Extensions;
+
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Exceptions\OpenIdExtensionException;
+
 /**
  * OpenID_Extension_UI
  *
@@ -14,11 +20,6 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Extension.php';
-
-/**
  * Provides support for the UI extension
  *
  * @uses      OpenID_Extension
@@ -29,7 +30,7 @@ require_once 'src/Extension.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Extension_UI extends OpenID_Extension
+class UI extends OpenIdExtension
 {
     /**
      * URI of the UI namespace
@@ -55,23 +56,22 @@ class OpenID_Extension_UI extends OpenID_Extension
     /**
      * Adds mode checking to set()
      *
-     * @param mixed $key   Key
+     * @param mixed $key Key
      * @param mixed $value Value
-     *
      * @return void
+     * @throws OpenIdExtensionException
      */
     public function set($key, $value)
     {
         if (strpos($key, 'mode') === 0
             && !in_array($value, $this->validModes)
         ) {
-            throw new OpenID_Extension_Exception(
+            throw new OpenIdExtensionException(
                 'Invalid UI mode: ' . $key,
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
         parent::set($key, $value);
     }
 }
-?>

@@ -2,9 +2,11 @@
 
 namespace Pear\OpenId\Assertions;
 
-use Pear\OpenID\OpenID;
-use Pear\OpenID\OpenIdException;
-use Pear\OpenID\OpenIdMessage;
+use Pear\OpenId\Discover\Discover;
+use Pear\OpenId\Exceptions\OpenIdAssertionException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\OpenIdMessage;
 
 /**
  * A class that represents the result of verifying an assertion.
@@ -16,7 +18,7 @@ use Pear\OpenID\OpenIdMessage;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenIDAssertionResult
+class OpenIdAssertionResult
 {
     /**
      * The check_authentication response
@@ -48,11 +50,11 @@ class OpenIDAssertionResult
     protected $assertion = false;
 
     /**
-     * Discovered information as an instance of OpenID_Discover
+     * Discovered information as an instance of Discover
      *
      * @see getDiscover()
      * @see setDiscover()
-     * @var OpenID_Discover|null
+     * @var Discover|null
      */
     protected $discover = null;
 
@@ -118,26 +120,26 @@ class OpenIDAssertionResult
      *
      * @param string $method Method used
      *
-     * @throws OpenID_Assertion_Exception on invalid assertion mode
+     * @throws OpenIdAssertionException on invalid assertion mode
      * @return void
      */
     public function setAssertionMethod($method)
     {
         switch ($method) {
-        case OpenID::MODE_ID_RES:
-        case OpenID::MODE_ASSOCIATE:
-        case OpenID::MODE_CHECKID_SETUP:
-        case OpenID::MODE_CHECKID_IMMEDIATE:
-        case OpenID::MODE_CHECK_AUTHENTICATION:
-        case OpenID::MODE_CANCEL:
-        case OpenID::MODE_SETUP_NEEDED:
-            $this->assertionMethod = $method;
-            break;
-        default:
-            throw new OpenIdAssertionException(
-                'Invalid assertion method',
-                OpenIdException::INVALID_VALUE
-            );
+            case OpenId::MODE_ID_RES:
+            case OpenId::MODE_ASSOCIATE:
+            case OpenId::MODE_CHECKID_SETUP:
+            case OpenId::MODE_CHECKID_IMMEDIATE:
+            case OpenId::MODE_CHECK_AUTHENTICATION:
+            case OpenId::MODE_CANCEL:
+            case OpenId::MODE_SETUP_NEEDED:
+                $this->assertionMethod = $method;
+                break;
+            default:
+                throw new OpenIdAssertionException(
+                    'Invalid assertion method',
+                    OpenIdException::INVALID_VALUE
+                );
         }
     }
 
@@ -166,13 +168,13 @@ class OpenIDAssertionResult
     /**
      * Sets the discovered information about the identifier
      *
-     * @param OpenID_Discover $discover An instance of OpenID_Discover
+     * @param Discover $discover An instance of Discover
      *
      * @see $discover
      * @see getDiscover()
      * @return void
      */
-    public function setDiscover(OpenID_Discover $discover)
+    public function setDiscover(Discover $discover)
     {
         $this->discover = $discover;
     }
@@ -182,7 +184,7 @@ class OpenIDAssertionResult
      *
      * @see $discover
      * @see setDiscover()
-     * @return OpenID_Discover|null
+     * @return Discover|null
      */
     public function getDiscover()
     {

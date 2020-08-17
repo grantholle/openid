@@ -1,4 +1,7 @@
 <?php
+
+namespace Pear\OpenId\Extensions;
+
 /**
  * OpenID_Extension_SREG11
  *
@@ -12,11 +15,6 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-
-/**
- * Required files
- */
-require_once 'src/Extensions/SREG10.php';
 
 /**
  * Implementation of the Simple Registration Extension, version 1.1 Draft 1.
@@ -44,7 +42,7 @@ require_once 'src/Extensions/SREG10.php';
  * @link      http://github.com/shupp/openid
  * @see       OpenID_Extension_SREG10
  */
-class OpenID_Extension_SREG11 extends OpenID_Extension_SREG10
+class SREG11 extends SREG10
 {
     /**
      * Enables namespaces.  The only differnce I can see in the specs.
@@ -60,4 +58,3 @@ class OpenID_Extension_SREG11 extends OpenID_Extension_SREG10
      */
     protected $namespace = 'http://openid.net/extensions/sreg/1.1';
 }
-?>

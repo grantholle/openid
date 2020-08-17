@@ -1,4 +1,12 @@
 <?php
+
+namespace Pear\OpenId\Store;
+
+use Pear\Cache\Lite\Lite;
+use Pear\OpenId\Associations\Association;
+use Pear\OpenId\Discover\Discover;
+use Pear\OpenId\OpenId;
+
 /**
  * OpenID_Store_CacheLite
  *
@@ -15,13 +23,7 @@
  */
 
 /**
- * Required files
- */
-require_once 'Cache/Lite.php';
-require_once 'src/Store/Interface.php';
-
-/**
- * PEAR Cache_Lite driver for storage.  This is the default driver used.
+ * PEAR Lite driver for storage.  This is the default driver used.
  *
  * @uses      OpenID_Store_Interface
  * @category  Auth
@@ -32,12 +34,12 @@ require_once 'src/Store/Interface.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Store_CacheLite implements OpenID_Store_Interface
+class CacheLite implements StoreInterface
 {
     /**
-     * Instance of Cache_Lite
+     * Instance of Lite
      *
-     * @var Cache_Lite
+     * @var Lite
      */
     protected $cache = null;
 
@@ -46,16 +48,16 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
      *
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
-     * Default options for Cache_Lite
+     * Default options for Lite
      *
      * @var array
      */
     protected $defaultOptions = array(
-        'cacheDir'             => '/tmp',
-        'lifeTime'             => 3600,
+        'cacheDir' => '/tmp',
+        'lifeTime' => 3600,
         'hashedDirectoryLevel' => 2
     );
 
@@ -66,32 +68,31 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
      */
     protected $storeDirectories = array(
         self::TYPE_ASSOCIATION => 'association',
-        self::TYPE_DISCOVER    => 'discover',
-        self::TYPE_NONCE       => 'nonce'
+        self::TYPE_DISCOVER => 'discover',
+        self::TYPE_NONCE => 'nonce'
     );
 
     /**
-     * Instantiate Cache_Lite.  Allows for options to be passed to Cache_Lite.
+     * Instantiate Lite. Allows for options to be passed to Lite.
      *
-     * @param array $options Options for Cache_Lite constructor
-     *
+     * @param array $options Options for Lite constructor
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->defaultOptions, $options);
-        $this->cache   = new Cache_Lite($this->options);
+        $this->cache   = new Lite($this->options);
     }
 
     /**
      * Gets an OpenID_Assocation instance from storage
      *
-     * @param string $uri    The OP endpoint URI to get an association for
-     * @param string $handle The handle if available
-     *
-     * @return OpenID_Association
+     * @param string $uri The OP endpoint URI to get an association for
+     * @param string|null $handle The handle if available
+     * @return Association
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
-    public function getAssociation($uri, $handle = null)
+    public function getAssociation(string $uri, string $handle = null)
     {
         $this->setOptions(self::TYPE_ASSOCIATION);
         if ($handle !== null) {
@@ -104,14 +105,14 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
     }
 
     /**
-     * Stores an OpenID_Association instance.  Details (such as endpoint url and
+     * Stores an Association instance.  Details (such as endpoint url and
      * expiration) are retrieved from the object itself.
      *
-     * @param OpenID_Association $association Instance of OpenID_Association
-     *
+     * @param Association $association Instance of Association
      * @return void
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
-    public function setAssociation(OpenID_Association $association)
+    public function setAssociation(Association $association)
     {
         $this->setOptions(self::TYPE_ASSOCIATION, $association->expiresIn);
 
@@ -139,33 +140,34 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
     }
 
     /**
-     * Gets an OpenID_Discover object from storage
+     * Gets an Discover object from storage
      *
-     * @param string $identifier The normalized identifier that discovery was
-     *                           performed on
-     *
-     * @return OpenID_Discover
+     * @param string $identifier The normalized identifier that discovery was performed on
+     * @return Discover
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
-    public function getDiscover($identifier)
+    public function getDiscover(string $identifier)
     {
         $this->setOptions(self::TYPE_DISCOVER);
 
         $result = $this->cache->get($this->getDiscoverCacheKey($identifier));
+
         if ($result === false) {
-            return $result;
+            return null;
         }
+
         return unserialize($result);
     }
 
     /**
-     * Stores an instance of OpenID_Discover
+     * Stores an instance of Discover
      *
-     * @param OpenID_Discover $discover Instance of OpenID_Discover
-     * @param int             $expire   How long to cache it for, in seconds
-     *
-     * @return void
+     * @param Discover $discover Instance of Discover
+     * @param int|null $expire How long to cache it for, in seconds
+     * @return bool
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
-    public function setDiscover(OpenID_Discover $discover, $expire = null)
+    public function setDiscover(Discover $discover, int $expire = null)
     {
         $this->setOptions(self::TYPE_DISCOVER, $expire);
 
@@ -175,31 +177,29 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
     }
 
     /**
-     * Deletes a cached OpenID_Discover object
+     * Deletes a cached Discover object
      *
      * @param string $identifier The Identifier
-     *
      * @return void
      */
-    public function deleteDiscover($identifier)
+    public function deleteDiscover(string $identifier)
     {
         $this->setOptions(self::TYPE_DISCOVER);
 
         $key = $this->getDiscoverCacheKey($identifier);
 
-        return $this->removeFromCache($key);
+        $this->removeFromCache($key);
     }
 
     /**
      * Common method for creating a cache key based on the normalized identifier
      *
      * @param string $identifier User supplied identifier
-     *
      * @return string md5 of the normalized identifier
      */
-    protected function getDiscoverCacheKey($identifier)
+    protected function getDiscoverCacheKey(string $identifier)
     {
-        return md5(OpenID::normalizeIdentifier($identifier));
+        return md5(OpenId::normalizeIdentifier($identifier));
     }
 
     /**
@@ -207,14 +207,15 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
      *
      * @param string $nonce The nonce itself
      * @param string $opURL The OP Endpoint URL it was used with
-     *
      * @return string
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
     public function getNonce($nonce, $opURL)
     {
         $this->setOptions(self::TYPE_NONCE);
 
         $key = $this->getNonceCacheKey($nonce, $opURL);
+
         return $this->cache->get($key);
     }
 
@@ -223,10 +224,10 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
      *
      * @param string $nonce The nonce itself
      * @param string $opURL The OP endpoint URL it was associated with
-     *
-     * @return void
+     * @return bool
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
-    public function setNonce($nonce, $opURL)
+    public function setNonce(string $nonce, string $opURL)
     {
         $this->setOptions(self::TYPE_NONCE);
 
@@ -238,14 +239,13 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
      *
      * @param string $nonce The nonce to delete
      * @param string $opURL The OP endpoint URL it is associated with
-     *
      * @return void
      */
     public function deleteNonce($nonce, $opURL)
     {
         $this->setOptions(self::TYPE_NONCE);
 
-        return $this->removeFromCache($this->getNonceCacheKey($nonce, $opURL));
+        $this->removeFromCache($this->getNonceCacheKey($nonce, $opURL));
     }
 
     /**
@@ -263,15 +263,14 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
     }
 
     /**
-     * Sets options for Cache_Lite based on the needs of the current method.
+     * Sets options for Lite based on the needs of the current method.
      * Options set include the subdirectory to be used, and the expiration.
      *
-     * @param string $key    The sub-directory of the cacheDir
-     * @param string $expire The cache lifetime (expire) to be used
-     *
+     * @param string $key The sub-directory of the cacheDir
+     * @param string|null $expire The cache lifetime (expire) to be used
      * @return void
      */
-    protected function setOptions($key, $expire = null)
+    protected function setOptions(string $key, string $expire = null)
     {
         $cacheDir  = $this->options['cacheDir'] . '/openid/';
         $cacheDir .= rtrim($this->storeDirectories[$key], '/') . '/';
@@ -286,12 +285,12 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
     }
 
     /**
-     * This is a warpper for Cache_Lite::remove(), since it generates
+     * This is a warpper for Lite::remove(), since it generates
      * strict warnings.
      *
      * @param mixed $key The key to remove from cache
-     *
-     * @return result of Cache_Lite::remove(), without the strict warnings
+     * @return void
+     * @throws \Pear\Cache\Lite\Exceptions\CacheLiteException
      */
     protected function removeFromCache($key)
     {
@@ -315,4 +314,3 @@ class OpenID_Store_CacheLite implements OpenID_Store_Interface
         }
     }
 }
-?>

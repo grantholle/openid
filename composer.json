@@ -35,7 +35,9 @@
         "grantholle/pear-services-yadis": "^1.0",
         "grantholle/pear-http-request2": "^3.0",
         "grantholle/pear-cache-lite": "^2.0",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-libxml": "*",
+        "ext-dom": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3"

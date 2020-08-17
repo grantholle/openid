@@ -1,42 +1,45 @@
 <?php
+
+namespace Pear\OpenId\Discover;
+
+use DOMDocument;
+use DOMXPath;
+use Pear\Http\Request2;
+use Pear\Http\Request2\Response;
+use Pear\OpenId\Exceptions\OpenIdDiscoverException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\ServiceEndpoint;
+use Pear\OpenId\ServiceEndpoints;
+
 /**
- * OpenID_Discover_HTML
+ * Discover_HTML
  *
  * PHP Version 5.2.0+
  *
  * @category  Auth
  * @package   OpenID
- * @uses      OpenID_Discover
- * @uses      OpenID_Discover_Interface
+ * @uses      \Pear\OpenId\Discover\Discover
+ * @uses      \Pear\OpenId\Discover\Discover_Interface
  * @author    Rich Schumacher <rich.schu@gmail.com>
  * @copyright 2009 Rich Schumacher
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-
-/**
- * Required files
- */
-require_once 'src/Discover.php';
-require_once 'src/Discover/Interface.php';
-require_once 'src/ServiceEndpoint.php';
-require_once 'src/ServiceEndpoints.php';
 
 /**
  * Implements HTML discovery
  *
  * @category  Auth
  * @package   OpenID
- * @uses      OpenID_Discover
- * @uses      OpenID_Discover_Interface
+ * @uses      \Pear\OpenId\Discover\Discover
+ * @uses      \Pear\OpenId\Discover\Discover_Interface
  * @author    Rich Schumacher <rich.schu@gmail.com>
  * @copyright 2009 Rich Schumacher
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Discover_HTML
-extends OpenID_Discover
-implements OpenID_Discover_Interface
+class HTML extends Discover implements DiscoverInterface
 {
     /**
      * The normalized identifier
@@ -46,16 +49,16 @@ implements OpenID_Discover_Interface
     protected $identifier = null;
 
     /**
-     * Local storage of the HTTP_Request2 object
+     * Local storage of the Request2 object
      *
-     * @var HTTP_Request2
+     * @var Request2
      */
     protected $request = null;
 
     /**
-     * Local storage of the HTTP_Request2_Response object
+     * Local storage of the Response object
      *
-     * @var HTTP_Request2_Response
+     * @var Response
      */
     protected $response = null;
 
@@ -63,19 +66,19 @@ implements OpenID_Discover_Interface
      * Constructor.  Sets the
      *
      * @param mixed $identifier The user supplied identifier
-     *
      * @return void
      */
-    public function __construct($identifier)
-    {
-        $this->identifier = $identifier;
-    }
+//    public function __construct($identifier)
+//    {
+//        parent::__construct($identifier);
+//        $this->identifier = $identifier;
+//    }
 
     /**
      * Performs HTML discovery.
      *
-     * @throws OpenID_Discover_Exception on error
-     * @return OpenID_ServiceEndpoints
+     * @throws OpenIdDiscoverException() on error
+     * @return ServiceEndpoints
      */
     public function discover()
     {
@@ -126,47 +129,53 @@ implements OpenID_Discover_Interface
      *
      * @param array $results Array of items discovered via HTML
      *
-     * @return OpenID_ServiceEndpoints
+     * @return ServiceEndpoints
+     * @throws OpenIdDiscoverException
      */
     protected function buildServiceEndpoint(array $results)
     {
         if (count($results['openid2.provider'])) {
-            $version = OpenID::SERVICE_2_0_SIGNON;
+            $version = OpenId::SERVICE_2_0_SIGNON;
             if (count($results['openid2.local_id'])) {
                 $localID = $results['openid2.local_id'][0];
             }
             $endpointURIs = $results['openid2.provider'];
         } elseif (count($results['openid.server'])) {
-            $version      = OpenID::SERVICE_1_1_SIGNON;
+            $version = OpenId::SERVICE_1_1_SIGNON;
             $endpointURIs = $results['openid.server'];
             if (count($results['openid.delegate'])) {
                 $localID = $results['openid.delegate'][0];
             }
         } else {
-            throw new OpenID_Discover_Exception(
+            throw new OpenIdDiscoverException(
                 'Discovered information does not conform to spec',
-                OpenID_Exception::MISSING_DATA
+                OpenIdException::MISSING_DATA
             );
         }
 
-        $opEndpoint = new OpenID_ServiceEndpoint();
+        $opEndpoint = new ServiceEndpoint();
         $opEndpoint->setVersion($version);
         $opEndpoint->setTypes(array($version));
         $opEndpoint->setURIs($endpointURIs);
-        $opEndpoint->setSource(OpenID_Discover::TYPE_HTML);
+        $opEndpoint->setSource(Discover::TYPE_HTML);
 
         if (isset($localID)) {
             $opEndpoint->setLocalID($localID);
         }
 
-        return new OpenID_ServiceEndpoints($this->identifier, $opEndpoint);
+        return new ServiceEndpoints($this->identifier, $opEndpoint);
     }
 
     // @codeCoverageIgnoreStart
+
     /**
-     * Sends the request via HTTP_Request2
+     * Sends the request via Request2
      *
      * @return string The HTTP response body
+     * @throws OpenIdDiscoverException
+     * @throws Request2\Exceptions\Exception
+     * @throws Request2\Exceptions\LogicException
+     * @throws Request2\Exceptions\Request2Exception
      */
     protected function sendRequest()
     {
@@ -174,9 +183,9 @@ implements OpenID_Discover_Interface
         $this->response = $this->request->send();
 
         if ($this->response->getStatus() !== 200) {
-            throw new OpenID_Discover_Exception(
+            throw new OpenIdDiscoverException(
                 'Unable to connect to OpenID Provider.',
-                OpenID_Exception::HTTP_ERROR
+                OpenIdException::HTTP_ERROR
             );
         }
 
@@ -184,17 +193,16 @@ implements OpenID_Discover_Interface
     }
 
     /**
-     * Instantiates HTTP_Request2.  Abstracted for testing.
+     * Instantiates Request2.  Abstracted for testing.
      *
      * @return void
+     * @throws Request2\Exceptions\LogicException
      */
     protected function getHTTPRequest2()
     {
-        $this->request = new HTTP_Request2(
-            $this->identifier, HTTP_Request2::METHOD_GET, $this->requestOptions
+        $this->request = new Request2(
+            $this->identifier, Request2::METHOD_GET, $this->requestOptions
         );
     }
     // @codeCoverageIgnoreEnd
 }
-
-?>

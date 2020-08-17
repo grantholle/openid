@@ -1,4 +1,7 @@
 <?php
+
+namespace Pear\OpenId\Extensions;
+
 /**
  * OpenID_Extension_SREG10
  *
@@ -12,11 +15,6 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-
-/**
- * Required files
- */
-require_once 'src/Extension.php';
 
 /**
  * Implementation of the Simple Registration Extension version 1.0.  See
@@ -41,7 +39,7 @@ require_once 'src/Extension.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Extension_SREG10 extends OpenID_Extension
+class SREG10 extends OpenIdExtension
 {
     /**
      * Disables NS use, since this extension was done before OpenID 2.0
@@ -85,4 +83,3 @@ class OpenID_Extension_SREG10 extends OpenID_Extension
         'timezone'
     );
 }
-?>

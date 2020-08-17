@@ -4,6 +4,8 @@ namespace Pear\OpenId\Extensions;
 
 use Pear\OpenId\Exceptions\OpenIdException;
 use Pear\OpenId\Exceptions\OpenIdExtensionException;
+use Pear\OpenId\Exceptions\OpenIdMessageException;
+use Pear\OpenId\OpenIdMessage;
 
 /**
  * OpenID_Extension
@@ -107,8 +109,7 @@ abstract class OpenIdExtension
      *
      * @param string $type Type response or type request
      * @param OpenIdMessage|null $message Optional message to get values from
-     * @throws Message\OpenIdMessageException on invalid type argument
-     * @throws OpenIdExtensionException on invalid type argument
+     * @throws OpenIdMessageException|OpenIdExtensionException
      */
     public function __construct(string $type, OpenIdMessage $message = null)
     {
@@ -130,11 +131,10 @@ abstract class OpenIdExtension
      *
      * @param string $key   Key
      * @param string $value Value
-     *
-     * @return void
+     * @return OpenIdExtension
      * @throws OpenIdExtensionException on invalid key argument
      */
-    public function set($key, $value)
+    public function set(string $key, string $value)
     {
         $keys = $this->responseKeys;
         if ($this->type == self::REQUEST) {
@@ -147,7 +147,10 @@ abstract class OpenIdExtension
                 OpenIdException::INVALID_VALUE
             );
         }
+
         $this->values[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -169,9 +172,9 @@ abstract class OpenIdExtension
      * Adds the extension contents to an OpenIDMessage
      *
      * @param OpenIdMessage $message Message to add the extension contents to
-     *
      * @return void
-     * @throws OpenIdExtensionException|Message\OpenIdMessageException on error
+     * @throws OpenIdExtensionException
+     * @throws OpenIdMessageException
      */
     public function toMessage(OpenIdMessage $message)
     {
@@ -206,11 +209,9 @@ abstract class OpenIdExtension
     /**
      * Extracts extension contents from an OpenIDMessage
      *
-     * @param OpenIdMessage $message OpenIDMessage to extract the extension
-     *                                contents from
-     *
+     * @param OpenIdMessage $message OpenIDMessage to extract the extension contents from
      * @return array An array of the extension's key/value pairs
-     * @throws Message\OpenIdMessageException
+     * @throws OpenIdMessageException
      */
     public function fromMessageResponse(OpenIdMessage $message)
     {

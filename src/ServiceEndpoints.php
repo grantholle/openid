@@ -1,6 +1,14 @@
 <?php
+
+namespace Pear\OpenId;
+
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+
 /**
- * OpenID_ServiceEndpoints
+ * ServiceEndpoints
  *
  * PHP Version 5.2.0+
  *
@@ -13,14 +21,9 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/ServiceEndpoint.php';
-
-/**
-* OpenID_ServiceEndpoints
+* ServiceEndpoints
 *
-* This class represents a colleciton of OpenID_ServiceEndpoint objects.  It
+* This class represents a colleciton of ServiceEndpoint objects.  It
 * implements several SPL interfaces to make it easy to consume.
 *
 * @category  Auth
@@ -30,7 +33,7 @@ require_once 'src/ServiceEndpoint.php';
 * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
 * @link      http://github.com/shupp/openid
 */
-class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countable
+class ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
      * Copy of the Expires header from the HTTP request.  Used for customizing cache
@@ -48,34 +51,32 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     private $_identifier = null;
 
     /**
-     * An array of OpenID_ServiceEndpoint objects
+     * An array of ServiceEndpoint objects
      *
      * @var array
      */
-    private $_services = array();
+    private $_services = [];
 
     /**
      * Sets the user-supplied identifier and adds a service if one is passed
      *
-     * @param string                       $identifier User-supplied identifier
-     * @param null|OpenID_Service_Endpoint $spec       Service endpoint object
-     *
+     * @param string $identifier User-supplied identifier
+     * @param null|ServiceEndpoint $spec Service endpoint object
      * @return void
      */
-    public function __construct($identifier, $spec = null)
+    public function __construct(string $identifier, ServiceEndpoint $spec = null)
     {
         $this->setIdentifier($identifier);
 
-        if ($spec instanceof OpenID_ServiceEndpoint) {
+        if ($spec instanceof ServiceEndpoint) {
             $this->addService($spec);
         }
     }
 
     /**
-     * Sets the user-supplied indentifier
+     * Sets the user-supplied identifier
      *
      * @param string $identifier The user-supplied identifier
-     *
      * @return void
      */
     public function setIdentifier($identifier)
@@ -96,11 +97,11 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     /**
      * Adds a service to the services array
      *
-     * @param OpenID_ServiceEndpoint $endpoint The service endpoint object
+     * @param ServiceEndpoint $endpoint The service endpoint object
      *
      * @return void
      */
-    public function addService(OpenID_ServiceEndpoint $endpoint)
+    public function addService(ServiceEndpoint $endpoint)
     {
         if (!$endpoint->isValid()) {
             return;
@@ -136,12 +137,12 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
      *
      * @param int $offset The offset to retrieve
      *
-     * @return null|OpenID_ServiceEndpoint
+     * @return null|ServiceEndpoint
      */
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {
-            return;
+            return null;
         }
 
         return $this->_services[$offset];
@@ -150,14 +151,13 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
     /**
      * Sets a value in the services array
      *
-     * @param int                    $offset   The offset to set
-     * @param OpenID_ServiceEndpoint $endpoint The service object to set
-     *
+     * @param int $offset   The offset to set
+     * @param ServiceEndpoint $endpoint The service object to set
      * @return void
      */
     public function offsetSet($offset, $endpoint)
     {
-        if ($endpoint instanceof OpenID_ServiceEndpoint) {
+        if ($endpoint instanceof ServiceEndpoint) {
             $this->_services[$offset] = $endpoint;
         }
     }
@@ -166,7 +166,6 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
      * Removes a particular offset in the services array
      *
      * @param int $offset The offset to remove
-     *
      * @return void
      */
     public function offsetUnset($offset)
@@ -200,15 +199,13 @@ class OpenID_ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countab
      * Sets the Expires header value
      *
      * @param string $value The Expires header value
-     *
      * @see getExpiresHeader()
-     * @return OpenID_ServiceEndpoints
+     * @return ServiceEndpoints
      */
-    public function setExpiresHeader($value)
+    public function setExpiresHeader(string $value)
     {
         $this->_expiresHeader = $value;
+
         return $this;
     }
 }
-
-?>

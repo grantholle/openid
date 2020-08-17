@@ -1,6 +1,9 @@
 <?php
+
+namespace Pear\OpenId\Discover;
+
 /**
- * OpenID_Discover_Interface
+ * Discover_Interface
  *
  * PHP Version 5.2.0+
  *
@@ -22,7 +25,7 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-interface OpenID_Discover_Interface
+interface DiscoverInterface
 {
     /**
      * Constructor.  Sets the user supplied identifier.
@@ -45,9 +48,7 @@ interface OpenID_Discover_Interface
      *
      * @param array $options Array of HTTP_Request2 options
      *
-     * @return OpenID_Discover for fluent interface
+     * @return Discover for fluent interface
      */
     public function setRequestOptions(array $options);
 }
-
-?>

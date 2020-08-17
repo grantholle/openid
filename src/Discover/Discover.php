@@ -1,6 +1,16 @@
 <?php
+
+namespace Pear\OpenId\Discover;
+
+use Pear\OpenId\Exceptions\OpenIdDiscoverException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Extensions\OpenIdExtension;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\ServiceEndpoints;
+use Pear\OpenId\Store\StoreInterface;
+
 /**
- * OpenID_Discover
+ * Discover
  *
  * PHP Version 5.2.0+
  *
@@ -13,21 +23,12 @@
  */
 
 /**
- * Required files
- */
-require_once 'OpenID.php';
-require_once 'Services/Yadis.php';
-require_once 'src/ServiceEndpoint.php';
-require_once 'src/ServiceEndpoints.php';
-require_once 'src/Discover/Exception.php';
-
-/**
- * OpenID_Discover
+ * Discover
  *
  * Implements OpenID discovery ({@link
  * http://openid.net/specs/openid-authentication-2_0.html#discovery 7.3} of the 2.0
  * spec).  Discovery is driver based, and currently supports YADIS discovery
- * (via Services_Yadis), and HTML discovery ({@link OpenID_Discover_HTML}).  Once
+ * (via Services_Yadis), and HTML discovery ({@link Discover_HTML}).  Once
  * completed, it will also support {@link
  * http://www.hueniverse.com/hueniverse/2009/03/the-discovery-protocol-stack.html
  * XRD/LRDD}.
@@ -36,7 +37,7 @@ require_once 'src/Discover/Exception.php';
  * <code>
  * $id = 'http://user.example.com';
  *
- * $discover = new OpenID_Discover($id);
+ * $discover = new Discover($id);
  * $result   = $discover->discover();
  *
  * if (!$result) {
@@ -56,7 +57,7 @@ require_once 'src/Discover/Exception.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Discover
+class Discover
 {
     const TYPE_YADIS = 'Yadis';
     const TYPE_HTML  = 'HTML';
@@ -77,8 +78,8 @@ class OpenID_Discover
      * @var array
      */
     static public $discoveryOrder = array(
-        0  => OpenID_Discover::TYPE_YADIS,
-        10 => OpenID_Discover::TYPE_HTML
+        0  => self::TYPE_YADIS,
+        10 => self::TYPE_HTML
     );
 
     /**
@@ -86,7 +87,7 @@ class OpenID_Discover
      *
      * @var string
      */
-    protected $identifier = null;
+    public $identifier = null;
 
     /**
      * HTTP_Request2 options
@@ -95,28 +96,27 @@ class OpenID_Discover
      */
     protected $requestOptions = array(
         'follow_redirects' => true,
-        'timeout'          => 3,
-        'connect_timeout'  => 3
+        'timeout' => 3,
+        'connect_timeout' => 3
     );
 
     /**
-     * Instance of OpenID_ServiceEndpoints
+     * Instance of ServiceEndpoints
      *
-     * @var OpenID_ServiceEndpoints
+     * @var ServiceEndpoints
      */
-    protected $services = null;
+    public $services = null;
 
     /**
      * Constructor.  Enables libxml internal errors, normalized the identifier.
      *
      * @param mixed $identifier The user supplied identifier
-     *
      * @return void
      */
     public function __construct($identifier)
     {
         libxml_use_internal_errors(true);
-        $this->identifier = OpenID::normalizeIdentifier($identifier);
+        $this->identifier = OpenId::normalizeIdentifier($identifier);
     }
 
     /**
@@ -139,11 +139,12 @@ class OpenID_Discover
      *
      * @param array $options Array of HTTP_Request2 options
      *
-     * @return OpenID_Discover for fluent interface
+     * @return Discover for fluent interface
      */
     public function setRequestOptions(array $options)
     {
         $this->requestOptions = $options;
+
         return $this;
     }
 
@@ -158,14 +159,16 @@ class OpenID_Discover
         ksort(self::$discoveryOrder);
 
         foreach (self::$discoveryOrder as $service) {
+            $result = null;
+
             try {
                 $discover = $this->_factory($service, $this->identifier);
-                $result   = $discover->discover();
-            } catch (OpenID_Discover_Exception $e) {
+                $result = $discover->discover();
+            } catch (OpenIdDiscoverException $e) {
                 continue;
             }
 
-            if ($result instanceof OpenID_ServiceEndpoints && isset($result[0])) {
+            if ($result instanceof ServiceEndpoints && isset($result[0])) {
                 $this->services = $result;
                 return true;
             }
@@ -178,30 +181,18 @@ class OpenID_Discover
      * Provides the standard factory pattern for loading discovery drivers.
      *
      * @param string $discoverType The discovery type (driver) to load
-     * @param string $identifier   The user supplied identifier
-     *
-     * @return void
+     * @param string $identifier The user supplied identifier
+     * @return DiscoverInterface
+     * @throws OpenIdDiscoverException
      */
     protected function _factory($discoverType, $identifier)
     {
-        $file  = 'OpenID/Discover/' . $discoverType . '.php';
-        $class = 'OpenID_Discover_' . $discoverType;
+        $object = new $discoverType($identifier);
 
-        include_once $file;
-
-        if (!class_exists($class)) {
-            throw new OpenID_Discover_Exception(
-                'Unable to load driver: ' . $discoverType,
-                OpenID_Exception::LOAD_ERROR
-            );
-        }
-
-        $object = new $class($identifier);
-
-        if (!$object instanceof OpenID_Discover_Interface) {
-            throw new OpenID_Discover_Exception(
+        if (!$object instanceof DiscoverInterface) {
+            throw new OpenIdDiscoverException(
                 'Requested driver does not conform to Discover interface',
-                OpenID_Exception::INVALID_DEFINITION
+                OpenIdException::INVALID_DEFINITION
             );
         }
 
@@ -211,27 +202,14 @@ class OpenID_Discover
     }
 
     /**
-     * Determines if dicovered information supports a given OpenID extension
+     * Determines if discovered information supports a given OpenID extension
      *
      * @param string $extension The name of the extension to check, (SREG10, AX, etc)
-     *
      * @return bool
      */
-    public function extensionSupported($extension)
+    public function extensionSupported(string $extension)
     {
-        $class = 'OpenID_Extension_' . $extension;
-        $file  = str_replace('_', '/', $class) . '.php';
-
-        include_once $file;
-
-        if (!class_exists($class, false)) {
-            throw new OpenID_Discover_Exception(
-                'Unknown extension: ' . $class,
-                OpenID_Exception::LOAD_ERROR
-            );
-        }
-
-        $instance = new $class(OpenID_Extension::REQUEST);
+        $instance = new $extension(OpenIdExtension::REQUEST);
 
         foreach ($this->services as $service) {
             if (in_array($instance->getNamespace(), $service->getTypes())) {
@@ -247,27 +225,27 @@ class OpenID_Discover
      * exists, otherwise executing discovery and storing results if they are
      * positive.
      *
-     * @param string       $id      URI Identifier to discover
-     * @param OpenID_Store $store   Instance of OpenID_Store
-     * @param array        $options Options to pass to HTTP_Request2
-     *
-     * @return OpenID_Discover|false OpenID_Discover on success, false on failure
+     * @param string $id URI Identifier to discover
+     * @param StoreInterface $store Instance of OpenID_Store
+     * @param array $options Options to pass to HTTP_Request2
+     * @return Discover Discover on success, false on failure
      */
     static public function getDiscover(
-        $id, OpenID_Store_Interface $store, array $options = array()
+        string $id, StoreInterface $store, array $options = []
     ) {
         $discoverCache = $store->getDiscover($id);
 
-        if ($discoverCache instanceof OpenID_Discover) {
+        if ($discoverCache instanceof Discover) {
             return $discoverCache;
         }
 
-        $discover = new OpenID_Discover($id);
+        $discover = new Discover($id);
         $discover->setRequestOptions($options);
-        $result   = $discover->discover();
+        $result = $discover->discover();
+
         if ($result === false) {
             // @codeCoverageIgnoreStart
-            return false;
+            return null;
             // @codeCoverageIgnoreEnd
         }
 
@@ -282,5 +260,3 @@ class OpenID_Discover
         return $discover;
     }
 }
-
-?>

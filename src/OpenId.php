@@ -2,7 +2,12 @@
 
 namespace Pear\OpenId;
 
+use Pear\Http\Request2;
+use Pear\Http\Request2\Response;
+use Pear\OpenId\Exceptions\OpenIdException;
 use Pear\OpenId\Observers\Common;
+use Pear\OpenId\Store\Store;
+use Pear\OpenId\Store\StoreInterface;
 
 /**
  * OpenID
@@ -20,7 +25,7 @@ use Pear\OpenId\Observers\Common;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  * @see       Common
- * @see       OpenID_Store
+ * @see       Store
  */
 class OpenId
 {
@@ -79,7 +84,7 @@ class OpenId
     const ASSOC_TYPE_HMAC_SHA256 = 'HMAC-SHA256';
 
     /**
-     * Instance of OpenID_Store_Interface
+     * Instance of StoreInterface
      *
      * @var $store
      * @see setStore()
@@ -176,27 +181,28 @@ class OpenId
     }
 
     /**
-     * Sets a custom OpenID_Store_Interface object
+     * Sets a custom StoreInterface object
      *
-     * @param OpenID_Store_Interface $store Custom storage instance
+     * @param StoreInterface $store Custom storage instance
      *
      * @return void
      */
-    static public function setStore(OpenID_Store_Interface $store)
+    static public function setStore(StoreInterface $store)
     {
         self::$store = $store;
     }
 
     /**
-     * Gets the OpenID_Store_Interface instance.  If none has been set, then the
+     * Gets the StoreInterface instance.  If none has been set, then the
      * default store is used (CacheLite).
      *
-     * @return OpenID_Store_Interface
+     * @return StoreInterface
+     * @throws Exceptions\StoreException
      */
     static public function getStore()
     {
-        if (!self::$store instanceof OpenID_Store_Interface) {
-            self::$store = OpenID_Store::factory();
+        if (!self::$store instanceof StoreInterface) {
+            self::$store = Store::factory();
         }
 
         return self::$store;
@@ -205,47 +211,51 @@ class OpenId
     /**
      * Sends a direct HTTP request.
      *
-     * @param string         $url     URL to send the request to
-     * @param OpenID_Message $message Contains message contents
-     * @param array          $options Options to pass to HTTP_Request2
+     * @param string $url URL to send the request to
+     * @param OpenIdMessage $message Contains message contents
+     * @param array $options Options to pass to Request2
      *
+     * @return Response
+     * @throws Exceptions\OpenIdMessageException
+     * @throws OpenIdException if send() fails
+     * @throws Request2\Exceptions\Exception
+     * @throws Request2\Exceptions\LogicException
      * @see getHTTPRequest2Instance()
-     * @throws OpenID_Exception if send() fails
-     * @return HTTP_Request2_Response
      */
     public function directRequest(
-        $url, OpenID_Message $message, array $options = array()
+        $url, OpenIdMessage $message, array $options = array()
     ) {
         $request = $this->getHTTPRequest2Instance();
         $request->setConfig($options);
         $request->setURL($url);
         // Require POST, per the spec
-        $request->setMethod(HTTP_Request2::METHOD_POST);
+        $request->setMethod(Request2::METHOD_POST);
         $request->setBody($message->getHTTPFormat());
+
         try {
             return $request->send();
-        } catch (HTTP_Request2_Exception $e) {
-            throw new OpenID_Exception($e->getMessage(), $e->getCode(), $e);
+        } catch (\Exception $e) {
+            throw new OpenIdException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
-     * Instantiates HTTP_Request2.  Abstracted for testing.
+     * Instantiates Request2.  Abstracted for testing.
      *
      * @see directRequest()
-     * @return HTTP_Request2_Response
+     * @return Request2
      */
     protected function getHTTPRequest2Instance()
     {
         // @codeCoverageIgnoreStart
-        return new HTTP_Request2();
+        return new Request2();
         // @codeCoverageIgnoreEnd
     }
 
     /**
      * Returns an array of the 5 XRI globals symbols
      *
-     * @return void
+     * @return string[]
      */
     static public function getXRIGlobalSymbols()
     {
@@ -255,12 +265,11 @@ class OpenId
     /**
      * Normalizes an identifier (URI or XRI)
      *
-     * @param mixed $identifier URI or XRI to be normalized
-     *
-     * @throws OpenID_Exception on invalid identifier
+     * @param string $identifier URI or XRI to be normalized
+     * @throws OpenIdException on invalid identifier
      * @return string Normalized Identifier.
      */
-    static public function normalizeIdentifier($identifier)
+    static public function normalizeIdentifier(string $identifier)
     {
         // XRI
         if (preg_match('@^xri://@i', $identifier)) {
@@ -275,14 +284,17 @@ class OpenId
         if (!preg_match('@^http[s]?://@i', $identifier)) {
             $identifier = 'http://' . $identifier;
         }
+
         if (strlen($identifier) < 8 || strpos($identifier, '/', 8) === false) {
             $identifier .= '/';
         }
+
         if (filter_var($identifier, FILTER_VALIDATE_URL)) {
             return $identifier;
         }
-        throw new OpenID_Exception(
-            'Invalid URI Identifier', OpenID_Exception::INVALID_VALUE
+
+        throw new OpenIdException(
+            'Invalid URI Identifier', OpenIdException::INVALID_VALUE
         );
     }
 

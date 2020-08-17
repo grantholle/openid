@@ -1,4 +1,9 @@
 <?php
+
+namespace Pear\OpenId;
+
+use Pear\OpenId\Discover\Discover;
+
 /**
  * OpenID_ServiceEndpoint
  *
@@ -13,11 +18,6 @@
  */
 
 /**
- * Required files
- */
-require_once 'src/Discover.php';
-
-/**
  * OpenID_ServiceEndpoint
  *
  * A simple class that represents a single OpenID provider service endpoint.
@@ -29,21 +29,21 @@ require_once 'src/Discover.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_ServiceEndpoint
+class ServiceEndpoint
 {
     /**
      * An array of URIs for this endpoint
      *
      * @var array
      */
-    protected $uris = array();
+    protected $uris = [];
 
     /**
      * An array of service types
      *
      * @var array
      */
-    protected $types = array();
+    protected $types = [];
 
     /**
      * The local ID represented by this endpoint
@@ -147,7 +147,7 @@ class OpenID_ServiceEndpoint
      */
     public function setSource($source)
     {
-        if (in_array($source, OpenID_Discover::$discoveryOrder)) {
+        if (in_array($source, Discover::$discoveryOrder)) {
             $this->source = $source;
         }
     }
@@ -199,5 +199,3 @@ class OpenID_ServiceEndpoint
         return count($this->getURIs()) > 0;
     }
 }
-
-?>

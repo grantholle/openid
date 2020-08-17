@@ -1,114 +1,114 @@
 <?php
+
+namespace Pear\OpenId\Discover;
+
+use Pear\OpenId\Exceptions\OpenIdDiscoverException;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\ServiceEndpoint;
+use Pear\OpenId\ServiceEndpoints;
+use Pear\Services\Yadis\Exceptions\YadisException;
+use Pear\Services\Yadis\Yadis as YadisService;
+
 /**
- * OpenID_Discover_Yadis
+ * Discover_Yadis
  *
  * PHP Version 5.2.0+
  *
  * @category  Auth
  * @package   OpenID
- * @uses      OpenID_Discover_Interface
- * @uses      OpenID_Discover
+ * @uses      \Pear\OpenId\Discover\Discover_Interface
+ * @uses      \Pear\OpenId\Discover\Discover
  * @author    Rich Schumacher <rich.schu@gmail.com>
  * @copyright 2009 Rich Schumacher
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-
-/**
- * Required files
- */
-require_once 'src/Discover.php';
-require_once 'src/Discover/Interface.php';
-require_once 'src/ServiceEndpoint.php';
-require_once 'src/ServiceEndpoints.php';
 
 /**
  * Implements YADIS discovery
  *
  * @category  Auth
  * @package   OpenID
- * @uses      OpenID_Discover_Interface
- * @uses      OpenID_Discover
+ * @uses      \Pear\OpenId\Discover\Discover_Interface
+ * @uses      \Pear\OpenId\Discover\Discover
  * @author    Rich Schumacher <rich.schu@gmail.com>
  * @copyright 2009 Rich Schumacher
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
- * @see       Services_Yadis
+ * @see       \Pear\Services\Yadis\Yadis
  */
-class OpenID_Discover_Yadis
-    extends OpenID_Discover
-    implements OpenID_Discover_Interface
+class Yadis extends Discover implements DiscoverInterface
 {
     /**
-     * The Services_Yadis instance
+     * The \Pear\Services\Yadis\Yadis instance
      *
-     * @var Services_Yadis
+     * @var YadisService
      */
     protected $yadis = null;
 
     /**
      * Performs YADIS discovery
      *
-     * @throws OpenID_Discover_Exception on error
-     * @return OpenID_ServiceEndpoints
+     * @return ServiceEndpoints
+     * @throws OpenIdDiscoverException on error
+     * @throws \Pear\Http\Request2\Exceptions\Exception
+     * @throws \Pear\Http\Request2\Exceptions\LogicException
+     * @throws \Pear\Http\Request2\Exceptions\Request2Exception
      */
     public function discover()
     {
         try {
             try {
                 $discoveredServices = $this->getServicesYadis()->discover();
-            } catch (Services_Yadis_Exception $e) {
+            } catch (YadisException $e) {
                 $message = 'Yadis protocol could not locate a valid XRD document';
 
-                if ($e->getMessage() == $message) {
-                    return false;
+                if ($e->getMessage() === $message) {
+                    return null;
                 }
+
                 throw $e;
             }
 
             if (!$discoveredServices->valid()) {
-                return false;
+                return null;
             }
 
-            $service = new OpenID_ServiceEndpoints(
+            $service = new ServiceEndpoints(
                 $this->getServicesYadis()->getYadisId()
             );
 
             foreach ($discoveredServices as $discoveredService) {
                 $types = $discoveredService->getTypes();
-                if (array_key_exists($types[0], OpenID::$versionMap)) {
-
-                    $version  = $types[0];
-                    $localID  = null;
+                if (array_key_exists($types[0], OpenId::$versionMap)) {
+                    $localID = null;
                     $localIDs = $discoveredService->getElements('xrd:LocalID');
 
                     if (!empty($localIDs[0])) {
                         $localID = $localIDs[0];
                     }
 
-                    // Modify version if appropriate
-                    if ($localID && $version == OpenID::SERVICE_2_0_SERVER) {
-                        $version = OpenID::SERVICE_2_0_SIGNON;
-                    }
-
-                    $opEndpoint = new OpenID_ServiceEndpoint();
+                    $opEndpoint = new ServiceEndpoint();
                     $opEndpoint->setVersion($types[0]);
+
                     // Choose OpenID 2.0 if it's available
                     if (count($types) > 1) {
                         foreach ($types as $type) {
-                            if ($type == OpenID::SERVICE_2_0_SERVER
-                                || $type == OpenID::SERVICE_2_0_SIGNON
+                            if (
+                                $type == OpenID::SERVICE_2_0_SERVER ||
+                                $type == OpenID::SERVICE_2_0_SIGNON
                             ) {
                                 $opEndpoint->setVersion($type);
                                 break;
                             }
                         }
                     }
+
                     $opEndpoint->setTypes($types);
                     $opEndpoint->setURIs($discoveredService->getUris());
                     $opEndpoint->setLocalID($localID);
-                    $opEndpoint->setSource(OpenID_Discover::TYPE_YADIS);
-
+                    $opEndpoint->setSource(Discover::TYPE_YADIS);
                     $service->addService($opEndpoint);
                 }
             }
@@ -121,33 +121,33 @@ class OpenID_Discover_Yadis
             );
 
             return $service;
-
-        } catch (Services_Yadis_Exception $e) {
+        } catch (YadisException $e) {
             // Add logging or observer?
-            throw new OpenID_Discover_Exception(
+            throw new OpenIdDiscoverException(
                 $e->getMessage(),
-                OpenID_Exception::DISCOVERY_ERROR
+                OpenIdException::DISCOVERY_ERROR
             );
         }
 
         // Did the identifier even respond to the initial HTTP request?
         if ($this->yadis->getUserResponse() === false) {
-            throw new OpenID_Discover_Exception(
+            throw new OpenIdDiscoverException(
                 'No response from identifier',
-                OpenID_Exception::HTTP_ERROR
+                OpenIdException::HTTP_ERROR
             );
         }
     }
 
     /**
-     * Gets the Services_Yadis instance.  Abstracted for testing.
+     * Gets the \Pear\Services\Yadis\Yadis instance.  Abstracted for testing.
      *
-     * @return Services_Yadis
+     * @return YadisService
+     * @throws YadisException
      */
     public function getServicesYadis()
     {
         if ($this->yadis === null) {
-            $this->yadis = new Services_Yadis($this->identifier);
+            $this->yadis = new YadisService($this->identifier);
             $this->yadis->setHttpRequestOptions($this->requestOptions);
             $this->yadis->addNamespace('openid', 'http://openid.net/xmlns/1.0');
         }
@@ -155,5 +155,3 @@ class OpenID_Discover_Yadis
         return $this->yadis;
     }
 }
-
-?>

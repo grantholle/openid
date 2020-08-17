@@ -41,21 +41,21 @@ class Association
      *
      * @var string
      */
-    protected $uri = null;
+    public $uri = null;
 
     /**
      * expires_in paramater of the association.  Time is in seconds.
      *
      * @var mixed
      */
-    protected $expiresIn = null;
+    public $expiresIn = null;
 
     /**
      * Unix timestamp of when this association was created.
      *
      * @var int
      */
-    protected $created = null;
+    public $created = null;
 
     /**
      * assoc_type parameter of the association.  Should be one of HMAC-SHA1 or
@@ -63,14 +63,14 @@ class Association
      *
      * @var string
      */
-    protected $assocType = null;
+    public $assocType = null;
 
     /**
      * assoc_handle parameter of the association.
      *
      * @var string
      */
-    protected $assocHandle = null;
+    public $assocHandle = null;
 
     /**
      * In the association response, this is also referred to as the "mac_key", or is
@@ -78,7 +78,7 @@ class Association
      *
      * @var mixed
      */
-    protected $sharedSecret = null;
+    public $sharedSecret = null;
 
     /**
      * Required parameters for storing an association.

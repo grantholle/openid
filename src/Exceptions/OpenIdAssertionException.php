@@ -1,8 +1,6 @@
 <?php
 
-namespace Pear\OpenId\Assertions;
-
-use Pear\OpenID\OpenIdException;
+namespace Pear\OpenId\Exceptions;
 
 /**
  * OpenID_Assertion_Exception

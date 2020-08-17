@@ -2,6 +2,15 @@
 
 namespace Pear\OpenId;
 
+use Pear\Net\Url2;
+use Pear\OpenId\Assertions\Assertion;
+use Pear\OpenId\Assertions\OpenIDAssertionResult;
+use Pear\OpenId\Associations\Association;
+use Pear\OpenId\Associations\Request;
+use Pear\OpenId\Auth\OpenIdAuthRequest;
+use Pear\OpenId\Discover\Discover;
+use Pear\OpenId\Exceptions\OpenIdException;
+
 /**
  * OpenID_RelyingParty
  *
@@ -10,10 +19,10 @@ namespace Pear\OpenId;
  *
  * {@link prepare() prepare} sets up the request, which includes performing
  * discovery on the identifier, establishing an association with the OpenID Provider
- * (optional), and then building an OpenID_Auth_Request object.  With this object,
+ * (optional), and then building an OpenIdAuthRequest object.  With this object,
  * you can optionally add OpenID_Extension(s), and then perform the request.
  *
- * {@link verify() verify} takes a Net_URL2 object as an argument, which represents
+ * {@link verify() verify} takes a Url2 object as an argument, which represents
  * the URL that the end user was redirected to after communicating with the the
  * OpenID Provider.  It processes the URL, and if it was a positive response from
  * the OP, tries to verify that assertion.
@@ -42,12 +51,12 @@ namespace Pear\OpenId;
  *  $sreg->set('required', 'email');
  *  $sreg->set('optional', 'nickname,gender,dob');
  *
- *  // You'll need to add it to OpenID_Auth_Request
+ *  // You'll need to add it to OpenIdAuthRequest
  *  $authRequest->addExtension($sreg);
  * // Optionally get association (from cache in this example)
  *
  * // Optionally make this a checkid_immediate request
- * $auth->setMode(OpenID::MODE_CHECKID_IMMEDIATE);
+ * $auth->setMode(OpenId::MODE_CHECKID_IMMEDIATE);
  *
  * // Send user to the OP
  * header('Location: ' . $auth->getAuthorizeURL());
@@ -58,16 +67,16 @@ namespace Pear\OpenId;
  *
  * // Now, when they come back, you'll want to verify the claim ...
  *
- * // Assuming your $realm is the host which they came in to, build a Net_URL2
+ * // Assuming your $realm is the host which they came in to, build a Url2
  * // object from this request:
- * $request = new Net_URL2($realm . $_SERVER['REQUEST_URI']);
+ * $request = new Url2($realm . $_SERVER['REQUEST_URI']);
  *
  * if (!count($_POST)) {
  *     list(, $queryString) = explode('?', $_SERVER['REQUEST_URI']);
  * } else {
  *     $queryString = file_get_contents('php://input');
  * }
- * $message = new \OpenID_Message($queryString, \OpenID_Message::FORMAT_HTTP);
+ * $message = new \OpenIdMessage($queryString, \OpenIdMessage::FORMAT_HTTP);
  *
  * // Now verify:
  * $result = $rp->verify($request, $message);
@@ -86,12 +95,12 @@ namespace Pear\OpenId;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenIDRelyingParty extends OpenID
+class RelyingParty extends OpenId
 {
     /**
      * The user supplied identifier, normalized
      *
-     * @see OpenID::normalizeIdentifier()
+     * @see OpenId::normalizeIdentifier()
      * @see __construct()
      * @var string
      */
@@ -120,8 +129,8 @@ class OpenIDRelyingParty extends OpenID
      */
     protected $requestOptions = array(
         'follow_redirects' => true,
-        'timeout'          => 3,
-        'connect_timeout'  => 3
+        'timeout' => 3,
+        'connect_timeout' => 3
     );
 
     /**
@@ -144,41 +153,44 @@ class OpenIDRelyingParty extends OpenID
      * Sets the identifier, returnTo, and realm to be used for messages.  The
      * identifier is normalized before being set.
      *
-     * @param mixed $returnTo   The openid.return_to parameter value
-     * @param mixed $realm      The openid.realm parameter value
-     * @param mixed $identifier The user supplied identifier, defaults to null
-     *
-     * @throws OpenIdException When the identifier is invalid
-     * @see OpenID::normalizeIdentifier
-     *
+     * @param string $returnTo The openid.return_to parameter value
+     * @param string $realm The openid.realm parameter value
+     * @param string|null $identifier The user supplied identifier, defaults to null
+     * @throws OpenIdException
+     * @see OpenId::normalizeIdentifier
      */
-    public function __construct($returnTo, $realm, $identifier = null)
+    public function __construct(string $returnTo, string $realm, string $identifier = null)
     {
         $this->returnTo = $returnTo;
-        $this->realm    = $realm;
+        $this->realm = $realm;
+
         if ($identifier !== null) {
-            $this->normalizedID = OpenID::normalizeIdentifier($identifier);
+            $this->normalizedID = OpenId::normalizeIdentifier($identifier);
         }
     }
 
     /**
      * Enables the use of associations (default)
      *
-     * @return void
+     * @return RelyingParty
      */
     public function enableAssociations()
     {
         $this->useAssociations = true;
+
+        return $this;
     }
 
     /**
      * Disables the use if associations
      *
-     * @return void
+     * @return RelyingParty
      */
     public function disableAssociations()
     {
         $this->useAssociations = false;
+
+        return $this;
     }
 
     /**
@@ -186,7 +198,7 @@ class OpenIDRelyingParty extends OpenID
      *
      * @param int $skew Skew (or timeout) in seconds
      *
-     * @return void
+     * @return RelyingParty
      * @throws OpenIdException if $skew is not numeric
      */
     public function setClockSkew($skew)
@@ -197,7 +209,10 @@ class OpenIDRelyingParty extends OpenID
                 OpenIdException::INVALID_VALUE
             );
         }
+
         $this->clockSkew = $skew;
+
+        return $this;
     }
 
     /**
@@ -205,20 +220,21 @@ class OpenIDRelyingParty extends OpenID
      *
      * @param array $options Array of HTTP_Request2 options
      *
-     * @return OpenID_RelyingParty for fluent interface
+     * @return RelyingParty for fluent interface
      */
     public function setRequestOptions(array $options)
     {
         $this->requestOptions = $options;
+
         return $this;
     }
 
     /**
-     * Prepares an OpenID_Auth_Request and returns it.  This process includes
+     * Prepares an OpenIdAuthRequest and returns it.  This process includes
      * performing discovery and optionally creating an association before preparing
-     * the OpenID_Auth_Request object.
+     * the OpenIdAuthRequest object.
      *
-     * @return OpenID_Auth_Request
+     * @return OpenIdAuthRequest
      * @throws OpenIdException if no identifier was passed to the constructor
      */
     public function prepare()
@@ -231,25 +247,25 @@ class OpenIDRelyingParty extends OpenID
         }
 
         // Discover
-        $discover        = $this->getDiscover();
+        $discover = $this->getDiscover();
         $serviceEndpoint = $discover->services[0];
 
         // Associate
         $assocHandle = null;
         if ($this->useAssociations) {
-            $uris          = $serviceEndpoint->getURIs();
+            $uris = $serviceEndpoint->getURIs();
             $opEndpointURL = array_shift($uris);
-            $assoc         = $this->getAssociation(
+            $assoc = $this->getAssociation(
                 $opEndpointURL, $serviceEndpoint->getVersion()
             );
 
-            if ($assoc instanceof OpenID_Association) {
+            if ($assoc instanceof Association) {
                 $assocHandle = $assoc->assocHandle;
             }
         }
 
-        // Return OpenID_Auth_Request object
-        return new OpenID_Auth_Request(
+        // Return OpenIdAuthRequest object
+        return new OpenIdAuthRequest(
             $discover, $this->returnTo, $this->realm, $assocHandle
         );
     }
@@ -258,60 +274,59 @@ class OpenIDRelyingParty extends OpenID
      * Verifies an assertion response from the OP.  If the openid.mode is error, an
      * exception is thrown.
      *
-     * @param Net_URL2       $requestedURL The requested URL (that the user was
-     *                                     directed to by the OP) as a Net_URL2
-     *                                     object
-     * @param OpenID_Message $message      The OpenID_Message instance, as extractd
-     *                                     from the input (GET or POST)
-     *
-     * @return OpenID_Assertion_Response
-     *@throws OpenIdException on error or invalid openid.mode
+     * @param Url2 $requestedURL The requested URL (that the user was directed to by the OP) as a Url2 object
+     * @param OpenIdMessage $message The OpenIdMessage instance, as extracted from the input (GET or POST)
+     * @return OpenIdAssertionResult
+     * @throws Exceptions\OpenIdAssociationException
+     * @throws Exceptions\OpenIdMessageException
+     * @throws Exceptions\StoreException
+     * @throws OpenIdException on error or invalid openid.mode
      */
-    public function verify(Net_URL2 $requestedURL, OpenID_Message $message)
+    public function verify(Url2 $requestedURL, OpenIdMessage $message)
     {
         // Unsolicited assertion?
         if ($this->normalizedID === null) {
-            $unsolicitedID      = $message->get('openid.claimed_id');
-            $this->normalizedID = OpenID::normalizeIdentifier($unsolicitedID);
+            $unsolicitedID = $message->get('openid.claimed_id');
+            $this->normalizedID = OpenId::normalizeIdentifier($unsolicitedID);
         }
 
-        $mode   = $message->get('openid.mode');
-        $result = new OpenID_Assertion_Result;
+        $mode = $message->get('openid.mode');
+        $result = new OpenIdAssertionResult();
 
-        OpenID::setLastEvent(__METHOD__, print_r($message->getArrayFormat(), true));
+        OpenId::setLastEvent(__METHOD__, print_r($message->getArrayFormat(), true));
 
         switch ($mode) {
-        case OpenID::MODE_ID_RES:
-            if ($message->get('openid.ns') === null
-                && $message->get('openid.user_setup_url') !== null
-            ) {
-                // Negative 1.1 checkid_immediate response
+            case OpenId::MODE_ID_RES:
+                if ($message->get('openid.ns') === null
+                    && $message->get('openid.user_setup_url') !== null
+                ) {
+                    // Negative 1.1 checkid_immediate response
+                    $result->setAssertionMethod($mode);
+                    $result->setUserSetupURL($message->get('openid.user_setup_url'));
+                    return $result;
+                }
+                break;
+            case OpenId::MODE_CANCEL:
+            case OpenId::MODE_SETUP_NEEDED:
                 $result->setAssertionMethod($mode);
-                $result->setUserSetupURL($message->get('openid.user_setup_url'));
                 return $result;
-            }
-            break;
-        case OpenID::MODE_CANCEL:
-        case OpenID::MODE_SETUP_NEEDED:
-            $result->setAssertionMethod($mode);
-            return $result;
-        case OpenID::MODE_ERROR:
-            throw new OpenIdException(
-                $message->get('openid.error'),
-                OpenIdException::OPENID_ERROR
-            );
-        default:
-            throw new OpenIdException(
-                'Unknown mode: ' . $mode,
-                OpenIdException::INVALID_VALUE
-            );
+            case OpenId::MODE_ERROR:
+                throw new OpenIdException(
+                    $message->get('openid.error'),
+                    OpenIdException::OPENID_ERROR
+                );
+            default:
+                throw new OpenIdException(
+                    'Unknown mode: ' . $mode,
+                    OpenIdException::INVALID_VALUE
+                );
         }
 
-        $discover        = $this->getDiscover();
+        $discover = $this->getDiscover();
         $serviceEndpoint = $discover->services[0];
-        $URIs            = $serviceEndpoint->getURIs();
-        $opEndpointURL   = array_shift($URIs);
-        $assertion       = $this->getAssertionObject($message, $requestedURL);
+        $URIs = $serviceEndpoint->getURIs();
+        $opEndpointURL = array_shift($URIs);
+        $assertion = $this->getAssertionObject($message, $requestedURL);
 
         $result->setDiscover($discover);
 
@@ -319,15 +334,14 @@ class OpenIDRelyingParty extends OpenID
         if ($this->useAssociations) {
             if ($message->get('openid.invalidate_handle') === null) {
                 // Don't fall back to check_authentication
-                $result->setAssertionMethod(OpenID::MODE_ASSOCIATE);
+                $result->setAssertionMethod(OpenId::MODE_ASSOCIATE);
                 $assoc = $this->getStore()
-                    ->getAssociation(
-                        $opEndpointURL, $message->get('openid.assoc_handle')
-                    );
-                OpenID::setLastEvent(__METHOD__, print_r($assoc, true));
+                    ->getAssociation($opEndpointURL, $message->get('openid.assoc_handle'));
+                OpenId::setLastEvent(__METHOD__, print_r($assoc, true));
 
-                if ($assoc instanceof OpenID_Association
-                    && $assoc->checkMessageSignature($message)
+                if (
+                    $assoc instanceof Association &&
+                    $assoc->checkMessageSignature($message)
                 ) {
                     $result->setAssertionResult(true);
                 }
@@ -344,11 +358,13 @@ class OpenIDRelyingParty extends OpenID
         }
 
         // Check via check_authenticate
-        $result->setAssertionMethod(OpenID::MODE_CHECK_AUTHENTICATION);
+        $result->setAssertionMethod(OpenId::MODE_CHECK_AUTHENTICATION);
         $result->setCheckAuthResponse($assertion->checkAuthentication());
+
         if ($result->getCheckAuthResponse()->get('is_valid') == 'true') {
             $result->setAssertionResult(true);
         }
+
         return $result;
     }
 
@@ -356,16 +372,17 @@ class OpenIDRelyingParty extends OpenID
      * Gets discovered information from cache if it exists, otherwise performs
      * discovery.
      *
-     * @return OpenID_Discover
+     * @return Discover
      *@throws OpenIdException if discovery fails
-     * @see OpenID_Discover::getDiscover()
+     * @see Discover::getDiscover()
      */
     protected function getDiscover()
     {
-        $discover = OpenID_Discover::getDiscover(
+        $discover = Discover::getDiscover(
             $this->normalizedID, $this->getStore(), $this->getRequestOptions()
         );
-        if (!$discover instanceof OpenID_Discover) {
+
+        if (!$discover instanceof Discover) {
             // @codeCoverageIgnoreStart
             throw new OpenIdException(
                 'Unable to discover OP Endpoint URL',
@@ -381,15 +398,17 @@ class OpenIDRelyingParty extends OpenID
      * Gets an association from cache if it exists, otherwise, creates one.
      *
      * @param string $opEndpointURL The OP Endpoint URL to communicate with
-     * @param string $version       The version of OpenID being used
-     *
-     * @return OpenID_Association on success, false on failure
+     * @param string $version The version of OpenID being used
+     * @return Association on success, false on failure
+     * @throws Exceptions\OpenIdAssociationException
+     * @throws Exceptions\OpenIdMessageException
+     * @throws Exceptions\StoreException
      */
-    protected function getAssociation($opEndpointURL, $version)
+    protected function getAssociation(string $opEndpointURL, string $version)
     {
         $assocCache = $this->getStore()->getAssociation($opEndpointURL);
 
-        if ($assocCache instanceof OpenID_Association) {
+        if ($assocCache instanceof Association) {
             return $assocCache;
         }
 
@@ -397,8 +416,8 @@ class OpenIDRelyingParty extends OpenID
         $assoc->setRequestOptions($this->getRequestOptions());
         $result = $assoc->associate();
 
-        if (!$result instanceof OpenID_Association) {
-            return false;
+        if (!$result instanceof Association) {
+            return null;
         }
 
         self::getStore()->setAssociation($result);
@@ -407,33 +426,32 @@ class OpenIDRelyingParty extends OpenID
     }
 
     /**
-     * Gets a new OpenID_Association_Request object.  Abstracted for testing.
+     * Gets a new Request object.  Abstracted for testing.
      *
      * @param string $opEndpointURL The OP endpoint URL to communicate with
-     * @param string $version       The OpenID version being used
-     *
+     * @param string $version The OpenID version being used
+     * @return Request
+     * @throws Exceptions\OpenIdAssociationException
+     * @throws Exceptions\OpenIdMessageException
      * @see prepare()
-     * @return OpenID_Association_Request
      */
-    protected function getAssociationRequestObject($opEndpointURL, $version)
+    protected function getAssociationRequestObject(string $opEndpointURL, string $version)
     {
-        return new OpenID_Association_Request($opEndpointURL, $version);
+        return new Request($opEndpointURL, $version);
     }
 
     /**
-     * Gets an instance of OpenID_Assertion.  Abstracted for testing purposes.
+     * Gets an instance of Assertion().  Abstracted for testing purposes.
      *
-     * @param OpenID_Message $message      The message passed to verify()
-     * @param Net_URL2       $requestedURL The URL requested (redirect from OP)
-     *
+     * @param OpenIdMessage $message The message passed to verify()
+     * @param Url2 $requestedURL The URL requested (redirect from OP)
+     * @return Assertion
+     * @throws Exceptions\OpenIdAssociationException
      * @see    verify()
-     * @return OpenID_Assertion
      */
-    protected function getAssertionObject($message, $requestedURL)
+    protected function getAssertionObject(OpenIdMessage $message, Url2 $requestedURL)
     {
-        return new OpenID_Assertion(
-            $message, $requestedURL, $this->clockSkew
-        );
+        return new Assertion($message, $requestedURL, $this->clockSkew);
     }
 
     /**
@@ -446,4 +464,3 @@ class OpenIDRelyingParty extends OpenID
         return $this->requestOptions;
     }
 }
-?>

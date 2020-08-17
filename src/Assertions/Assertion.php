@@ -1,4 +1,12 @@
 <?php
+
+namespace Pear\OpenId\Assertions;
+
+use Pear\Net\Url2;
+use Pear\OpenId\Associations\Association;
+use Pear\OpenId\Discover\Discover;use Pear\OpenId\Exceptions\OpenIdAssociationException;use Pear\OpenId\Exceptions\OpenIdException;use Pear\OpenId\Nonce;use Pear\OpenId\OpenId;
+use Pear\OpenId\OpenIdMessage;
+
 /**
  * OpenID_Assertion
  *
@@ -13,17 +21,6 @@
  */
 
 /**
- * Required files
- */
-require_once 'OpenID.php';
-require_once 'src/Discover.php';
-require_once 'src/Assertions/Exception.php';
-require_once 'src/Assertions/Exceptions/NoClaimedID.php';
-require_once 'src/Message.php';
-require_once 'src/Nonce.php';
-require_once 'Net/URL2.php';
-
-/**
  * Class for verifying assertions.  Does basic validation (nonce, return_to, etc),
  * as well as signature verification and check_authentication.
  *
@@ -34,12 +31,12 @@ require_once 'Net/URL2.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_Assertion extends OpenID
+class Assertion extends OpenId
 {
     /**
      * Response message passed to the constructor
      *
-     * @var OpenID_Message
+     * @var OpenIdMessage
      */
     protected $message = null;
 
@@ -61,14 +58,13 @@ class OpenID_Assertion extends OpenID
      * Sets the request message, url, and clock skew.  Then does some basic
      * validation (return_to, nonce, discover).
      *
-     * @param OpenID_Message $message      Message from the request
-     * @param Net_URL2       $requestedURL The requested URL
-     * @param int            $clockSkew    Nonce clock skew in seconds
-     *
-     * @return void
+     * @param OpenIdMessage $message Message from the request
+     * @param Url2 $requestedURL The requested URL
+     * @param int|null $clockSkew Nonce clock skew in seconds
+     * @throws OpenIdAssociationException
      */
     public function __construct(
-        OpenID_Message $message, Net_URL2 $requestedURL, $clockSkew = null
+        OpenIdMessage $message, Url2 $requestedURL, int $clockSkew = null
     ) {
         $this->message      = $message;
         $this->requestedURL = $requestedURL;
@@ -92,12 +88,13 @@ class OpenID_Assertion extends OpenID
     /**
      * Verifies the signature of this message association.
      *
-     * @param OpenID_Association $assoc Association to use for checking the signature
-     *
-     * @return bool result of OpenID_Association::checkMessageSignature()
-     * @see OpenID_Association::checkMessageSignature()
+     * @param Association $assoc Association to use for checking the signature
+     * @return bool result of Association ::checkMessageSignature()
+     * @throws OpenIdAssociationException
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
+     * @see Association::checkMessageSignature()
      */
-    public function verifySignature(OpenID_Association $assoc)
+    public function verifySignature(Association $assoc)
     {
         return $assoc->checkMessageSignature($this->message);
     }
@@ -106,24 +103,24 @@ class OpenID_Assertion extends OpenID
      * Performs a check_authentication request.
      *
      * @param array $options Options to pass to HTTP_Request
-     *
-     * @return OpenID_Message Reponse to the check_authentication request
+     * @return OpenIdMessage Reponse to the check_authentication request
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
     public function checkAuthentication(array $options = array())
     {
         $this->message->set('openid.mode', OpenID::MODE_CHECK_AUTHENTICATION);
 
-        $opURL    = $this->message->get('openid.op_endpoint');
+        $opURL = $this->message->get('openid.op_endpoint');
         $response = $this->directRequest($opURL, $this->message, $options);
 
-        return new OpenID_Message($response->getBody(), OpenID_Message::FORMAT_KV);
+        return new OpenIdMessage($response->getBody(), OpenIdMessage::FORMAT_KV);
     }
 
     /**
      * Validates the openid.return_to parameter in the response.
      *
      * @return void
-     * @throws OpenID_Assertion_Exception on failure
+     * @throws OpenIdAssociationException() on failure
      */
     protected function validateReturnTo()
     {
@@ -135,13 +132,13 @@ class OpenID_Assertion extends OpenID
 
         // Validate openid.return_to
         if (!filter_var($returnTo, FILTER_VALIDATE_URL)) {
-            throw new OpenID_Assertion_Exception(
+            throw new OpenIdAssociationException(
                 'openid.return_to parameter is invalid or missing',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
-        $obj1 = new Net_URL2($returnTo);
+        $obj1 = new Url2($returnTo);
         $obj2 = $this->requestedURL;
 
         $queryString1 = $obj1->getQueryVariables();
@@ -151,9 +148,9 @@ class OpenID_Assertion extends OpenID
         $obj2->setQueryVariables(array());
 
         if ($obj1->getURL() != $obj2->getURL()) {
-            throw new OpenID_Assertion_Exception(
+            throw new OpenIdAssociationException(
                 'openid.return_to does not match the requested URL',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -165,9 +162,9 @@ class OpenID_Assertion extends OpenID
             if (!isset($queryString2[$param])
                 || $queryString2[$param] != $value
             ) {
-                throw new OpenID_Assertion_Exception(
+                throw new OpenIdAssociationException(
                     'openid.return_to parameters do not match requested url',
-                    OpenID_Exception::INVALID_VALUE
+                    OpenIdException::INVALID_VALUE
                 );
             }
         }
@@ -177,43 +174,43 @@ class OpenID_Assertion extends OpenID
      * Validates and performs discovery on the openid.claimed_id paramter.
      *
      * @return void
-     * @throws OpenID_Assertion_Exception on failure
+     * @throws OpenIdAssociationException() on failure
      */
     protected function validateDiscover()
     {
         $claimedID = $this->message->get('openid.claimed_id');
         if ($claimedID === null) {
-            throw new OpenID_Assertion_Exception_NoClaimedID(
+            throw new OpenIdAssociationException(
                 'No claimed_id in message',
-                OpenID_Exception::MISSING_DATA
+                OpenIdException::MISSING_DATA
             );
         }
 
         if ($claimedID === OpenID::SERVICE_2_0_SERVER) {
-            throw new OpenID_Assertion_Exception(
+            throw new OpenIdAssociationException(
                 'Claimed identifier cannot be an OP identifier',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
-        $url = new Net_URL2($claimedID);
+        $url = new Url2($claimedID);
         // Remove the fragment, per the spec
         $url->setFragment(false);
 
         $discover = $this->getDiscover($url->getURL());
-        if (!$discover instanceof OpenID_Discover) {
-            throw new OpenID_Assertion_Exception(
+        if (!$discover instanceof Discover) {
+            throw new OpenIdAssociationException(
                 'Unable to discover claimed_id',
-                OpenID_Exception::DISCOVERY_ERROR
+                OpenIdException::DISCOVERY_ERROR
             );
         }
 
         $URIs  = $discover->services[0]->getURIs();
         $opURL = array_shift($URIs);
         if ($opURL !== $this->message->get('openid.op_endpoint')) {
-            throw new OpenID_Assertion_Exception(
+            throw new OpenIdAssociationException(
                 'This OP is not authorized to issue assertions for this claimed id',
-                OpenID_Exception::DISCOVERY_ERROR
+                OpenIdException::DISCOVERY_ERROR
             );
         }
     }
@@ -222,18 +219,18 @@ class OpenID_Assertion extends OpenID
      * Validates the openid.response_nonce parameter.
      *
      * @return void
-     * @throws OpenID_Assertion_Exception on invalid or existing nonce
+     * @throws OpenIdAssociationException() on invalid or existing nonce
      */
     protected function validateNonce()
     {
         $opURL         = $this->message->get('openid.op_endpoint');
         $responseNonce = $this->message->get('openid.response_nonce');
 
-        $nonce = new OpenID_Nonce($opURL, $this->clockSkew);
+        $nonce = new Nonce($opURL, $this->clockSkew);
         if (!$nonce->verifyResponseNonce($responseNonce)) {
-            throw new OpenID_Assertion_Exception(
+            throw new OpenIdAssociationException(
                 'Invalid or already existing response_nonce',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
     }
@@ -243,31 +240,31 @@ class OpenID_Assertion extends OpenID
      * it from storage.. (For use with OpenID 1.1 only)
      *
      * @return void
-     * @throws OpenID_Assertion_Exception on invalid or non-existing nonce
+     * @throws OpenIdAssociationException() on invalid or non-existing nonce
      */
     protected function validateReturnToNonce()
     {
         $returnTo = $this->message->get('openid.return_to');
         if ($returnTo === null) {
             // Must be a checkid_immediate negative assertion.
-            $rtURL2   = new Net_URL2($this->message->get('openid.user_setup_url'));
+            $rtURL2   = new Url2($this->message->get('openid.user_setup_url'));
             $rtqs     = $rtURL2->getQueryVariables();
             $returnTo = $rtqs['openid.return_to'];
             $identity = $rtqs['openid.identity'];
         }
-        $netURL = new Net_URL2($returnTo);
+        $netURL = new Url2($returnTo);
         $qs     = $netURL->getQueryVariables();
-        if (!array_key_exists(OpenID_Nonce::RETURN_TO_NONCE, $qs)) {
-            throw new OpenID_Assertion_Exception(
+        if (!array_key_exists(Nonce::RETURN_TO_NONCE, $qs)) {
+            throw new OpenIdAssociationException(
                 'Missing OpenID 1.1 return_to nonce',
-                OpenID_Exception::MISSING_DATA
+                OpenIdException::MISSING_DATA
             );
         }
 
         if (!isset($identity)) {
             $identity = $this->message->get('openid.identity');
         }
-        $nonce     = $qs[OpenID_Nonce::RETURN_TO_NONCE];
+        $nonce     = $qs[Nonce::RETURN_TO_NONCE];
         $discover  = $this->getDiscover($identity);
         $endPoint  = $discover->services[0];
         $URIs      = $endPoint->getURIs();
@@ -281,9 +278,9 @@ class OpenID_Assertion extends OpenID
         OpenID::setLastEvent(__METHOD__, $logMessage);
 
         if (!$fromStore) {
-            throw new OpenID_Assertion_Exception(
+            throw new OpenIdAssociationException(
                 'Invalid OpenID 1.1 return_to nonce in response',
-                OpenID_Exception::INVALID_VALUE
+                OpenIdException::INVALID_VALUE
             );
         }
 
@@ -291,15 +288,14 @@ class OpenID_Assertion extends OpenID
     }
 
     /**
-     * Gets an instance of OpenID_Discover.  Abstracted for testing.
+     * Gets an instance of Discover.  Abstracted for testing.
      *
      * @param string $identifier OpenID Identifier
      *
-     * @return OpenID_Discover|false
+     * @return Discover|false
      */
     protected function getDiscover($identifier)
     {
-        return OpenID_Discover::getDiscover($identifier, self::getStore());
+        return Discover::getDiscover($identifier, self::getStore());
     }
 }
-?>
