@@ -1,4 +1,12 @@
 <?php
+
+namespace Tests;
+
+use Pear\OpenId\Exceptions\StoreException;
+use Pear\OpenId\Store\Store;
+use Tests\Store\NotInterface;
+use Tests\Store\StoreMock;
+
 /**
  * OpenID_StoreTest
  *
@@ -13,11 +21,6 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/Store.php';
-require_once 'src/Store/NoClass.php';
-require_once 'src/Store/Mock.php';
-require_once 'src/Store/NotInterface.php';
-
 /**
  * OpenID_StoreTest
  *
@@ -29,38 +32,18 @@ require_once 'src/Store/NotInterface.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_StoreTest extends PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * testFactorySuccess
-     *
-     * @return void
-     */
     public function testFactorySuccess()
     {
-        $object = OpenID_Store::factory('Mock');
+        $object = Store::factory(StoreMock::class);
+        $this->assertInstanceOf(StoreMock::class, $object);
     }
 
-    /**
-     * testFactoryFailNoClass
-     *
-     * @expectedException OpenID_Store_Exception
-     * @return void
-     */
-    public function testFactoryFailNoClass()
-    {
-        $object = OpenID_Store::factory('NoClass');
-    }
-
-    /**
-     * testFactoryFailNotInterface
-     *
-     * @expectedException OpenID_Store_Exception
-     * @return void
-     */
     public function testFactoryFailNotInterface()
     {
-        $object = OpenID_Store::factory('NotInterface');
+        $this->expectException(StoreException::class);
+        Store::factory(NotInterface::class);
     }
 }
-?>
+
