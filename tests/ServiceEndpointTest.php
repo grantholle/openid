@@ -1,4 +1,11 @@
 <?php
+
+namespace Tests;
+
+use Pear\OpenId\Discover\HTML;
+use Pear\OpenId\ServiceEndpoint;
+use PHPUnit\Framework\TestCase;
+
 /**
  * OpenID_ServiceEndpointTest
  *
@@ -13,8 +20,6 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/ServiceEndpoint.php';
-
 /**
  * Test class for the OpenID_ServiceEndpoint class
  *
@@ -26,40 +31,23 @@ require_once 'src/ServiceEndpoint.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
+class ServiceEndpointTest extends TestCase
 {
     /**
-     * @var OpenID_ServiceEndpoint
+     * @var ServiceEndpoint
      */
     protected $object;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     *
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->object = new OpenID_ServiceEndpoint;
+        $this->object = new ServiceEndpoint;
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return void
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->object);
     }
 
-    /**
-     * Tests that isValid returns false with no URIs
-     *
-     * @return void
-     */
     public function testIsValidFalse()
     {
         $isValid = $this->object->isValid();
@@ -67,40 +55,30 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($isValid);
     }
 
-    /**
-     * Tests that attempting to set an invalid URI fails
-     *
-     * @return void
-     */
     public function testSetInvalidURI()
     {
-        $invalid = array(
+        $invalid = [
             'thisiswrong'
-        );
+        ];
 
         $uris = $this->object->getURIs();
-        $this->assertEquals(array(), $uris);
+        $this->assertEquals([], $uris);
 
         $this->object->setURIs($invalid);
 
         $uris = $this->object->getURIs();
-        $this->assertEquals(array(), $uris);
+        $this->assertEquals([], $uris);
     }
 
-    /**
-     * Tests that getting and setting the URIs variable works properly
-     *
-     * @return void
-     */
     public function testGetSetURIs()
     {
-        $testURIs = array(
+        $testURIs = [
             'http://example.com',
             'http://myopenid.com'
-        );
+        ];
 
         $uris = $this->object->getURIs();
-        $this->assertEquals(array(), $uris);
+        $this->assertEquals([], $uris);
 
         $this->object->setURIs($testURIs);
 
@@ -108,20 +86,15 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testURIs, $uris);
     }
 
-    /**
-     * Tests that getting and setting the types variable works properly
-     *
-     * @return void
-     */
     public function testGetSetTypes()
     {
-        $testTypes = array(
+        $testTypes = [
             'foo',
             'bar'
-        );
+        ];
 
         $types = $this->object->getTypes();
-        $this->assertEquals(array(), $types);
+        $this->assertEquals([], $types);
 
         $this->object->setTypes($testTypes);
 
@@ -129,11 +102,6 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testTypes, $types);
     }
 
-    /**
-     * Tests that getting and setting the local ID variable works properly
-     *
-     * @return void
-     */
     public function testGetSetLocalID()
     {
         $testLocalID = 'foobar';
@@ -147,14 +115,9 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testLocalID, $localID);
     }
 
-    /**
-     * Tests that getting and setting the source variable works properly
-     *
-     * @return void
-     */
     public function testGetSetSource()
     {
-        $testSource = 'HTML';
+        $testSource = HTML::class;
 
         $source = $this->object->getSource();
         $this->assertNull($source);
@@ -165,11 +128,6 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testSource, $source);
     }
 
-    /**
-     * Tests that getting and setting the version variable works properly
-     *
-     * @return void
-     */
     public function testGetSetVersion()
     {
         $testVersion = 'http://specs.openid.net/auth/2.0/server';
@@ -183,19 +141,12 @@ class OpenID_ServiceEndpointTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testVersion, $version);
     }
 
-    /**
-     * Tests the isValid() method
-     *
-     * @return void
-     */
     public function testIsValidTrue()
     {
-        $this->object->setURIs(array('http://example.com'));
+        $this->object->setURIs(['http://example.com']);
 
         $isValid = $this->object->isValid();
 
         $this->assertTrue($isValid);
     }
 }
-
-?>

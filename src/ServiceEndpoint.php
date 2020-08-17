@@ -142,10 +142,9 @@ class ServiceEndpoint
      * Sets the source of discovery
      *
      * @param string $source The source of discovery
-     *
      * @return void
      */
-    public function setSource($source)
+    public function setSource(string $source)
     {
         if (in_array($source, Discover::$discoveryOrder)) {
             $this->source = $source;
