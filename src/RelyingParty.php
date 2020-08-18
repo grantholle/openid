@@ -4,7 +4,7 @@ namespace Pear\OpenId;
 
 use Pear\Net\Url2;
 use Pear\OpenId\Assertions\Assertion;
-use Pear\OpenId\Assertions\OpenIDAssertionResult;
+use Pear\OpenId\Assertions\OpenIdAssertionResult;
 use Pear\OpenId\Associations\Association;
 use Pear\OpenId\Associations\Request;
 use Pear\OpenId\Auth\OpenIdAuthRequest;
