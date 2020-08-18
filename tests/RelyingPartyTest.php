@@ -1,4 +1,27 @@
 <?php
+
+namespace Tests;
+
+use Pear\Net\Url2;
+use Pear\OpenId\Assertions\Assertion;
+use Pear\OpenId\Assertions\OpenIdAssertionResult;
+use Pear\OpenId\Associations\Association;
+use Pear\OpenId\Associations\Request;
+use Pear\OpenId\Auth\OpenIdAuthRequest;
+use Pear\OpenId\Discover\Discover;
+use Pear\OpenId\Exceptions\OpenIdException;
+use Pear\OpenId\Nonce;
+use Pear\OpenId\Observers\Log;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\OpenIdMessage;
+use Pear\OpenId\RelyingParty;
+use Pear\OpenId\ServiceEndpoint;
+use Pear\OpenId\ServiceEndpoints;
+use PHPUnit\Framework\TestCase;
+use Tests\Discover\Mock;
+use Tests\RelyingParty\RelyingPartyMock;
+use Tests\Store\StoreMock;
+
 /**
  * OpenID_RelyingPartyTest
  *
@@ -13,18 +36,6 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/RelyingParty.php';
-require_once 'src/RelyingParty/Mock.php';
-require_once 'src/Store/Mock.php';
-require_once 'src/Observers/Log.php';
-require_once 'src/Discover.php';
-require_once 'src/Association.php';
-require_once 'src/Associations/Request.php';
-require_once 'OpenID.php';
-require_once 'src/Nonce.php';
-require_once 'Net/URL2.php';
-require_once 'HTTP/Request2/Adapter/Mock.php';
-
 /**
  * OpenID_RelyingPartyTest
  *
@@ -36,140 +47,92 @@ require_once 'HTTP/Request2/Adapter/Mock.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
+class RelyingPartyTest extends TestCase
 {
-    protected $id            = 'http://user.example.com';
-    protected $returnTo      = 'http://openid.examplerp.com';
-    protected $realm         = 'http://examplerp.com';
-    protected $rp            = null;
+    protected $id = 'http://user.example.com';
+    protected $returnTo = 'http://openid.examplerp.com';
+    protected $realm = 'http://examplerp.com';
+    protected $rp = null;
     protected $opEndpointURL = 'http://exampleop.com';
-    protected $discover      = null;
-    protected $store         = null;
-    protected $association   = null;
+    protected $discover = null;
+    protected $store = null;
+    protected $association = null;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->rp = $this->getMock('OpenID_RelyingParty',
-                                   array('getAssociationRequestObject',
-                                         'getAssertionObject'),
-                                   array($this->returnTo, $this->realm, $this->id));
+        $this->rp = $this->getMockBuilder(RelyingParty::class)
+            ->onlyMethods(['getAssociationRequestObject', 'getAssertionObject'])
+            ->setConstructorArgs([$this->returnTo, $this->realm, $this->id])
+            ->getMock();
 
-        $this->store = $this->getMock('OpenID_Store_Mock',
-                                      array('getDiscover',
-                                            'getAssociation',
-                                            'getNonce'));
+        $this->store = $this->createMock(StoreMock::class);
 
-        OpenID::setStore($this->store);
+        OpenId::setStore($this->store);
 
-        $this->discover = $this->getMock('OpenID_Discover',
-                                         array('__get'),
-                                         array($this->id));
+        $this->discover = new Mock($this->id);
 
-        $opEndpoint = new OpenID_ServiceEndpoint;
-        $opEndpoint->setURIs(array($this->opEndpointURL));
-        $opEndpoint->setVersion(OpenID::SERVICE_2_0_SERVER);
-        $opEndpoints = new OpenID_ServiceEndpoints($this->id, $opEndpoint);
-
-        $this->discover->expects($this->any())
-                       ->method('__get')
-                       ->will($this->returnValue($opEndpoints));
-
-        $params = array(
-            'uri'          => 'http://example.com',
-            'expiresIn'    => 600,
-            'created'      => 1240980848,
-            'assocType'    => 'HMAC-SHA256',
-            'assocHandle'  => 'foobar{}',
+        $params = [
+            'uri' => 'http://example.com',
+            'expiresIn' => 600,
+            'created' => 1240980848,
+            'assocType' => 'HMAC-SHA256',
+            'assocHandle' => 'foobar{}',
             'sharedSecret' => '12345qwerty'
-        );
+        ];
 
-        $this->association = $this->getMock('OpenID_Association',
-                                            array('checkMessageSignature'),
-                                            array($params));
+        $this->association = $this->getMockBuilder(Association::class)
+            ->onlyMethods(['checkMessageSignature'])
+            ->setConstructorArgs([$params])
+            ->getMock();
     }
 
-    /**
-     * tearDown
-     *
-     * @return void
-     */
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->rp          = null;
-        $this->store       = null;
+        $this->rp = null;
+        $this->store = null;
         $this->association = null;
     }
 
-    /**
-     * testEnableDisableAssociations
-     *
-     * @return void
-     */
-    public function testEnableDisableAssociations()
+    protected function setStoreMethods($once = false)
     {
-        $this->rp->enableAssociations();
-        $this->rp->disableAssociations();
+        $this->store->expects($once ? $this->once() : $this->any())
+            ->method('getDiscover')
+            ->will($this->returnValue($this->discover));
+        $this->store->expects($once ? $this->once() : $this->any())
+            ->method('getAssociation')
+            ->will($this->returnValue(false));
     }
 
-    /**
-     * testSetClockSkew
-     *
-     * @return void
-     */
+    public function testEnableDisableAssociations()
+    {
+        $anExceptionWasThrown = false;
+
+        try {
+            $this->rp->enableAssociations();
+            $this->rp->disableAssociations();
+        } catch (\Exception $exception) {
+            $anExceptionWasThrown = true;
+        }
+
+        $this->assertFalse($anExceptionWasThrown);
+    }
+
     public function testSetClockSkew()
     {
         $this->rp->setClockSkew(50);
+        $this->assertEquals(50, $this->rp->getClockSkew());
     }
 
-    /**
-     * testSetClockSkewFail
-     *
-     * @expectedException OpenID_Exception
-     * @return void
-     */
-    public function testSetClockSkewFail()
-    {
-        $this->rp->setClockSkew('foo');
-    }
-
-    /**
-     * testPrepare
-     *
-     * @return void
-     */
-    public function testPrepare()
-    {
-        $this->store->expects($this->once())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
-        $this->store->expects($this->once())
-                    ->method('getAssociation')
-                    ->will($this->returnValue($this->association));
-
-        $auth = $this->rp->prepare();
-        $this->assertInstanceOf('OpenID_Auth_Request', $auth);
-    }
-
-    /**
-     * testPrepareFail
-     *
-     * @expectedException OpenID_Exception
-     * @return void
-     */
     public function testPrepareFail()
     {
-        $rp = new OpenID_RelyingParty($this->returnTo, $this->realm);
+        $this->expectException(OpenIdException::class);
+        $rp = new RelyingParty($this->returnTo, $this->realm);
         $rp->prepare();
     }
 
     public function testPrepareRequestOptions()
     {
-        $mock = new HTTP_Request2_Adapter_Mock();
+        $mock = new \Pear\Http\Request2\Adapters\Mock();
         //yadis application/xrds+xml request
         $mock->addResponse(
             "HTTP/1.1 200 OK\r\n"
@@ -187,195 +150,137 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
             OpenID::normalizeIdentifier($this->id)
         );
 
-        $this->rp = new OpenID_RelyingParty(
-            $this->returnTo, $this->realm, $this->id
-        );
+        $this->rp = new RelyingParty($this->returnTo, $this->realm, $this->id);
         $options = $this->rp->getRequestOptions();
         $options['adapter'] = $mock;
 
         $this->rp->setRequestOptions($options);
         $auth = $this->rp->prepare();
-        $this->assertInstanceOf('OpenID_Auth_Request', $auth);
+        $this->assertInstanceOf(OpenIdAuthRequest::class, $auth);
     }
 
-    /**
-     * testGetAssociationFail
-     *
-     * @return void
-     */
     public function testGetAssociationFail()
     {
-        $this->store->expects($this->once())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
-        $this->store->expects($this->once())
-                    ->method('getAssociation')
-                    ->will($this->returnValue(false));
+        $this->setStoreMethods(true);
 
-        $assocRequest = $this->getMock('OpenID_Association_Request',
-                                       array('associate'),
-                                       array($this->opEndpointURL,
-                                             OpenID::SERVICE_2_0_SERVER));
+        $assocRequest = $this->getMockBuilder(Request::class)
+            ->onlyMethods(['associate'])
+            ->setConstructorArgs([$this->opEndpointURL, OpenId::SERVICE_2_0_SERVER])
+            ->getMock();
 
         $assocRequest->expects($this->once())
-                     ->method('associate')
-                     ->will($this->returnValue($this->association));
+            ->method('associate')
+            ->will($this->returnValue($this->association));
 
         $this->rp->expects($this->once())
-                 ->method('getAssociationRequestObject')
-                 ->will($this->returnValue($assocRequest));
+            ->method('getAssociationRequestObject')
+            ->will($this->returnValue($assocRequest));
 
-
-        $auth = $this->rp->prepare();
-        $this->assertInstanceOf('OpenID_Auth_Request', $auth);
+        $this->assertInstanceOf(OpenIdAuthRequest::class, $this->rp->prepare());
     }
 
-    /**
-     * testGetAssociation
-     *
-     * @return void
-     */
     public function testGetAssociation()
     {
-        $this->store->expects($this->once())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
-        $this->store->expects($this->once())
-                    ->method('getAssociation')
-                    ->will($this->returnValue(false));
+        $this->setStoreMethods(true);
 
-        $assocRequest = $this->getMock('OpenID_Association_Request',
-                                       array('associate'),
-                                       array($this->opEndpointURL,
-                                             OpenID::SERVICE_2_0_SERVER));
+        $assocRequest = $this->getMockBuilder(Request::class)
+            ->onlyMethods(['associate'])
+            ->setConstructorArgs([$this->opEndpointURL, OpenId::SERVICE_2_0_SERVER])
+            ->getMock();
 
         $assocRequest->expects($this->once())
-                     ->method('associate')
-                     ->will($this->returnValue(false));
+            ->method('associate')
+            ->will($this->returnValue(false));
 
         $this->rp->expects($this->once())
-                 ->method('getAssociationRequestObject')
-                 ->will($this->returnValue($assocRequest));
+            ->method('getAssociationRequestObject')
+            ->will($this->returnValue($assocRequest));
 
-        $auth = $this->rp->prepare();
-        $this->assertInstanceOf('OpenID_Auth_Request', $auth);
+        $this->assertInstanceOf(OpenIdAuthRequest::class, $this->rp->prepare());
     }
 
-    /**
-     * testGetAssociationRequestObject
-     *
-     * @return void
-     */
     public function testGetAssociationRequestObject()
     {
-        $rp = new OpenID_RelyingParty_Mock($this->returnTo,
-                                           $this->realm,
-                                           $this->id);
+        $rp = new RelyingPartyMock($this->returnTo, $this->realm, $this->id);
 
-        $a = $rp->returnGetAssociationRequestObject($this->opEndpointURL,
-                                                    OpenID::SERVICE_2_0_SERVER);
-        $this->assertInstanceOf('OpenID_Association_Request', $a);
+        $a = $rp->returnGetAssociationRequestObject($this->opEndpointURL, OpenID::SERVICE_2_0_SERVER);
+        $this->assertInstanceOf(Request::class, $a);
     }
 
     /**
-     * Converts an OpenID_Message instance to a Net_URL2 instance based on
+     * Converts an OpenIdMessage instance to a Net_URL2 instance based on
      * $this->returnTo.  This was added to ease the transition from the old
      * verify() signature to the new one.
      *
-     * @param OpenID_Message $message Instance of OpenID_Message
-     *
-     * @return Net_URL2
+     * @param OpenIdMessage $message Instance of OpenIdMessage
+     * @return Url2
+     * @throws \Pear\OpenId\Exceptions\OpenIdMessageException
      */
-    protected function messageToNetURL2(OpenID_Message $message)
+    protected function messageToNetURL2(OpenIdMessage $message)
     {
-        return new Net_URL2($this->returnTo . '?' . $message->getHTTPFormat());
+        return new Url2($this->returnTo . '?' . $message->getHTTPFormat());
     }
 
-    /**
-     * testVerifyCancel
-     *
-     * @return void
-     */
     public function testVerifyCancel()
     {
-        $message = new OpenID_Message();
+        $message = new OpenIdMessage();
         $message->set('openid.mode', OpenID::MODE_CANCEL);
 
         $result = $this->rp->verify($this->messageToNetURL2($message), $message);
-        $this->assertInstanceOf('OpenID_Assertion_Result', $result);
+        $this->assertInstanceOf(OpenIdAssertionResult::class, $result);
         $this->assertFalse($result->success());
         $this->assertSame(OpenID::MODE_CANCEL, $result->getAssertionMethod());
     }
 
-    /**
-     * testVerifyOneOneImmediateFail
-     *
-     * @return void
-     */
     public function testVerifyOneOneImmediateFail()
     {
-        $url     = 'http://examplerp.com/';
-        $message = new OpenID_Message();
+        $url = 'http://examplerp.com/';
+        $message = new OpenIdMessage();
         $message->set('openid.mode', OpenID::MODE_ID_RES);
         $message->set('openid.user_setup_url', $url);
 
         $result = $this->rp->verify($this->messageToNetURL2($message), $message);
-        $this->assertInstanceOf('OpenID_Assertion_Result', $result);
+        $this->assertInstanceOf(OpenIdAssertionResult::class, $result);
         $this->assertFalse($result->success());
         $this->assertSame(OpenID::MODE_ID_RES, $result->getAssertionMethod());
         $this->assertSame($url, $result->getUserSetupURL());
     }
 
-    /**
-     * testVerifyError
-     *
-     * @expectedException OpenID_Exception
-     * @return void
-     */
     public function testVerifyError()
     {
-        $message = new OpenID_Message();
+        $this->expectException(OpenIdException::class);
+        $message = new OpenIdMessage();
         $message->set('openid.mode', OpenID::MODE_ERROR);
 
-        $result = $this->rp->verify($this->messageToNetURL2($message), $message);
+        $this->rp->verify($this->messageToNetURL2($message), $message);
     }
 
-    /**
-     * testVerifyInvalidMode
-     *
-     * @expectedException OpenID_Exception
-     * @return void
-     */
     public function testVerifyInvalidMode()
     {
-        $message = new OpenID_Message();
+        $this->expectException(OpenIdException::class);
+        $message = new OpenIdMessage();
         $message->set('openid.mode', 'foo');
 
-        $result = $this->rp->verify($this->messageToNetURL2($message), $message);
+        $this->rp->verify($this->messageToNetURL2($message), $message);
     }
 
-    /**
-     * testVerifyAssociation
-     *
-     * @return void
-     */
     public function testVerifyAssociation()
     {
         $this->store->expects($this->any())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
+            ->method('getDiscover')
+            ->will($this->returnValue($this->discover));
         $this->store->expects($this->once())
-                    ->method('getAssociation')
-                    ->will($this->returnValue($this->association));
+            ->method('getAssociation')
+            ->will($this->returnValue($this->association));
 
         $this->association->expects($this->once())
-                          ->method('checkMessageSignature')
-                          ->will($this->returnValue(true));
+            ->method('checkMessageSignature')
+            ->will($this->returnValue(true));
 
-        $nonceObj = new OpenID_Nonce($this->opEndpointURL);
-        $nonce    = $nonceObj->createNonce();
+        $nonceObj = new Nonce($this->opEndpointURL);
+        $nonce = $nonceObj->createNonce();
 
-        $message = new OpenID_Message();
+        $message = new OpenIdMessage();
         $message->set('openid.mode', 'id_res');
         $message->set('openid.ns', OpenID::NS_2_0);
         $message->set('openid.return_to', $this->returnTo);
@@ -385,58 +290,42 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
         $message->set('openid.assoc_handle', '12345qwerty');
         $message->set('openid.response_nonce', $nonce);
 
-
-        $this->assertInstanceOf('OpenID_Assertion_Result',
-                          $this->rp->verify($this->messageToNetURL2($message),
-                          $message));
+        $this->assertInstanceOf(OpenIdAssertionResult::class, $this->rp->verify($this->messageToNetURL2($message), $message));
     }
 
-    /**
-     * testVerifyUnsolicited
-     *
-     * @return void
-     */
     public function testVerifyUnsolicited()
     {
-        $log = new OpenID_Observer_Log;
-        OpenID::attach($log);
-        $this->rp = $this->getMock('OpenID_RelyingParty',
-                                   array('getAssociationRequestObject',
-                                         'getAssertionObject'),
-                                   array($this->returnTo, $this->realm));
+        $this->setStoreMethods();
 
-        $assertion = $this->getMock('OpenID_Assertion',
-                                    array('checkAuthentication'),
-                                    array(),
-                                    '',
-                                    false);
-
-        $authMessage = new OpenID_Message;
+        $authMessage = new OpenIdMessage;
         $authMessage->set('is_valid', 'true');
 
-        $assertion->expects($this->once())
-                  ->method('checkAuthentication')
-                  ->will($this->returnValue($authMessage));
+        $assertion = $this->getMockBuilder(Assertion::class)
+            ->onlyMethods(['checkAuthentication'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->rp->expects($this->once())
-                 ->method('getAssertionObject')
-                 ->will($this->returnValue($assertion));
+        $assertion->expects($this->any())
+            ->method('checkAuthentication')
+            ->will($this->returnValue($authMessage));
 
-        $this->store->expects($this->any())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
-        $this->store->expects($this->once())
-                    ->method('getAssociation')
-                    ->will($this->returnValue($this->association));
+        $rp = $this->getMockBuilder(RelyingParty::class)
+            ->setConstructorArgs([$this->returnTo, $this->realm])
+            ->onlyMethods(['getAssociationRequestObject', 'getAssertionObject'])
+            ->getMock();
 
-        $this->association->expects($this->once())
-                          ->method('checkMessageSignature')
-                          ->will($this->returnValue(true));
+        $rp->expects($this->any())
+            ->method('getAssertionObject')
+            ->will($this->returnValue($assertion));
 
-        $nonceObj = new OpenID_Nonce($this->opEndpointURL);
-        $nonce    = $nonceObj->createNonce();
+        $this->association->expects($this->any())
+            ->method('checkMessageSignature')
+            ->will($this->returnValue(true));
 
-        $message = new OpenID_Message();
+        $nonceObj = new Nonce($this->opEndpointURL);
+        $nonce = $nonceObj->createNonce();
+
+        $message = new OpenIdMessage();
         $message->set('openid.mode', 'id_res');
         $message->set('openid.ns', OpenID::NS_2_0);
         $message->set('openid.return_to', $this->returnTo);
@@ -446,30 +335,25 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
         $message->set('openid.assoc_handle', '12345qwerty');
         $message->set('openid.response_nonce', $nonce);
 
+        $verify = $rp->verify($this->messageToNetURL2($message), $message);
 
-        $this->assertInstanceOf('OpenID_Assertion_Result',
-                          $this->rp->verify($this->messageToNetURL2($message),
-                                            $message));
+        $this->assertInstanceOf(OpenIdAssertionResult::class, $rp->verify($this->messageToNetURL2($message), $message));
+        $this->assertTrue($verify->success());
     }
 
-    /**
-     * testVerifyCheckAuthentication
-     *
-     * @return void
-     */
     public function testVerifyCheckAuthentication()
     {
         $this->store->expects($this->any())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
+            ->method('getDiscover')
+            ->will($this->returnValue($this->discover));
         $this->store->expects($this->once())
-                    ->method('getNonce')
-                    ->will($this->returnValue(false));
+            ->method('getNonce')
+            ->will($this->returnValue(false));
 
-        $nonceObj = new OpenID_Nonce($this->opEndpointURL);
-        $nonce    = $nonceObj->createNonce();
+        $nonceObj = new Nonce($this->opEndpointURL);
+        $nonce = $nonceObj->createNonce();
 
-        $message = new OpenID_Message();
+        $message = new OpenIdMessage();
         $message->set('openid.mode', 'id_res');
         $message->set('openid.ns', OpenID::NS_2_0);
         $message->set('openid.return_to', $this->returnTo);
@@ -479,44 +363,38 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
         $message->set('openid.invalidate_handle', '12345qwerty');
         $message->set('openid.response_nonce', $nonce);
 
-        $assertion = $this->getMock('OpenID_Assertion',
-                                    array('checkAuthentication'),
-                                    array($message, new Net_URL2($this->returnTo)));
+        $assertion = $this->getMockBuilder(Assertion::class)
+            ->onlyMethods(['checkAuthentication'])
+            ->setConstructorArgs([$message, new Url2($this->returnTo)])
+            ->getMock();
 
-        $authMessage = new OpenID_Message;
+        $authMessage = new OpenIdMessage;
         $authMessage->set('is_valid', 'true');
 
         $assertion->expects($this->once())
-                  ->method('checkAuthentication')
-                  ->will($this->returnValue($authMessage));
+            ->method('checkAuthentication')
+            ->will($this->returnValue($authMessage));
 
         $this->rp->expects($this->once())
-                 ->method('getAssertionObject')
-                 ->will($this->returnValue($assertion));
+            ->method('getAssertionObject')
+            ->will($this->returnValue($assertion));
 
-        $this->assertInstanceOf('OpenID_Assertion_Result',
-                          $this->rp->verify($this->messageToNetURL2($message),
-                                            $message));
+        $this->assertInstanceOf(OpenIdAssertionResult::class, $this->rp->verify($this->messageToNetURL2($message), $message));
     }
 
-    /**
-     * testGetAssertionObject
-     *
-     * @return void
-     */
     public function testGetAssertionObject()
     {
-        $this->store->expects($this->any())
-                    ->method('getDiscover')
-                    ->will($this->returnValue($this->discover));
         $this->store->expects($this->once())
-                    ->method('getNonce')
-                    ->will($this->returnValue(false));
+            ->method('getDiscover')
+            ->will($this->returnValue($this->discover));
+        $this->store->expects($this->once())
+            ->method('getNonce')
+            ->will($this->returnValue(false));
 
-        $nonceObj = new OpenID_Nonce($this->opEndpointURL);
-        $nonce    = $nonceObj->createNonce();
+        $nonceObj = new Nonce($this->opEndpointURL);
+        $nonce = $nonceObj->createNonce();
 
-        $message = new OpenID_Message();
+        $message = new OpenIdMessage();
         $message->set('openid.mode', 'id_res');
         $message->set('openid.ns', OpenID::NS_2_0);
         $message->set('openid.return_to', $this->returnTo);
@@ -526,10 +404,7 @@ class OpenID_RelyingPartyTest extends PHPUnit_Framework_TestCase
         $message->set('openid.invalidate_handle', '12345qwerty');
         $message->set('openid.response_nonce', $nonce);
 
-        $rp = new OpenID_RelyingParty_Mock($this->id, $this->returnTo, $this->realm);
-        $this->assertInstanceOf('OpenID_Assertion',
-                          $rp->returnGetAssertionObject($message,
-                          new Net_URL2($this->returnTo)));
+        $rp = new RelyingPartyMock($this->id, $this->returnTo, $this->realm);
+        $this->assertInstanceOf(Assertion::class, $rp->returnGetAssertionObject($message, new Url2($this->returnTo)));
     }
 }
-?>

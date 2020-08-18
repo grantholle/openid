@@ -127,11 +127,11 @@ class RelyingParty extends OpenId
      *
      * @var array
      */
-    protected $requestOptions = array(
+    protected $requestOptions = [
         'follow_redirects' => true,
         'timeout' => 3,
         'connect_timeout' => 3
-    );
+    ];
 
     /**
      * Whether or not to use associations
@@ -197,19 +197,10 @@ class RelyingParty extends OpenId
      * Sets the clock skew for nonce checking
      *
      * @param int $skew Skew (or timeout) in seconds
-     *
      * @return RelyingParty
-     * @throws OpenIdException if $skew is not numeric
      */
-    public function setClockSkew($skew)
+    public function setClockSkew(int $skew)
     {
-        if (!is_numeric($skew)) {
-            throw new OpenIdException(
-                'Invalid clock skew',
-                OpenIdException::INVALID_VALUE
-            );
-        }
-
         $this->clockSkew = $skew;
 
         return $this;
@@ -462,5 +453,13 @@ class RelyingParty extends OpenId
     public function getRequestOptions()
     {
         return $this->requestOptions;
+    }
+
+    /**
+     * @return int
+     */
+    public function getClockSkew(): int
+    {
+        return $this->clockSkew;
     }
 }

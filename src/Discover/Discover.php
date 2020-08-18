@@ -186,7 +186,7 @@ class Discover
      * @return DiscoverInterface
      * @throws OpenIdDiscoverException
      */
-    protected function _factory($discoverType, $identifier)
+    protected function _factory(string $discoverType, string $identifier)
     {
         $object = new $discoverType($identifier);
 

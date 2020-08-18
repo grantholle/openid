@@ -198,11 +198,11 @@ class ServiceEndpoints implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Sets the Expires header value
      *
-     * @param string $value The Expires header value
-     * @see getExpiresHeader()
+     * @param string|null $value The Expires header value
      * @return ServiceEndpoints
+     * @see getExpiresHeader()
      */
-    public function setExpiresHeader(string $value)
+    public function setExpiresHeader(string $value = null)
     {
         $this->_expiresHeader = $value;
 

@@ -66,13 +66,14 @@ class Assertion extends OpenId
     public function __construct(
         OpenIdMessage $message, Url2 $requestedURL, int $clockSkew = null
     ) {
-        $this->message      = $message;
+        $this->message = $message;
         $this->requestedURL = $requestedURL;
-        $this->clockSkew    = $clockSkew;
+        $this->clockSkew = $clockSkew;
 
         // Don't check return_to for a negative checkid_immadiate 1.1 response
-        if ($message->get('openid.ns') !== null
-            || $message->get('openid.user_setup_url') === null
+        if (
+            $message->get('openid.ns') !== null ||
+            $message->get('openid.user_setup_url') === null
         ) {
             $this->validateReturnTo();
         }

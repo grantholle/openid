@@ -1,4 +1,11 @@
 <?php
+
+namespace Tests\RelyingParty;
+
+use Pear\Net\Url2;
+use Pear\OpenId\OpenIdMessage;
+use Pear\OpenId\RelyingParty;
+
 /**
  * OpenID_RelyingParty_Mock
  *
@@ -13,8 +20,6 @@
  * @link      http://github.com/shupp/openid
  */
 
-require_once 'src/RelyingParty.php';
-
 /**
  * OpenID_RelyingParty_Mock
  *
@@ -26,7 +31,7 @@ require_once 'src/RelyingParty.php';
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class OpenID_RelyingParty_Mock extends OpenID_RelyingParty
+class RelyingPartyMock extends RelyingParty
 {
     /**
      * Just returns an OpenID_Association_Request object, as instantiated by
@@ -34,8 +39,7 @@ class OpenID_RelyingParty_Mock extends OpenID_RelyingParty
      *
      * @param string $opEndpointURL The OP endpoint URL to communicate with
      * @param string $version       The OpenID version in use
-     *
-     * @return OpenID_Association_Request
+     * @return \Pear\OpenId\Associations\Request
      */
     public function returnGetAssociationRequestObject($opEndpointURL, $version)
     {
@@ -46,14 +50,14 @@ class OpenID_RelyingParty_Mock extends OpenID_RelyingParty
      * Just returns an OpenID_Assertion object, as instantiated by
      * getAssertionObject().  This is just for testing it.
      *
-     * @param OpenID_Message $message      The message passed to {link verify()}
-     * @param string         $requestedURL The requested URL
+     * @param OpenIdMessage $message The message passed to {link verify()}
+     * @param Url2 $requestedURL The requested URL
      *
-     * @return OpenID_Assertion
+     * @return \Pear\OpenId\Assertions\Assertion
+     * @throws \Pear\OpenId\Exceptions\OpenIdAssociationException
      */
-    public function returnGetAssertionObject(OpenID_Message $message, $requestedURL)
+    public function returnGetAssertionObject(OpenIdMessage $message, Url2 $requestedURL)
     {
         return $this->getAssertionObject($message, $requestedURL);
     }
 }
-?>

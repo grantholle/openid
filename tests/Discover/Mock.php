@@ -3,7 +3,10 @@
 namespace Tests\Discover;
 
 use DateTime;
+use Pear\OpenId\Discover\Discover;
 use Pear\OpenId\Discover\DiscoverInterface;
+use Pear\OpenId\OpenId;
+use Pear\OpenId\ServiceEndpoint;
 use Pear\OpenId\ServiceEndpoints;
 
 /**
@@ -31,35 +34,25 @@ use Pear\OpenId\ServiceEndpoints;
  * @license   http://www.opensource.org/licenses/bsd-license.php FreeBSD
  * @link      http://github.com/shupp/openid
  */
-class Mock implements DiscoverInterface
+class Mock extends Discover
 {
-    static public $opEndpoint = null;
+    static public $opEndpoint = 'http://exampleop.com';
     public $identifier;
+    public $services;
 
-    /**
-     * __construct
-     *
-     * @param mixed $identifier Identifier
-     *
-     * @return void
-     */
     public function __construct($identifier)
     {
-        $this->identifier = $identifier;
+        parent::__construct($identifier);
+
+        $opEndpoint = new ServiceEndpoint;
+        $opEndpoint->setURIs([self::$opEndpoint]);
+        $opEndpoint->setVersion(OpenId::SERVICE_2_0_SERVER);
+        $this->services = new ServiceEndpoints($identifier, $opEndpoint);
     }
 
-    /**
-     * discover
-     *
-     * @return ServiceEndpoints
-     */
     public function discover()
     {
-        $service = new ServiceEndpoints($this->identifier);
-        $service->addService(self::$opEndpoint);
-        $date = new DateTime(date('c', (time() + (3600 * 8))));
-        $service->setExpiresHeader($date->format(DATE_RFC1123));
-        return $service;
+        return true;
     }
 
     public function setRequestOptions(array $options)
