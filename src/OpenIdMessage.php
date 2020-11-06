@@ -56,13 +56,14 @@ class OpenIdMessage
      * Gets the value of any key in this message.
      *
      * @param string $name Name of key
+     * @param null $default
      * @return mixed Value of key if set, defaults to null
      */
-    public function get(string $name)
+    public function get(string $name, $default = null)
     {
         return isset($this->data[$name])
             ? $this->data[$name]
-            : null;
+            : $default;
     }
 
     /**

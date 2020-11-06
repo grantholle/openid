@@ -277,7 +277,7 @@ class RelyingParty extends OpenId
     {
         // Unsolicited assertion?
         if ($this->normalizedID === null) {
-            $unsolicitedID = $message->get('openid.claimed_id');
+            $unsolicitedID = $message->get('openid.claimed_id', '');
             $this->normalizedID = OpenId::normalizeIdentifier($unsolicitedID);
         }
 
